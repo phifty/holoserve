@@ -13,7 +13,11 @@ class Application::Interface::Control < Sinatra::Base
   end
 
   put "/_control/layouts/:id/current" do |id|
-    configuration.layout = id
+    if configuration.layouts.keys.include?(id)
+      configuration.layout = id
+    else
+      not_found
+    end
   end
 
   get "/_control/layouts/current" do

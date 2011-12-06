@@ -11,8 +11,12 @@ Feature: Layout handling
       And the available layouts should include 'one'
       And the available layouts should include 'two'
 
-  Scenario: Set the current layout
+  Scenario Outline: Set the current layout
     Given the test layouts
-     When the layout 'one' is set to be the current layout
-     Then the responded status code should be 200
-      And the current layout should be 'one'
+     When the layout '<layout>' is set to be the current layout
+     Then the responded status code should be <status code>
+      And the current layout should be '<current layout>'
+    Examples:
+      | layout  | status code | current layout |
+      | one     | 200         | one            |
+      | invalid | 404         | one            |
