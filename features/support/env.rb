@@ -3,6 +3,7 @@ require 'bundler/setup'
 require 'cucumber/formatter/unicode'
 require 'rspec/expectations'
 require 'rack/test'
+require 'json'
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "lib", "application"))
 
 class TestWorld
@@ -10,6 +11,10 @@ class TestWorld
 
   def app
     Application.instance.rack
+  end
+
+  def last_json_response_body
+    JSON.parse last_response.body
   end
 
 end
