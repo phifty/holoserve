@@ -1,12 +1,12 @@
 require 'rubygems'
 require 'bundler/setup'
 
-desc "Runs the unicorn rack server."
+desc "Runs the unicorn interface server."
 task :server do
   system "bundle exec unicorn"
 end
 
-desc "Runs the shotgun rack server."
+desc "Runs the shotgun interface server."
 task :shotgun do
   system "bundle exec shotgun"
 end

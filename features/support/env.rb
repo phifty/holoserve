@@ -9,8 +9,7 @@ class TestWorld
   include Rack::Test::Methods
 
   def app
-    @application ||= Application.new
-    @application.rack
+    Application.instance.rack
   end
 
 end
