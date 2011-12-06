@@ -4,11 +4,12 @@ Given /^the test layouts$/ do
 end
 
 When /^the test layouts are set$/ do
-  post "/_control/layouts", File.read(File.join(File.dirname(__FILE__), "..", "layouts", "test.yml"))
+  test_layouts_filename = File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "test.yml"))
+  post "/_control/layouts", :file => Rack::Test::UploadedFile.new(test_layouts_filename, "application/x-yaml")
 end
 
 When /^the layout '([^']+)' is set to be the current layout$/ do |layout|
-  put "/_control/layouts/#{layout}"
+  put "/_control/layouts/#{layout}/current"
 end
 
 Then /^the current layout should be '([^']+)'$/ do |layout|
