@@ -1,5 +1,5 @@
 
-class Application::Request::Decomposer
+class Request::Decomposer
 
   def initialize(request)
     @request = request

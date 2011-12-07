@@ -3,9 +3,6 @@ require File.join(File.dirname(__FILE__), "configuration")
 
 class Application
 
-  module Request
-    autoload :Decomposer, File.join(File.dirname(__FILE__), "request", "decomposer")
-  end
 
   module Response
     autoload :Composer, File.join(File.dirname(__FILE__), "response", "composer")

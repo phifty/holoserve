@@ -2,8 +2,8 @@
 class Interface::Fake
 
   def call(request)
-    request_hash = Application::Request::Decomposer.new(request).hash
-    pair = Application::Pair::Finder.new(configuration, request_hash).pair
+    request_hash = Request::Decomposer.new(request).hash
+    pair = Pair::Finder.new(configuration, request_hash).pair
     if pair
       Application::Response::Composer.new(pair[:response]).response_array
     else
