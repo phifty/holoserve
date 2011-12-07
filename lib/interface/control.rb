@@ -4,12 +4,17 @@ require 'yaml'
 class Application::Interface::Control < Sinatra::Base
 
   post "/_control/layouts" do
-    tempfile = params["file"][:tempfile]
-    configuration.layouts = YAML::load tempfile
+    begin
+      tempfile = params["file"][:tempfile]
+      configuration.layouts = YAML::load tempfile
+    rescue Psych::SyntaxError => error
+      configuration.clear_layouts!
+      error 400, error.inspect
+    end
   end
 
   get "/_control/layouts/ids" do
-    respond_json configuration.layouts.keys
+    respond_json configuration.layout_ids
   end
 
   put "/_control/layouts/:id/current" do |id|

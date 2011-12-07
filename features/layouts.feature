@@ -5,11 +5,15 @@ Feature: Layout handling
   As a random user
   I should be able to set and get the internal layout configuration
 
-  Scenario: Set the layouts
-     When the test layouts are set
-     Then the responded status code should be 200
-      And the available layouts should include 'one'
-      And the available layouts should include 'two'
+  Scenario Outline: Set the layouts
+     When the <test or invalid> layouts are set
+     Then the responded status code should be <status code>
+      And the available layouts should <include or not include> 'one'
+      And the available layouts should <include or not include> 'two'
+    Examples:
+      | test or invalid | status code | include or not include |
+      | test            | 200         | include                |
+      | invalid         | 400         | not include            |
 
   Scenario Outline: Set the current layout
     Given the test layouts
