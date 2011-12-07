@@ -1,16 +1,16 @@
 require 'rack/builder'
-require File.join(File.dirname(__FILE__), "bucket")
-require File.join(File.dirname(__FILE__), "configuration")
 
 class Application
 
   attr_reader :configuration
   attr_reader :bucket
+  attr_reader :history
   attr_reader :rack
 
   def initialize
     initialize_configuration
     initialize_bucket
+    initialize_history
     initialize_rack
   end
 
@@ -22,6 +22,10 @@ class Application
 
   def initialize_bucket
     @bucket = Bucket.new
+  end
+
+  def initialize_history
+    @history = History.new
   end
 
   def initialize_rack

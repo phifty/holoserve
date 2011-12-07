@@ -33,6 +33,10 @@ class Interface::Control < Sinatra::Base
     respond_json bucket.requests
   end
 
+  get "/_control/history" do
+    respond_json history.pair_names
+  end
+
   private
 
   def respond_json(object)
@@ -42,6 +46,10 @@ class Interface::Control < Sinatra::Base
 
   def bucket
     Application.instance.bucket
+  end
+
+  def history
+    Application.instance.history
   end
 
   def configuration

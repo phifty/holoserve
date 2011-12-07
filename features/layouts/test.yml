@@ -65,9 +65,10 @@ one:
       body: "deleted"
 two:
   -
+    name: "fetched_test"
     request:
       method: "GET"
       path: "/test"
     response:
       status: 200
-      body: "Test two"
+      body: "fetched"

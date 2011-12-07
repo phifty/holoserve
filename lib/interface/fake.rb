@@ -5,6 +5,7 @@ class Interface::Fake
     request_hash = Request::Decomposer.new(request).hash
     pair = Pair::Finder.new(configuration, request_hash).pair
     if pair
+      history.pair_names << pair[:name] if pair[:name]
       Response::Composer.new(pair[:response]).response_array
     else
       bucket.requests << request_hash
@@ -24,6 +25,10 @@ class Interface::Fake
 
   def bucket
     Application.instance.bucket
+  end
+
+  def history
+    Application.instance.history
   end
 
   def configuration
