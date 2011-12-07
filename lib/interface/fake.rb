@@ -1,5 +1,5 @@
 
-class Application::Interface::Fake
+class Interface::Fake
 
   def call(request)
     request_hash = Application::Request::Decomposer.new(request).hash

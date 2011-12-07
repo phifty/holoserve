@@ -3,11 +3,6 @@ require File.join(File.dirname(__FILE__), "configuration")
 
 class Application
 
-  module Interface
-    autoload :Control, File.join(File.dirname(__FILE__), "interface", "control")
-    autoload :Fake, File.join(File.dirname(__FILE__), "interface", "fake")
-  end
-
   module Pair
     autoload :Finder, File.join(File.dirname(__FILE__), "pair", "finder")
   end

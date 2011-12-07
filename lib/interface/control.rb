@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'yaml'
 
-class Application::Interface::Control < Sinatra::Base
+class Interface::Control < Sinatra::Base
 
   post "/_control/layouts" do
     begin
