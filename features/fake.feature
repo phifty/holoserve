@@ -8,7 +8,7 @@ Feature: Fake handling of requests
   Scenario Outline: Handle request
     Given the test layouts
       And the layout 'one'
-     When a <method> request is performed
+     When the test <method> request is performed
      Then the expected response should be returned
     Examples:
       | method |
@@ -20,7 +20,7 @@ Feature: Fake handling of requests
   Scenario Outline: Handle request with parameters
     Given the test layouts
       And the layout 'one'
-     When a <method> request is performed with parameter set '<parameter set>'
+     When the test <method> request is performed with parameter set '<parameter set>'
      Then the expected response should be returned
     Examples:
       | method | parameter set |
