@@ -17,7 +17,7 @@ class Application::Request::Decomposer
   private
 
   def parameters
-    Application::Hash::KeySymbolizer.new(query_hash.merge(form_hash)).hash
+    Tool::Hash::KeySymbolizer.new(query_hash.merge(form_hash)).hash
   end
 
   def query_hash

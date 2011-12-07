@@ -1,5 +1,5 @@
 
-class Application::Hash::KeySymbolizer
+class Tool::Hash::KeySymbolizer
 
   def initialize(hash)
     @hash = hash
