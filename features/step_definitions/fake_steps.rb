@@ -37,6 +37,20 @@ When /^a (post|put|get|delete) request is performed with parameter set '([^']+)'
   end
 end
 
+When /^a unhandled (post|put|get|delete) request is performed$/ do |method|
+  @expected_response = { :status => 404, :body => "no response found for this request" }
+  case method.to_sym
+    when :post
+      post "/unhandled"
+    when :put
+      put "/unhandled"
+    when :get
+      get "/unhandled"
+    when :delete
+      delete "/unhandled"
+  end
+end
+
 Then /^the expected response should be returned$/ do
   last_response.status.to_i.should == @expected_response[:status]
   last_response.body.should == @expected_response[:body]

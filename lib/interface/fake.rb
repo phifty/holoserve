@@ -7,6 +7,7 @@ class Interface::Fake
     if pair
       Response::Composer.new(pair[:response]).response_array
     else
+      bucket.requests << request_hash
       not_found
     end
   end
@@ -19,6 +20,10 @@ class Interface::Fake
 
   def layout
     configuration.layout
+  end
+
+  def bucket
+    Application.instance.bucket
   end
 
   def configuration

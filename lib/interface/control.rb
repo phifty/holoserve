@@ -29,11 +29,19 @@ class Interface::Control < Sinatra::Base
     configuration.layout_id.to_s
   end
 
+  get "/_control/bucket/requests" do
+    respond_json bucket.requests
+  end
+
   private
 
   def respond_json(object)
     content_type "application/json"
     JSON.dump object
+  end
+
+  def bucket
+    Application.instance.bucket
   end
 
   def configuration
