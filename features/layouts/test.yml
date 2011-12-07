@@ -27,6 +27,42 @@ one:
     response:
       status: 200
       body: "deleted"
+  -
+    request:
+      method: "POST"
+      path: "/test"
+      parameters:
+        test: "value"
+    response:
+      status: 201
+      body: "created"
+  -
+    request:
+      method: "PUT"
+      path: "/test"
+      parameters:
+        test: "value"
+    response:
+      status: 200
+      body: "updated"
+  -
+    request:
+      method: "GET"
+      path: "/test"
+      parameters:
+        test: "value"
+    response:
+      status: 200
+      body: "fetched"
+  -
+    request:
+      method: "DELETE"
+      path: "/test"
+      parameters:
+        test: "value"
+    response:
+      status: 200
+      body: "deleted"
 two:
   -
     request:

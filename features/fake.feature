@@ -16,3 +16,15 @@ Feature: Fake handling of requests
       | put    |
       | get    |
       | delete |
+
+  Scenario Outline: Handle request with parameters
+    Given the test layouts
+      And the layout 'one'
+     When a <method> request is performed with parameter set '<parameter set>'
+     Then the expected response should be returned
+    Examples:
+      | method | parameter set |
+      | post   | one           |
+      | put    | one           |
+      | get    | one           |
+      | delete | one           |
