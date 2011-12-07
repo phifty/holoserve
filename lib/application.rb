@@ -3,11 +3,6 @@ require File.join(File.dirname(__FILE__), "configuration")
 
 class Application
 
-
-  module Response
-    autoload :Composer, File.join(File.dirname(__FILE__), "response", "composer")
-  end
-
   attr_reader :configuration
   attr_reader :rack
 

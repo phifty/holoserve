@@ -5,7 +5,7 @@ class Interface::Fake
     request_hash = Request::Decomposer.new(request).hash
     pair = Pair::Finder.new(configuration, request_hash).pair
     if pair
-      Application::Response::Composer.new(pair[:response]).response_array
+      Response::Composer.new(pair[:response]).response_array
     else
       not_found
     end
