@@ -1,5 +1,5 @@
 
-class Application::Pair::Finder
+class Pair::Finder
 
   def initialize(configuration, request)
     @configuration, @request = configuration, request
