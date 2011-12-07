@@ -18,15 +18,15 @@ class Application::Interface::Control < Sinatra::Base
   end
 
   put "/_control/layouts/:id/current" do |id|
-    if configuration.layouts.keys.include?(id)
-      configuration.layout = id
+    if configuration.layout_id?(id)
+      configuration.layout_id = id
     else
       not_found
     end
   end
 
   get "/_control/layouts/current" do
-    configuration.layout
+    configuration.layout_id.to_s
   end
 
   private

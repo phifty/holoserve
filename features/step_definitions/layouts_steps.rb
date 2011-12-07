@@ -1,6 +1,10 @@
 
 Given /^the test layouts$/ do
-  When "the test layouts are set"
+  step "the test layouts are set"
+end
+
+Given /^the layout '([^']+)'$/ do |layout|
+  step "the layout '#{layout}' is set to be the current layout"
 end
 
 When /^the test layouts are set$/ do

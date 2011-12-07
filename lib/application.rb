@@ -4,10 +4,20 @@ require File.join(File.dirname(__FILE__), "configuration")
 class Application
 
   module Interface
-
     autoload :Control, File.join(File.dirname(__FILE__), "interface", "control")
-    autoload :Face, File.join(File.dirname(__FILE__), "interface", "face")
+    autoload :Fake, File.join(File.dirname(__FILE__), "interface", "fake")
+  end
 
+  module Pair
+    autoload :Finder, File.join(File.dirname(__FILE__), "pair", "finder")
+  end
+
+  module Request
+    autoload :Decomposer, File.join(File.dirname(__FILE__), "request", "decomposer")
+  end
+
+  module Response
+    autoload :Composer, File.join(File.dirname(__FILE__), "response", "composer")
   end
 
   attr_reader :configuration
@@ -27,7 +37,7 @@ class Application
   def initialize_rack
     @rack = Rack::Builder.new do
       use Interface::Control
-      run Interface::Face.new
+      run Interface::Fake.new
     end
   end
 

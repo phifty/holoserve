@@ -1,16 +1,37 @@
 one:
   -
     request:
-      method: "GET"
-      path: "/"
+      method: "POST"
+      path: "/test"
+    response:
+      status: 201
+      body: "created"
+  -
+    request:
+      method: "PUT"
+      path: "/test"
     response:
       status: 200
-      body: "Test"
+      body: "updated"
+  -
+    request:
+      method: "GET"
+      path: "/test"
+    response:
+      status: 200
+      body: "fetched"
+  -
+    request:
+      method: "DELETE"
+      path: "/test"
+    response:
+      status: 200
+      body: "deleted"
 two:
   -
     request:
       method: "GET"
-      path: "/"
+      path: "/test"
     response:
       status: 200
       body: "Test two"

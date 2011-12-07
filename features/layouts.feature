@@ -2,8 +2,8 @@
 Feature: Layout handling
 
   In order control behaviour of holoserve
-  As a random user
-  I should be able to set and get the internal layout configuration
+  As a client application
+  It should be possible to set and get the internal layout configuration
 
   Scenario Outline: Set the layouts
      When the <test or invalid> layouts are set
