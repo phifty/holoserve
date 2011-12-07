@@ -9,7 +9,7 @@ Feature: Fake handling of requests
     Given the test layouts
       And the layout 'one'
      When the test <method> request is performed
-     Then the expected response should be returned
+     Then the response for test <method> request should be returned
     Examples:
       | method |
       | post   |
@@ -21,7 +21,7 @@ Feature: Fake handling of requests
     Given the test layouts
       And the layout 'one'
      When the test <method> request is performed with parameter set '<parameter set>'
-     Then the expected response should be returned
+     Then the response for test <method> request should be returned
     Examples:
       | method | parameter set |
       | post   | one           |
