@@ -7,6 +7,7 @@ class Interface::Control < Sinatra::Base
     begin
       tempfile = params["file"][:tempfile]
       configuration.layouts = YAML::load tempfile
+      respond_json_acknowledgement
     rescue Psych::SyntaxError => error
       configuration.clear_layouts!
       error 400, error.inspect
@@ -15,6 +16,7 @@ class Interface::Control < Sinatra::Base
 
   delete "/_control/layouts" do
     configuration.clear_layout!
+    respond_json_acknowledgement
   end
 
   get "/_control/layouts/ids" do
@@ -24,6 +26,7 @@ class Interface::Control < Sinatra::Base
   put "/_control/layouts/:id/current" do |id|
     if configuration.layout_id?(id)
       configuration.layout_id = id
+      respond_json_acknowledgement
     else
       not_found
     end
@@ -43,9 +46,14 @@ class Interface::Control < Sinatra::Base
 
   delete "/_control/history" do
     history.clear!
+    respond_json_acknowledgement
   end
 
   private
+
+  def respond_json_acknowledgement
+    respond_json :ok => true
+  end
 
   def respond_json(object)
     content_type "holoserve/json"

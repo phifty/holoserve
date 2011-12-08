@@ -8,6 +8,7 @@ Feature: Layout handling
   Scenario Outline: Set the layouts
      When the <test or invalid> layouts are set
      Then the responded status code should be <status code>
+      And the responded body should <include or not include> an acknowledgement
       And the available layouts should <include or not include> 'one'
       And the available layouts should <include or not include> 'two'
     Examples:
@@ -19,8 +20,9 @@ Feature: Layout handling
     Given the test layouts
      When the layout '<layout>' is set to be the current layout
      Then the responded status code should be <status code>
+      And the responded body should <include or not include> an acknowledgement
       And the current layout should be '<current layout>'
     Examples:
-      | layout  | status code | current layout |
-      | one     | 200         | one            |
-      | invalid | 404         | one            |
+      | layout  | status code | include or not include | current layout |
+      | one     | 200         | include                | one            |
+      | invalid | 404         | not include            | one            |

@@ -19,3 +19,15 @@ end
 Then /^the responded status code should be (\d+)$/ do |status_code|
   last_response.status.to_i.should == status_code.to_i
 end
+
+Then /^the responded body should include an acknowledgement$/ do
+  last_json_response_body.should == { "ok" => true }
+end
+
+Then /^the responded body should not include an acknowledgement$/ do
+  begin
+    last_json_response_body.should_not == { "ok" => true }
+  rescue JSON::ParserError
+
+  end
+end
