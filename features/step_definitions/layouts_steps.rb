@@ -7,6 +7,10 @@ Given /^the layout '([^']+)'$/ do |layout|
   step "the layout '#{layout}' is set to be the current layout"
 end
 
+Given /^a clear layouts setting$/ do
+  delete '/_control/layouts'
+end
+
 When /^the test layouts are set$/ do
   test_layouts_filename = File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "test.yml"))
   post "/_control/layouts", :file => Rack::Test::UploadedFile.new(test_layouts_filename, "application/x-yaml")

@@ -13,6 +13,10 @@ class Interface::Control < Sinatra::Base
     end
   end
 
+  delete "/_control/layouts" do
+    configuration.clear_layout!
+  end
+
   get "/_control/layouts/ids" do
     respond_json configuration.layout_ids
   end

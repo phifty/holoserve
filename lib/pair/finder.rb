@@ -6,6 +6,7 @@ class Pair::Finder
   end
 
   def pair
+    return nil unless layout
     layout.detect do |pair|
       pair[:request] == @request
     end

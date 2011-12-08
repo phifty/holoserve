@@ -1,11 +1,11 @@
 source :rubygems
 
-gem "rake"
 gem "rack"
 gem "sinatra"
 gem "unicorn"
 
 group :development do
+  gem "rake"
   gem "shotgun"
 end
 

@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+
+require 'unicorn'
+
+base_directory = File.expand_path(File.join(File.dirname(__FILE__), ".."))
+system "cd #{base_directory} && bundle exec unicorn"
