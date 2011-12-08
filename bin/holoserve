@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'bundler/setup'
 
-require File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve-server"))
+require File.expand_path(File.join(File.dirname(__FILE__), "..", "lib", "holoserve", "server"))
 
-runner = Application::Runner.new
+runner = Holoserve::Server::Runner.new
 runner.run

@@ -1,5 +1,5 @@
 
-class Application::Response::Composer
+class Response::Composer
 
   def initialize(response)
     @response = response

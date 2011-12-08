@@ -13,12 +13,12 @@ end
 
 When /^the test layouts are set$/ do
   test_layouts_filename = File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "test.yml"))
-  post "/_control/layouts", :file => Rack::Test::UploadedFile.new(test_layouts_filename, "application/x-yaml")
+  post "/_control/layouts", :file => Rack::Test::UploadedFile.new(test_layouts_filename, "holoserve/x-yaml")
 end
 
 When /^the invalid layouts are set$/ do
   invalid_layouts_filename = File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "invalid.yml"))
-  post "/_control/layouts", :file => Rack::Test::UploadedFile.new(invalid_layouts_filename, "application/x-yaml")
+  post "/_control/layouts", :file => Rack::Test::UploadedFile.new(invalid_layouts_filename, "holoserve/x-yaml")
 end
 
 When /^the layout '([^']+)' is set to be the current layout$/ do |layout|

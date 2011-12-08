@@ -48,20 +48,20 @@ class Interface::Control < Sinatra::Base
   private
 
   def respond_json(object)
-    content_type "application/json"
+    content_type "holoserve/json"
     JSON.dump object
   end
 
   def bucket
-    Application.instance.bucket
+    Holoserve::Server.instance.bucket
   end
 
   def history
-    Application.instance.history
+    Holoserve::Server.instance.history
   end
 
   def configuration
-    Application.instance.configuration
+    Holoserve::Server.instance.configuration
   end
 
 end
