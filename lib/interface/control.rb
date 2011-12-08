@@ -56,7 +56,7 @@ class Interface::Control < Sinatra::Base
   end
 
   def respond_json(object)
-    content_type "holoserve/json"
+    content_type "application/json"
     JSON.dump object
   end
 
