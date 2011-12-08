@@ -37,6 +37,10 @@ class Interface::Control < Sinatra::Base
     respond_json history.pair_names
   end
 
+  delete "/_control/history" do
+    history.clear!
+  end
+
   private
 
   def respond_json(object)

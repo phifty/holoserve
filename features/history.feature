@@ -5,9 +5,18 @@ Feature: History handling
   As a client application
   It should list the names of the triggered request/response-pairs
 
-  Scenario: A named pair is triggered
+  Background:
     Given the test layouts
-      And the layout 'two'
+
+  Scenario: A named pair is triggered
+    Given the layout 'two'
      When the test get request is performed
      Then the response for test get request should be returned
       And the history should contain the test get pair name
+
+  Scenario: A pair without a name is triggered
+    Given the layout 'one'
+      And a clear history
+     When the test get request is performed
+     Then the response for test get request should be returned
+      And the history should be empty
