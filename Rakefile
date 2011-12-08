@@ -15,8 +15,14 @@ begin
   require 'cucumber'
   require 'cucumber/rake/task'
 
-  Cucumber::Rake::Task.new(:features) do |t|
-    t.cucumber_opts = "features --format pretty"
+  Cucumber::Rake::Task.new(:features) do |task|
+    task.cucumber_opts = "features --format pretty"
+  end
+
+  namespace :features do
+    Cucumber::Rake::Task.new(:wip) do |task|
+      task.cucumber_opts = "features --format pretty --tags @wip"
+    end
   end
 rescue LoadError
 
