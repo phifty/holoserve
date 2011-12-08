@@ -4,7 +4,7 @@ require 'cucumber/formatter/unicode'
 require 'rspec/expectations'
 require 'rack/test'
 require 'json'
-require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "holoserve"))
+require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "holoserve-server"))
 
 class TestWorld
   include Rack::Test::Methods
