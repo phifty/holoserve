@@ -15,7 +15,7 @@ class Interface::Control < Sinatra::Base
   end
 
   delete "/_control/layouts" do
-    configuration.clear_layout!
+    configuration.clear_layouts!
     respond_json_acknowledgement
   end
 

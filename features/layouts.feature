@@ -26,3 +26,12 @@ Feature: Layout handling
       | layout  | status code | include or not include | current layout |
       | one     | 200         | include                | one            |
       | invalid | 404         | not include            | one            |
+
+  Scenario: List available layout ids
+    Given the test layouts
+     Then the available layouts should include 'one'
+      And the available layouts should include 'two'
+
+  Scenario: List available layout ids without any layouts loaded
+    Given a clear layouts setting
+     Then the available layouts should be empty
