@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'bundler/setup'
 
-require 'unicorn'
+require File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve-server"))
 
-base_directory = File.expand_path(File.join(File.dirname(__FILE__), ".."))
-system "cd #{base_directory} && bundle exec unicorn"
+runner = Application::Runner.new
+runner.run

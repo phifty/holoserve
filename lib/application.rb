@@ -2,6 +2,8 @@ require 'rack/builder'
 
 class Application
 
+  autoload :Runner, File.join(File.dirname(__FILE__), "application", "runner")
+
   attr_reader :configuration
   attr_reader :bucket
   attr_reader :history
