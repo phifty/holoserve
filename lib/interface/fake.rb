@@ -1,14 +1,14 @@
 
 class Interface::Fake
 
-  def call(request)
-    request_hash = Request::Decomposer.new(request).hash
-    pair = Pair::Finder.new(configuration, request_hash).pair
+  def call(env)
+    request = Request::Decomposer.new(env).hash
+    pair = Pair::Finder.new(configuration, request).pair
     if pair
       history.pair_names << pair[:name] if pair[:name]
       Response::Composer.new(pair[:response]).response_array
     else
-      bucket.requests << request_hash
+      bucket.requests << request
       not_found
     end
   end

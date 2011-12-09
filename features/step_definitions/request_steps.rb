@@ -1,13 +1,6 @@
 
 Transform /^(test|unhandled) (post|put|get|delete) request$/ do |type, method|
-  request = { "method" => method.upcase, "path" => "/#{type}" }
-  headers = { }
-  case method.to_sym
-    when :post, :put, :delete
-      headers.merge! "Content-Type" => "application/x-www-form-urlencoded"
-  end
-  request.merge! "headers" => headers unless headers.empty?
-  request
+  { "method" => method.upcase, "path" => "/#{type}" }
 end
 
 Transform /^parameter set '([^']+)'$/ do |parameter_set_name|

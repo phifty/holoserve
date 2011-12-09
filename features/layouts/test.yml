@@ -3,8 +3,6 @@ one:
     request:
       method: "POST"
       path: "/test"
-      headers:
-        Content-Type: "application/x-www-form-urlencoded"
     response:
       status: 201
       body: "created"
@@ -12,8 +10,6 @@ one:
     request:
       method: "PUT"
       path: "/test"
-      headers:
-        Content-Type: "application/x-www-form-urlencoded"
     response:
       status: 200
       body: "updated"
@@ -28,8 +24,6 @@ one:
     request:
       method: "DELETE"
       path: "/test"
-      headers:
-        Content-Type: "application/x-www-form-urlencoded"
     response:
       status: 200
       body: "deleted"
@@ -39,8 +33,6 @@ one:
       path: "/test"
       parameters:
         test: "value"
-      headers:
-        Content-Type: "application/x-www-form-urlencoded"
     response:
       status: 201
       body: "created"
@@ -50,8 +42,6 @@ one:
       path: "/test"
       parameters:
         test: "value"
-      headers:
-        Content-Type: "application/x-www-form-urlencoded"
     response:
       status: 200
       body: "updated"
@@ -70,8 +60,6 @@ one:
       path: "/test"
       parameters:
         test: "value"
-      headers:
-        Content-Type: "application/x-www-form-urlencoded"
     response:
       status: 200
       body: "deleted"

@@ -8,7 +8,7 @@ class Pair::Finder
   def pair
     return nil unless layout
     layout.detect do |pair|
-      pair[:request] == @request
+      Request::Matcher.new(@request, pair[:request]).match?
     end
   end
 
