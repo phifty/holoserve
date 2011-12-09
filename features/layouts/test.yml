@@ -86,7 +86,7 @@ three:
         oauth_version: "1.0"
     response:
       status: 201
-      body: "ok"
+      body: "oauth_token=12345&oauth_token_secret=secret"
   -
     name: "access_token_requested"
     request:
@@ -96,10 +96,11 @@ three:
         oauth_body_hash: "2jmj7l5rSw0yVb%2FvlWAYkK%2FYBwk%3D"
         oauth_consumer_key: "consumer_id"
         oauth_signature_method: "HMAC-SHA1"
+        oauth_token: "12345"
         oauth_version: "1.0"
     response:
       status: 201
-      body: "ok"
+      body: "oauth_token=23456&oauth_token_secret=secret"
   -
     name: "oauth_test_requested"
     request:
@@ -108,6 +109,7 @@ three:
       oauth:
         oauth_consumer_key: "consumer_id"
         oauth_signature_method: "HMAC-SHA1"
+        oauth_token: "23456"
         oauth_version: "1.0"
     response:
       status: 200
