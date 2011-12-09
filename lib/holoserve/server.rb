@@ -4,7 +4,15 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve"))
 
 class Holoserve::Server
 
+  autoload :Bucket, File.join(File.dirname(__FILE__), "server", "bucket")
+  autoload :Configuration, File.join(File.dirname(__FILE__), "server", "configuration")
+  autoload :History, File.join(File.dirname(__FILE__), "server", "history")
+  autoload :Interface, File.join(File.dirname(__FILE__), "server", "interface")
+  autoload :Pair, File.join(File.dirname(__FILE__), "server", "pair")
+  autoload :Request, File.join(File.dirname(__FILE__), "server", "request")
+  autoload :Response, File.join(File.dirname(__FILE__), "server", "response")
   autoload :Runner, File.join(File.dirname(__FILE__), "server", "runner")
+  autoload :Tool, File.join(File.dirname(__FILE__), "server", "tool")
 
   attr_reader :configuration
   attr_reader :bucket
@@ -21,21 +29,21 @@ class Holoserve::Server
   private
 
   def initialize_configuration
-    @configuration = Holoserve::Configuration.new
+    @configuration = Configuration.new
   end
 
   def initialize_bucket
-    @bucket = Holoserve::Bucket.new
+    @bucket = Bucket.new
   end
 
   def initialize_history
-    @history = Holoserve::History.new
+    @history = History.new
   end
 
   def initialize_rack
     @rack = Rack::Builder.new do
-      use Holoserve::Interface::Control
-      run Holoserve::Interface::Fake.new
+      use Interface::Control
+      run Interface::Fake.new
     end
   end
 

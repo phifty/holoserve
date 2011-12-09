@@ -1,11 +1,11 @@
 
-class Holoserve::Configuration
+class Holoserve::Server::Configuration
 
   attr_reader :layouts
   attr_reader :layout_id
 
   def layouts=(hash)
-    @layouts = Holoserve::Tool::Hash::KeySymbolizer.new(hash).hash
+    @layouts = Holoserve::Server::Tool::Hash::KeySymbolizer.new(hash).hash
   end
 
   def layout_id=(value)

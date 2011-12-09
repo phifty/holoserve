@@ -1,5 +1,5 @@
 
-class Holoserve::Response::Composer
+class Holoserve::Server::Response::Composer
 
   def initialize(response)
     @response = response

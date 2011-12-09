@@ -1,12 +1,12 @@
 
-class Holoserve::Interface::Fake
+class Holoserve::Server::Interface::Fake
 
   def call(env)
-    request = Holoserve::Request::Decomposer.new(env).hash
-    pair = Holoserve::Pair::Finder.new(configuration, request).pair
+    request = Holoserve::Server::Request::Decomposer.new(env).hash
+    pair = Holoserve::Server::Pair::Finder.new(configuration, request).pair
     if pair
       history.pair_names << pair[:name] if pair[:name]
-      Holoserve::Response::Composer.new(pair[:response]).response_array
+      Holoserve::Server::Response::Composer.new(pair[:response]).response_array
     else
       bucket.requests << request
       not_found

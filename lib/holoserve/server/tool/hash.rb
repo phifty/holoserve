@@ -1,5 +1,5 @@
 
-module Holoserve::Tool::Hash
+module Holoserve::Server::Tool::Hash
 
   autoload :KeySymbolizer, File.join(File.dirname(__FILE__), "hash", "key_symbolizer")
 

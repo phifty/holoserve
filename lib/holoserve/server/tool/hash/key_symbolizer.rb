@@ -1,5 +1,5 @@
 
-class Holoserve::Tool::Hash::KeySymbolizer
+class Holoserve::Server::Tool::Hash::KeySymbolizer
 
   def initialize(hash)
     @hash = hash

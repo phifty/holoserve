@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'yaml'
 
-class Holoserve::Interface::Control < Sinatra::Base
+class Holoserve::Server::Interface::Control < Sinatra::Base
 
   post "/_control/layouts" do
     begin

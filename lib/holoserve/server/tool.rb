@@ -1,5 +1,5 @@
 
-module Holoserve::Tool
+module Holoserve::Server::Tool
 
   autoload :Hash, File.join(File.dirname(__FILE__), "tool", "hash")
 

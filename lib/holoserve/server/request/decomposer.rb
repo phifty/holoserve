@@ -1,5 +1,5 @@
 
-class Holoserve::Request::Decomposer
+class Holoserve::Server::Request::Decomposer
 
   def initialize(request)
     @request = request
@@ -35,7 +35,7 @@ class Holoserve::Request::Decomposer
   end
 
   def parameters
-    Holoserve::Tool::Hash::KeySymbolizer.new(query_hash.merge(form_hash)).hash
+    Holoserve::Server::Tool::Hash::KeySymbolizer.new(query_hash.merge(form_hash)).hash
   end
 
   def query_hash
