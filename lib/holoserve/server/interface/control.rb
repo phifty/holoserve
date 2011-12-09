@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'yaml'
+require 'json'
 
 class Holoserve::Server::Interface::Control < Sinatra::Base
 
