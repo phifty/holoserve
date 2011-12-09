@@ -28,3 +28,15 @@ Feature: Fake handling of requests
       | put    | one           |
       | get    | one           |
       | delete | one           |
+
+  Scenario Outline: Handle request with headers
+    Given the test layouts
+      And the layout 'one'
+     When the test <method> request is performed with header set '<header set>'
+     Then the response for test <method> request should be returned
+    Examples:
+      | method | header set |
+      | post   | one        |
+      | put    | one        |
+      | get    | one        |
+      | delete | one        |
