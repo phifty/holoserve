@@ -13,4 +13,5 @@ group :test do
   gem "cucumber"
   gem "rspec"
   gem "transport"
+  gem "oauth"
 end

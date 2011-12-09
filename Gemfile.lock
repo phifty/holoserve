@@ -13,6 +13,7 @@ GEM
       json (>= 1.4.6)
     json (1.6.3)
     kgio (2.6.0)
+    oauth (0.4.5)
     rack (1.3.5)
     rack-protection (1.1.4)
       rack
@@ -45,6 +46,7 @@ PLATFORMS
 
 DEPENDENCIES
   cucumber
+  oauth
   rack
   rake
   rspec

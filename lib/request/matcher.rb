@@ -10,7 +10,8 @@ class Request::Matcher
       match_path? &&
       match_headers? &&
       match_body? &&
-      match_parameters?
+      match_parameters? &&
+      match_oauth?
   end
 
   private
@@ -45,6 +46,14 @@ class Request::Matcher
     match = true
     (@request_subset[:parameters] || { }).each do |key, value|
       match &&= @request[:parameters][key] == value
+    end
+    match
+  end
+
+  def match_oauth?
+    match = true
+    (@request_subset[:oauth] || { }).each do |key, value|
+      match &&= @request[:oauth][key] == value
     end
     match
   end

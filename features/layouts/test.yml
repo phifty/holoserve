@@ -72,3 +72,43 @@ two:
     response:
       status: 200
       body: "fetched"
+three:
+  -
+    name: "request_token_requested"
+    request:
+      method: "POST"
+      path: "/oauth/request_token"
+      oauth:
+        oauth_body_hash: "2jmj7l5rSw0yVb%2FvlWAYkK%2FYBwk%3D"
+        oauth_callback: "oob"
+        oauth_consumer_key: "consumer_id"
+        oauth_signature_method: "HMAC-SHA1"
+        oauth_version: "1.0"
+    response:
+      status: 201
+      body: "ok"
+  -
+    name: "access_token_requested"
+    request:
+      method: "POST"
+      path: "/oauth/access_token"
+      oauth:
+        oauth_body_hash: "2jmj7l5rSw0yVb%2FvlWAYkK%2FYBwk%3D"
+        oauth_consumer_key: "consumer_id"
+        oauth_signature_method: "HMAC-SHA1"
+        oauth_version: "1.0"
+    response:
+      status: 201
+      body: "ok"
+  -
+    name: "oauth_test_requested"
+    request:
+      method: "GET"
+      path: "/test"
+      oauth:
+        oauth_consumer_key: "consumer_id"
+        oauth_signature_method: "HMAC-SHA1"
+        oauth_version: "1.0"
+    response:
+      status: 200
+      body: "ok"

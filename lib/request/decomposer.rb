@@ -13,6 +13,7 @@ class Request::Decomposer
     hash.merge! :headers => headers unless headers.empty?
     hash.merge! :body => body unless body.nil?
     hash.merge! :parameters => parameters unless parameters.empty?
+    hash.merge! :oauth => oauth unless oauth.empty?
     hash
   end
 
@@ -43,6 +44,22 @@ class Request::Decomposer
 
   def form_hash
     @request["rack.request.form_hash"] || { }
+  end
+
+  def oauth
+    @oauth ||= begin
+      oauth = { }
+      http_authorization = @request["HTTP_AUTHORIZATION"]
+      if http_authorization && http_authorization =~ /^OAuth/
+        http_authorization = http_authorization.sub /^OAuth/, ""
+        pairs = http_authorization.split ","
+        pairs.each do |pair|
+          key, value = *pair.strip.split("=")
+          oauth[ key.to_sym ] = value.sub(/^\\"/, "").sub(/\\"$/, "").gsub(/"/, "")
+        end
+      end
+      oauth
+    end
   end
 
 end
