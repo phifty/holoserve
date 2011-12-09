@@ -17,7 +17,7 @@ Transform /^response for unhandled (post|put|get|delete) request$/ do |method|
 end
 
 Then /^the responded status code should be (\d+)$/ do |status_code|
-  last_response.status.to_i.should == status_code.to_i
+  last_response_status.to_i.should == status_code.to_i
 end
 
 Then /^the responded body should include an acknowledgement$/ do

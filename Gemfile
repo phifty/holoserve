@@ -10,7 +10,7 @@ group :development do
 end
 
 group :test do
-  gem "rack-test"
   gem "cucumber"
   gem "rspec"
+  gem "transport"
 end
