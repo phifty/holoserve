@@ -1,14 +1,6 @@
 require 'rack/builder'
 
-require File.join(File.dirname(__FILE__), "..", "bucket")
-require File.join(File.dirname(__FILE__), "..", "configuration")
-require File.join(File.dirname(__FILE__), "..", "history")
-require File.join(File.dirname(__FILE__), "..", "holoserve")
-require File.join(File.dirname(__FILE__), "..", "interface")
-require File.join(File.dirname(__FILE__), "..", "pair")
-require File.join(File.dirname(__FILE__), "..", "request")
-require File.join(File.dirname(__FILE__), "..", "response")
-require File.join(File.dirname(__FILE__), "..", "tool")
+require File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve"))
 
 class Holoserve::Server
 
@@ -29,21 +21,21 @@ class Holoserve::Server
   private
 
   def initialize_configuration
-    @configuration = Configuration.new
+    @configuration = Holoserve::Configuration.new
   end
 
   def initialize_bucket
-    @bucket = Bucket.new
+    @bucket = Holoserve::Bucket.new
   end
 
   def initialize_history
-    @history = History.new
+    @history = Holoserve::History.new
   end
 
   def initialize_rack
     @rack = Rack::Builder.new do
-      use Interface::Control
-      run Interface::Fake.new
+      use Holoserve::Interface::Control
+      run Holoserve::Interface::Fake.new
     end
   end
 

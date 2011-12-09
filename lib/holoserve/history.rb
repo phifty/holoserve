@@ -1,5 +1,5 @@
 
-class History
+class Holoserve::History
 
   attr_reader :pair_names
 
