@@ -1,2 +1,131 @@
 
 = HoloServe - Simple faking of HTTP APIs
+
+This tool can be used to fake HTTP web APIs. It's meant to be used in a testing environment, to make the test suite
+run faster and be independent from other API and network problems.
+
+== Concept
+
+HoloServe runs a rack application server, that matches any incoming request to a list of request profiles defined in
+the server layout. If a match is found, the defined static response is returned. The name of the matched
+request/response pair is saved in a request history. If no match is found, a 404 is returned and the
+request data is stored in the bucket for unhandeled requests. These informations can be used to extend the server layout
+with missing request handlers.
+
+Layouts, history and bucket can be accessed via control routes, which are described below.
+
+== Control routes
+
+=== POST /_control/layouts
+
+It should receive a parameter named <tt>file</tt> that contains an uploaded YML file with the server layouts. See
+{YML server layouts file format}[rdoc-label:YML-server-layouts-file-format] below.
+
+=== DELETE /_control/layouts
+
+Removes all server layouts.
+
+=== GET /_control/layouts/ids
+
+Returns the list of ids of all server layouts.
+
+==== Response example
+
+  [ "one", "two" ]
+
+=== PUT /_control/layouts/:id/current
+
+Makes the layout with id <tt>:id</tt> the currently active one.
+
+=== GET /_control/layouts/current
+
+Returns the id of the current layout.
+
+==== Response example
+
+  one
+
+=== GET /_control/bucket/requests
+
+Returns a list of all requests that has been received, but couldn't be handled.
+
+==== Response example
+
+  [
+    {
+      "method": "POST",
+      "path": "test",
+      "headers": {
+        "REMOTE_ADDR": "127.0.0.1",
+        "REQUEST_METHOD": "GET",
+        "REQUEST_PATH": "/test",
+        "PATH_INFO": "/test",
+        "REQUEST_URI": "/test",
+        "SERVER_PROTOCOL": "HTTP/1.1",
+        "HTTP_VERSION": "HTTP/1.1",
+        "HTTP_ACCEPT": "*/*",
+        "HTTP_USER_AGENT": "Ruby",
+        "HTTP_HOST": "localhost:8080",
+        "SERVER_NAME": "localhost",
+        "SERVER_PORT": "8080",
+        "QUERY_STRING": "",
+        "SCRIPT_NAME": "",
+        "SERVER_SOFTWARE": "Unicorn 4.1.1"
+      }
+    }
+  ]
+
+=== GET /_control/history
+
+Returns a list of all names of pairs that has been triggered.
+
+==== Response example
+
+  [ "create_received", "update_received" ]
+
+=== DELETE /_control/history
+
+Removes all entries from the history.
+
+== YML server layouts file format
+
+The server layouts file should have the following format.
+
+  one:
+    -
+      name: "test_received"
+      request:
+        method: "POST"
+        path: "/test"
+        headers:
+          HTTP_USER_AGENT: "Ruby"
+          HTTP_AUTHORIZATION: "OAuth oauth_token=12345"
+        body:
+          "test=value"
+        parameters:
+          test: "value"
+        oauth:
+          oauth_token: "12345"
+      response:
+        status: 200
+        body:
+          "ok"
+    -
+      request:
+        method: "GET"
+        path: "/test"
+      response:
+        status: 200
+        body:
+          "ok too"
+
+This example would define a server layout named <tt>one</tt> that has two request/response pairs. The first pair would
+have the name <tt>test_received</tt> and would match a <tt>POST</tt> request to the path <tt>/test</tt>.
+
+Notice, that the given request attributes are the _minimal_ values that have to match the incomong one. An incoming
+request may has much more attributes (see bucket example above). If a request is matched, the corresponding pair name is
+placed in the history.
+
+As the sections <tt>headers</tt> and <tt>body</tt> are raw values from the request, the sections <tt>parameters</tt> and
+<tt>oauth</tt> contain high-level values. The <tt>parameters</tt> hash is taken from the request body or the query and
+the hash containing the OAuth values is parsed from a fitting <tt>HTTP_AUTHORIZATION</tt> header.
