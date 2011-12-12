@@ -3,7 +3,7 @@ require 'oauth'
 Given /^the test oauth consumer$/ do
   @consumer = OAuth::Consumer.new "consumer_id",
                                   "consumer_secret",
-                                  :site => "http://localhost:8080"
+                                  :site => "http://localhost:#{port}"
 end
 
 When /^the request token is requested$/ do

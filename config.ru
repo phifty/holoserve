@@ -1,5 +1,5 @@
 require 'rubygems'
 require 'bundler/setup'
-require File.join(File.dirname(__FILE__), "lib", "holoserve", "server")
+require File.join(File.dirname(__FILE__), "lib", "holoserve")
 
-run Application.instance.rack
+run Holoserve.instance.rack

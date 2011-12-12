@@ -2,13 +2,21 @@ require 'unicorn'
 
 class Holoserve::Runner
 
-  def initialize
+  attr_reader :port
+
+  def initialize(options = { })
+    @port = options[:port] || 4250
+
     @rackup_options = Unicorn::Configurator::RACKUP
-    @unicorn = nil
+    @rackup_options[:port] = @port
+    @rackup_options[:set_listener] = true
+    @options = @rackup_options[:options]
+
+    @unicorn = Unicorn::HttpServer.new rack, @options
   end
 
   def start
-    @unicorn = Unicorn::HttpServer.new(rack, @rackup_options[:options]).start
+    @unicorn.start
   end
 
   def join

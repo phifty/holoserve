@@ -8,13 +8,15 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "lib", "h
 
 class TestWorld
 
+  attr_reader :port
   attr_reader :server
 
   attr_reader :last_response_status
   attr_reader :last_response_body
 
   def initialize
-    @server = Holoserve::Runner.new
+    @port = 4250
+    @server = Holoserve::Runner.new :port => @port
   end
 
   def post_yml(path, filename)
@@ -53,7 +55,7 @@ class TestWorld
   def perform(request)
     @last_response_status = 200
     @last_response_body = Transport::HTTP.request :"#{request["method"].downcase}",
-                                                  "http://localhost:8080#{request["path"]}",
+                                                  "http://localhost:#{port}#{request["path"]}",
                                                   :headers => request["headers"],
                                                   :body => request["body"],
                                                   :parameters => request["parameters"],
