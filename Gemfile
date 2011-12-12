@@ -7,6 +7,7 @@ gem "unicorn"
 group :development do
   gem "rake"
   gem "shotgun"
+  gem "rdoc"
 end
 
 group :test do
