@@ -1,6 +1,6 @@
 require 'unicorn'
 
-class Holoserve::Server::Runner
+class Holoserve::Runner
 
   def initialize
     @rackup_options = Unicorn::Configurator::RACKUP
@@ -30,7 +30,7 @@ class Holoserve::Server::Runner
   private
 
   def rack
-    Holoserve::Server.instance.rack
+    Holoserve.instance.rack
   end
 
 end

@@ -1,5 +1,5 @@
 
-class Holoserve::Server::Pair::Finder
+class Holoserve::Pair::Finder
 
   def initialize(configuration, request)
     @configuration, @request = configuration, request
@@ -8,7 +8,7 @@ class Holoserve::Server::Pair::Finder
   def pair
     return nil unless layout
     layout.detect do |pair|
-      Holoserve::Server::Request::Matcher.new(@request, pair[:request]).match?
+      Holoserve::Request::Matcher.new(@request, pair[:request]).match?
     end
   end
 

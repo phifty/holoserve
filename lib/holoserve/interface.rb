@@ -1,5 +1,5 @@
 
-module Holoserve::Server::Interface
+module Holoserve::Interface
 
   autoload :Control, File.join(File.dirname(__FILE__), "interface", "control")
   autoload :Fake, File.join(File.dirname(__FILE__), "interface", "fake")

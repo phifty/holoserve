@@ -1,5 +1,5 @@
 
-class Holoserve::Server::Request::Matcher
+class Holoserve::Request::Matcher
 
   def initialize(request, request_subset)
     @request, @request_subset = request, request_subset

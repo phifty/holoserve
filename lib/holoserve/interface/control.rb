@@ -2,7 +2,7 @@ require 'sinatra'
 require 'yaml'
 require 'json'
 
-class Holoserve::Server::Interface::Control < Sinatra::Base
+class Holoserve::Interface::Control < Sinatra::Base
 
   post "/_control/layouts" do
     begin
@@ -62,15 +62,15 @@ class Holoserve::Server::Interface::Control < Sinatra::Base
   end
 
   def bucket
-    Holoserve::Server.instance.bucket
+    Holoserve.instance.bucket
   end
 
   def history
-    Holoserve::Server.instance.history
+    Holoserve.instance.history
   end
 
   def configuration
-    Holoserve::Server.instance.configuration
+    Holoserve.instance.configuration
   end
 
 end

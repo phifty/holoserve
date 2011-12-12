@@ -4,7 +4,7 @@ require 'cucumber/formatter/unicode'
 require 'rspec/expectations'
 require 'json'
 require 'transport'
-require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "lib", "holoserve", "server"))
+require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "lib", "holoserve"))
 
 class TestWorld
 
@@ -14,7 +14,7 @@ class TestWorld
   attr_reader :last_response_body
 
   def initialize
-    @server = Holoserve::Server::Runner.new
+    @server = Holoserve::Runner.new
   end
 
   def post_yml(path, filename)

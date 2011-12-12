@@ -1,5 +1,5 @@
 
-class Holoserve::Server::Bucket
+class Holoserve::Bucket
 
   attr_reader :requests
 
