@@ -1,8 +1,15 @@
+require 'yaml'
 
 class Holoserve::Configuration
 
+  attr_reader :logger
+
   attr_reader :layouts
   attr_reader :layout_id
+
+  def initialize(logger)
+    @logger = logger
+  end
 
   def layouts=(hash)
     @layouts = Holoserve::Tool::Hash::KeySymbolizer.new(hash).hash
@@ -30,6 +37,7 @@ class Holoserve::Configuration
 
   def load_layouts_from_yml(file_or_filename)
     self.layouts = file_or_filename.is_a?(String) ? YAML::load_file(file_or_filename) : YAML::load(file_or_filename)
+    logger.info "loaded layouts from file #{file_or_filename}"
   rescue Psych::SyntaxError => error
     self.clear_layouts!
     raise error

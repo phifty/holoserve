@@ -1,3 +1,4 @@
+require 'pp'
 
 class Holoserve::Interface::Fake
 
@@ -5,10 +6,14 @@ class Holoserve::Interface::Fake
     request = Holoserve::Request::Decomposer.new(env).hash
     pair = Holoserve::Pair::Finder.new(configuration, request).pair
     if pair
-      history.pair_names << pair[:name] if pair[:name]
+      if name = pair[:name]
+        history.pair_names << name
+        logger.info "received handled request with name '#{name}'"
+      end
       Holoserve::Response::Composer.new(pair[:response]).response_array
     else
       bucket.requests << request
+      logger.error "received unhandled request\n" + request.pretty_inspect
       not_found
     end
   end
@@ -17,6 +22,10 @@ class Holoserve::Interface::Fake
 
   def not_found
     [ 404, { "Content-Type" => "text/plain" }, [ "no response found for this request" ] ]
+  end
+
+  def logger
+    configuration.logger
   end
 
   def layout

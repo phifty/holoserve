@@ -1,4 +1,5 @@
 require 'rack/builder'
+require 'logger'
 
 class Holoserve
 
@@ -12,12 +13,14 @@ class Holoserve
   autoload :Runner, File.join(File.dirname(__FILE__), "holoserve", "runner")
   autoload :Tool, File.join(File.dirname(__FILE__), "holoserve", "tool")
 
+  attr_reader :logger
   attr_reader :configuration
   attr_reader :bucket
   attr_reader :history
   attr_reader :rack
 
   def initialize
+    initialize_logger
     initialize_configuration
     initialize_bucket
     initialize_history
@@ -26,8 +29,12 @@ class Holoserve
 
   private
 
+  def initialize_logger
+    @logger = Logger.new STDOUT
+  end
+
   def initialize_configuration
-    @configuration = Configuration.new
+    @configuration = Configuration.new @logger
   end
 
   def initialize_bucket
