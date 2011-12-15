@@ -28,8 +28,8 @@ class Holoserve::Configuration
     self.layouts ? self.layouts[self.layout_id] : nil
   end
 
-  def load_layouts_from_yml(filename)
-    self.layouts = YAML::load filename
+  def load_layouts_from_yml(file_or_filename)
+    self.layouts = file_or_filename.is_a?(String) ? YAML::load_file(file_or_filename) : YAML::load(file_or_filename)
   rescue Psych::SyntaxError => error
     self.clear_layouts!
     raise error
