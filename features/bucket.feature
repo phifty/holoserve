@@ -10,10 +10,10 @@ Feature: Bucket handling
      When the regular test get request is performed
      Then the response for unhandled get request should be returned
       And the bucket should contain the test get request
+    Given the test layouts
 
   Scenario Outline: Perform an unhandled request
-    Given the test layouts
-      And the layout 'one'
+    Given the layout 'one'
      When the regular unhandled <method> request is performed
      Then the response for unhandled <method> request should be returned
       And the bucket should contain the unhandled <method> request

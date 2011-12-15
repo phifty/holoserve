@@ -11,13 +11,13 @@ Feature: Layout handling
       And the responded body should <include or not include> an acknowledgement
       And the available layouts should <include or not include> 'one'
       And the available layouts should <include or not include> 'two'
+    Given the test layouts
     Examples:
       | test or invalid | status code | include or not include |
       | test            | 200         | include                |
       | invalid         | 400         | not include            |
 
   Scenario Outline: Set the current layout
-    Given the test layouts
      When the layout '<layout>' is set to be the current layout
      Then the responded status code should be <status code>
       And the responded body should <include or not include> an acknowledgement

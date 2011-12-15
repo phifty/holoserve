@@ -2,8 +2,26 @@
 
 require 'rubygems'
 require 'bundler/setup'
+require 'optparse'
 
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "lib", "holoserve"))
 
-runner = Holoserve::Runner.new
+options = { }
+OptionParser.new do |parser|
+  parser.banner = "Usage: holoserve [options]"
+  parser.separator ""
+  parser.separator "Options:"
+  parser.on("-p", "--port PORT", Integer, "The port holoserve should listen to.") do |value|
+    options[:port] = value
+  end
+  parser.on("-l", "--layouts-file FILE", "Load the specified layouts file on startup.") do |value|
+    options[:layouts_filename] = value
+  end
+  parser.on_tail("-h", "--help", "Shows the help message.") do
+    puts parser
+    exit
+  end
+end.parse!(ARGV)
+
+runner = Holoserve::Runner.new options
 runner.run

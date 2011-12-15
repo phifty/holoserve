@@ -6,11 +6,9 @@ class Holoserve::Interface::Control < Sinatra::Base
 
   post "/_control/layouts" do
     begin
-      tempfile = params["file"][:tempfile]
-      configuration.layouts = YAML::load tempfile
+      configuration.load_layouts_from_yml params["file"][:tempfile]
       respond_json_acknowledgement
     rescue Psych::SyntaxError => error
-      configuration.clear_layouts!
       error 400, error.inspect
     end
   end

@@ -5,9 +5,6 @@ Feature: History handling
   As a client application
   It should list the names of the triggered request/response-pairs
 
-  Background:
-    Given the test layouts
-
   Scenario: A named pair is triggered
     Given the layout 'two'
      When the regular test get request is performed
