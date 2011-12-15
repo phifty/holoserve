@@ -71,7 +71,8 @@ two:
       path: "/test"
     response:
       status: 200
-      body: "fetched"
+      json:
+        test: "value"
 three:
   -
     name: "request_token_requested"

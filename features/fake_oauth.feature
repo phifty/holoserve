@@ -1,7 +1,7 @@
 
 Feature: Fake handling of oauth requests
 
-  In order to replace a oauth Web API
+  In order to replace a oauth Web api
   As a oauth client application
   It should handle all oauth http requests
 

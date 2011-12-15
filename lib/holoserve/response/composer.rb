@@ -1,3 +1,4 @@
+require 'json'
 
 class Holoserve::Response::Composer
 
@@ -20,7 +21,15 @@ class Holoserve::Response::Composer
   end
 
   def body
-    @response[:body]
+    @body ||= begin
+      if @response.has_key?(:body)
+        @response[:body]
+      elsif @response.has_key?(:json)
+        JSON.dump @response[:json]
+      else
+        nil
+      end
+    end
   end
 
 end

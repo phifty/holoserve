@@ -7,14 +7,14 @@ Feature: Bucket handling
 
   Scenario: Perform a request without any layout loaded
     Given a clear layouts setting
-     When the test get request is performed
+     When the regular test get request is performed
      Then the response for unhandled get request should be returned
       And the bucket should contain the test get request
 
   Scenario Outline: Perform an unhandled request
     Given the test layouts
       And the layout 'one'
-     When the unhandled <method> request is performed
+     When the regular unhandled <method> request is performed
      Then the response for unhandled <method> request should be returned
       And the bucket should contain the unhandled <method> request
     Examples:
