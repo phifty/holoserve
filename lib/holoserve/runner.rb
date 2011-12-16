@@ -6,7 +6,6 @@ class Holoserve::Runner
 
   def initialize(options = { })
     @port = options[:port] || 4250
-    @layouts_filename = options[:layouts_filename]
 
     @rackup_options = Unicorn::Configurator::RACKUP
     @rackup_options[:port] = @port
@@ -18,7 +17,6 @@ class Holoserve::Runner
 
   def start
     @unicorn.start
-    instance.configuration.load_layouts_from_yml @layouts_filename if @layouts_filename
   end
 
   def join

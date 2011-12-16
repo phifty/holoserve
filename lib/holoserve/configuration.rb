@@ -24,6 +24,7 @@ class Holoserve::Configuration
   end
 
   def layout_ids
+    logger.info @layouts.inspect
     self.layouts ? self.layouts.keys : [ ]
   end
 
@@ -35,9 +36,10 @@ class Holoserve::Configuration
     self.layouts ? self.layouts[self.layout_id] : nil
   end
 
-  def load_layouts_from_yml(file_or_filename)
-    self.layouts = file_or_filename.is_a?(String) ? YAML::load_file(file_or_filename) : YAML::load(file_or_filename)
-    logger.info "loaded layouts from file #{file_or_filename}"
+  def load_layouts_from_yml_file(file)
+    self.layouts = YAML::load_file file
+    logger.info "loaded layouts from file #{file.path}"
+    logger.info "available layout(s): #{self.layout_ids.join(", ")}"
   rescue Psych::SyntaxError => error
     self.clear_layouts!
     raise error
