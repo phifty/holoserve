@@ -24,7 +24,6 @@ class Holoserve::Configuration
   end
 
   def layout_ids
-    logger.info @layouts.inspect
     self.layouts ? self.layouts.keys : [ ]
   end
 
