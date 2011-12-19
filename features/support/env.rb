@@ -21,20 +21,16 @@ class TestWorld
   end
 
   def post_yml(path, filename)
-    boundary = "xxx12345xxx"
-    perform "method" => "POST",
-            "path" => path,
-            "headers" => {
-              "Content-Type" => "multipart/form-data, boundary=#{boundary}"
-            },
-            "body" =>
-              "--#{boundary}\r\n" +
-              "Content-Disposition: form-data; name=\"file\"; filename=\"#{File.basename(filename)}\"\r\n" +
-              "Content-Type: application/x-yaml\r\n" +
-              "\r\n" +
-              File.read(filename) +
-              "\r\n" +
-              "--#{boundary}--\r\n"
+    @last_response_status = 200
+    @last_response_body = Holoserve::Tool::Uploader.new(
+      filename,
+      :post,
+      "http://localhost:#{port}#{path}",
+      :expected_status_code => 200
+    ).upload
+  rescue Transport::UnexpectedStatusCodeError => error
+    @last_response_status = error.status_code
+    @last_response_body = error.message
   end
 
   def post(path, parameters = { }, headers = { })

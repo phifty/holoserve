@@ -3,6 +3,7 @@ source :rubygems
 gem "rack"
 gem "sinatra"
 gem "unicorn"
+gem "transport"
 
 group :development do
   gem "rake"
