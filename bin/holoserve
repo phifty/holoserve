@@ -14,8 +14,11 @@ OptionParser.new do |parser|
   parser.on("-p", "--port PORT", Integer, "The port holoserve should listen to.") do |value|
     options[:port] = value
   end
-  parser.on("-l", "--layouts-file FILE", "Load the specified layouts file on startup.") do |value|
+  parser.on("-f", "--layouts-file FILE", "Load the specified layouts file on startup.") do |value|
     options[:layouts_filename] = value
+  end
+  parser.on("-l", "--layout LAYOUT", "Selects the specified layout as the current one.") do |value|
+    options[:layout] = value
   end
   parser.on_tail("-h", "--help", "Shows the help message.") do
     puts parser
