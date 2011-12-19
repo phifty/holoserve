@@ -17,6 +17,7 @@ Gem::Specification.new do |specification|
   specification.files             = [ "README.rdoc", "LICENSE", "Rakefile" ] + Dir["bin/**/*"] + Dir["lib/**/*"] + Dir["spec/**/*"]
   specification.extra_rdoc_files  = [ "README.rdoc" ]
   specification.require_path      = "lib"
+  specification.executables       = [ "holoserve" ]
 
   specification.test_files        = Dir["spec/**/*_spec.rb"]
 
