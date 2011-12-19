@@ -1,5 +1,5 @@
 
-= HoloServe - Simple faking of HTTP APIs
+= Holoserve - Simple faking of HTTP APIs
 
 This tool can be used to fake HTTP web APIs. It's meant to be used in a testing environment, to make the test suite
 run faster and be independent from other API and network problems.
@@ -14,7 +14,26 @@ with missing request handlers.
 
 Layouts, history and bucket can be accessed via control routes, which are described below.
 
+== Installation
+
+Assuming that <tt>ruby</tt> and <tt>gem</tt> are installed, simply type...
+
+  gem install holoserve
+
+== Run from the command line
+
+To start up an empty Holoserve instance, type...
+
+  holoserve
+
+To load and select a server layout during start up, you can provide some parameters.
+
+  holoserve -f layouts.yml -l backend
+
 == Control routes
+
+If you're using Ruby, you can control Holoserve via the
+{Holoserve Connector}[https://github.com/skrill/holoserve-connector] gem.
 
 === POST /_control/layouts
 
