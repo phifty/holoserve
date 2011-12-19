@@ -17,6 +17,7 @@ class Holoserve::Configuration
 
   def layout_id=(value)
     @layout_id = value.to_sym
+    logger.info "made '#{value}' the current layout"
   end
 
   def clear_layouts!
