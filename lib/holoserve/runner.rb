@@ -7,8 +7,8 @@ class Holoserve::Runner
 
   def initialize(options = { })
     @port = options[:port] || 4250
-    @layouts_filename = options[:layouts_filename]
-    @layout = options[:layout]
+    @layout_filename = options[:layout_filename]
+    @situation = options[:situation]
 
     @rackup_options = Unicorn::Configurator::RACKUP
     @rackup_options[:port] = @port
@@ -20,8 +20,8 @@ class Holoserve::Runner
 
   def start
     @unicorn.start
-    upload_layouts if @layouts_filename
-    set_layout if @layout
+    upload_layouts if @layout_filename
+    set_situation if @situation
   end
 
   def join
@@ -44,16 +44,18 @@ class Holoserve::Runner
 
   def upload_layouts
     Holoserve::Tool::Uploader.new(
-      @layouts_filename,
+      @layout_filename,
       :post,
-      "http://localhost:#{port}/_control/layouts",
+      "http://localhost:#{port}/_control/layout",
       :expected_status_code => 200
     ).upload
     nil
   end
 
-  def set_layout
-    Transport::JSON.request :put, "http://localhost:#{port}/_control/layouts/#{@layout}/current", :expected_status_code => 200
+  def set_situation
+    Transport::JSON.request :put,
+                            "http://localhost:#{port}/_control/situation/#{@situation}",
+                            :expected_status_code => 200
     nil
   end
 

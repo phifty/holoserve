@@ -6,11 +6,11 @@ Feature: Bucket handling
   It should list all unhandled requests in the bucket
 
   Scenario: Perform a request without any layout loaded
-    Given a clear layouts setting
+    Given a clear layout setting
      When the regular test get request is performed
      Then the response for unhandled get request should be returned
       And the bucket should contain the test get request
-    Given the test layouts
+    Given the test layout
 
   Scenario Outline: Perform an unhandled request
     Given the situation 'one'

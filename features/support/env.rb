@@ -17,7 +17,7 @@ class TestWorld
   def initialize
     @port = 4250
     @server = Holoserve::Runner.new :port => @port,
-                                    :layouts_filename => File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "test.yml"))
+                                    :layout_filename => File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "test.yml"))
   end
 
   def post_yml(path, filename)

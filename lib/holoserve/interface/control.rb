@@ -4,7 +4,7 @@ require 'json'
 
 class Holoserve::Interface::Control < Sinatra::Base
 
-  post "/_control/layouts" do
+  post "/_control/layout" do
     begin
       configuration.load_layouts_from_yml_file params["file"][:tempfile]
       respond_json_acknowledgement
@@ -13,7 +13,7 @@ class Holoserve::Interface::Control < Sinatra::Base
     end
   end
 
-  delete "/_control/layouts" do
+  delete "/_control/layout" do
     configuration.clear_layouts!
     respond_json_acknowledgement
   end
