@@ -13,6 +13,10 @@ class Holoserve::Interface::Control < Sinatra::Base
     end
   end
 
+  get "/_control/layout" do
+    respond_yaml configuration.layout
+  end
+
   delete "/_control/layout" do
     configuration.clear_layout!
     respond_json_acknowledgement
@@ -49,6 +53,11 @@ class Holoserve::Interface::Control < Sinatra::Base
   def respond_json(object)
     content_type "application/json"
     JSON.dump object
+  end
+
+  def respond_yaml(object)
+    content_type "application/x-yaml"
+    object.to_yaml
   end
 
   def bucket

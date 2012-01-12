@@ -31,3 +31,9 @@ Then /^the responded body should not include an acknowledgement$/ do
 
   end
 end
+
+Then /^the responded body should contain yaml data$/ do
+  lambda do
+    YAML.load last_response_body
+  end.should_not raise_error
+end

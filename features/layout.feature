@@ -14,3 +14,9 @@ Feature: Layout handling
       | test or invalid | status code | include or not include |
       | test            | 200         | include                |
       | invalid         | 400         | not include            |
+
+  Scenario: Get the layout
+    Given the test layout
+     When the layout is fetched
+     Then the responded status code should be 200
+      And the responded body should contain yaml data

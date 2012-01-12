@@ -7,6 +7,10 @@ Given /^a clear layout setting$/ do
   delete '/_control/layout'
 end
 
+When /^the layout is fetched$/ do
+  get "/_control/layout"
+end
+
 When /^the test layout are set$/ do
   test_layout_filename = File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "test.yml"))
   post_yml "/_control/layout", test_layout_filename
