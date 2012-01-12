@@ -6,7 +6,7 @@ class Holoserve::Interface::Control < Sinatra::Base
 
   post "/_control/layout" do
     begin
-      configuration.load_layouts_from_yml_file params["file"][:tempfile]
+      configuration.load_layout_from_yml_file params["file"][:tempfile]
       respond_json_acknowledgement
     rescue Psych::SyntaxError => error
       error 400, error.inspect
@@ -14,17 +14,17 @@ class Holoserve::Interface::Control < Sinatra::Base
   end
 
   delete "/_control/layout" do
-    configuration.clear_layouts!
+    configuration.clear_layout!
     respond_json_acknowledgement
   end
 
   put "/_control/situation/:name" do |situation|
-    configuration.layout_id = situation
+    configuration.situation = situation
     respond_json_acknowledgement
   end
 
   get "/_control/situation" do
-    configuration.layout_id.to_s
+    configuration.situation.to_s
   end
 
   get "/_control/bucket/requests" do
