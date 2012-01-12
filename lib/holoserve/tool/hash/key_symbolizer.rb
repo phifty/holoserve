@@ -1,12 +1,18 @@
 
 class Holoserve::Tool::Hash::KeySymbolizer
 
-  def initialize(hash)
-    @hash = hash
+  def initialize(hash_or_array)
+    @hash_or_array = hash_or_array
   end
 
   def hash
-    symbolize_keys @hash
+    if @hash_or_array.is_a?(Hash)
+      symbolize_keys @hash_or_array
+    elsif @hash_or_array.is_a?(Array)
+      symbolize_keys_of_all @hash_or_array
+    else
+      @hash_or_array
+    end
   end
 
   private
@@ -27,6 +33,7 @@ class Holoserve::Tool::Hash::KeySymbolizer
   end
 
   def symbolize_keys_of_all(array)
+    return nil unless array.is_a?(Array)
     array.map do |item|
       if item.is_a?(Hash)
         symbolize_keys item
