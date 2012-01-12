@@ -6,7 +6,7 @@ Feature: Fake handling of requests
   It should handle all http requests
 
   Scenario Outline: Handle request
-    Given the layout 'one'
+    Given the situation 'one'
      When the regular test <method> request is performed
      Then the response for test <method> request should be returned
     Examples:
@@ -17,7 +17,7 @@ Feature: Fake handling of requests
       | delete |
 
   Scenario Outline: Handle request with parameters
-    Given the layout 'one'
+    Given the situation 'one'
      When the regular test <method> request is performed with parameter set '<parameter set>'
      Then the response for test <method> request should be returned
     Examples:
@@ -28,7 +28,7 @@ Feature: Fake handling of requests
       | delete | one           |
 
   Scenario Outline: Handle request with headers
-    Given the layout 'one'
+    Given the situation 'one'
      When the regular test <method> request is performed with header set '<header set>'
      Then the response for test <method> request should be returned
     Examples:

@@ -15,8 +15,8 @@ Feature: Layout handling
       | test            | 200         | include                |
       | invalid         | 400         | not include            |
 
-  Scenario: Set the current layout
-     When the layout 'one' is set to be the current layout
+  Scenario: Set the current situation
+     When the situation 'one' is set to be the current one
      Then the responded status code should be 200
       And the responded body should include an acknowledgement
-      And the current layout should be 'one'
+      And the current situation should be 'one'

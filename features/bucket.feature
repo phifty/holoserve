@@ -13,7 +13,7 @@ Feature: Bucket handling
     Given the test layouts
 
   Scenario Outline: Perform an unhandled request
-    Given the layout 'one'
+    Given the situation 'one'
      When the regular unhandled <method> request is performed
      Then the response for unhandled <method> request should be returned
       And the bucket should contain the unhandled <method> request

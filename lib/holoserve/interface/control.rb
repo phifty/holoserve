@@ -18,12 +18,12 @@ class Holoserve::Interface::Control < Sinatra::Base
     respond_json_acknowledgement
   end
 
-  put "/_control/layouts/:id/current" do |id|
-    configuration.layout_id = id
+  put "/_control/situation/:name" do |situation|
+    configuration.layout_id = situation
     respond_json_acknowledgement
   end
 
-  get "/_control/layouts/current" do
+  get "/_control/situation" do
     configuration.layout_id.to_s
   end
 

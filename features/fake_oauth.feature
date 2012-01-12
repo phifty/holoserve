@@ -6,7 +6,7 @@ Feature: Fake handling of oauth requests
   It should handle all oauth http requests
 
   Scenario: Consumer fetches access token
-    Given the layout 'three'
+    Given the situation 'three'
       And the test oauth consumer
      When the request token is requested
       And the access token is requested
