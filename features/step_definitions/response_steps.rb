@@ -37,3 +37,13 @@ Then /^the responded body should contain yaml data$/ do
     YAML.load last_response_body
   end.should_not raise_error
 end
+
+Then /^the responded body should contain json data$/ do
+  lambda do
+    JSON.parse last_response_body
+  end.should_not raise_error
+end
+
+Then /^the responded body should contain invalid data$/ do
+
+end

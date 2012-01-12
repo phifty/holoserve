@@ -13,8 +13,14 @@ class Holoserve::Interface::Control < Sinatra::Base
     end
   end
 
-  get "/_control/layout" do
-    respond_yaml configuration.layout
+  get "/_control/layout.:format" do |format|
+    if format == "yaml"
+      respond_yaml configuration.layout
+    elsif format == "json"
+      respond_json configuration.layout
+    else
+      not_acceptable
+    end
   end
 
   delete "/_control/layout" do
@@ -58,6 +64,10 @@ class Holoserve::Interface::Control < Sinatra::Base
   def respond_yaml(object)
     content_type "application/x-yaml"
     object.to_yaml
+  end
+
+  def not_acceptable
+    [ 406, { }, [ "format not acceptable" ] ]
   end
 
   def bucket

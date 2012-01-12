@@ -7,8 +7,8 @@ Given /^a clear layout setting$/ do
   delete '/_control/layout'
 end
 
-When /^the layout is fetched$/ do
-  get "/_control/layout"
+When /^the layout is fetched in format (\w+)$/ do |format|
+  get "/_control/layout.#{format}"
 end
 
 When /^the test layout are set$/ do

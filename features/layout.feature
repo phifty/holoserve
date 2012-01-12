@@ -15,8 +15,13 @@ Feature: Layout handling
       | test            | 200         | include                |
       | invalid         | 400         | not include            |
 
-  Scenario: Get the layout
+  Scenario Outline: Get the layout in different formats
     Given the test layout
-     When the layout is fetched
-     Then the responded status code should be 200
-      And the responded body should contain yaml data
+     When the layout is fetched in format <format>
+     Then the responded status code should be <status code>
+      And the responded body should contain <format> data
+    Examples:
+      | format  | status code |
+      | yaml    | 200         |
+      | json    | 200         |
+      | invalid | 406         |
