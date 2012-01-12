@@ -1,117 +1,121 @@
-one:
-  -
-    request:
-      method: "POST"
-      path: "/test"
-    response:
+-
+  name: "request_token_requested"
+  request:
+    method: "POST"
+    path: "/oauth/request_token"
+    oauth:
+      oauth_body_hash: "2jmj7l5rSw0yVb%2FvlWAYkK%2FYBwk%3D"
+      oauth_callback: "oob"
+      oauth_consumer_key: "consumer_id"
+      oauth_signature_method: "HMAC-SHA1"
+      oauth_version: "1.0"
+  response:
+    three:
+      status: 201
+      body: "oauth_token=12345&oauth_token_secret=secret"
+-
+  name: "access_token_requested"
+  request:
+    method: "POST"
+    path: "/oauth/access_token"
+    oauth:
+      oauth_body_hash: "2jmj7l5rSw0yVb%2FvlWAYkK%2FYBwk%3D"
+      oauth_consumer_key: "consumer_id"
+      oauth_signature_method: "HMAC-SHA1"
+      oauth_token: "12345"
+      oauth_version: "1.0"
+  response:
+    three:
+      status: 201
+      body: "oauth_token=23456&oauth_token_secret=secret"
+-
+  name: "oauth_test_requested"
+  request:
+    method: "GET"
+    path: "/test"
+    oauth:
+      oauth_consumer_key: "consumer_id"
+      oauth_signature_method: "HMAC-SHA1"
+      oauth_token: "23456"
+      oauth_version: "1.0"
+  response:
+    three:
+      status: 200
+      body: "ok"
+-
+  request:
+    method: "POST"
+    path: "/test"
+    parameters:
+      test: "value"
+  response:
+    one:
       status: 201
       body: "created"
-  -
-    request:
-      method: "PUT"
-      path: "/test"
-    response:
+-
+  request:
+    method: "PUT"
+    path: "/test"
+    parameters:
+      test: "value"
+  response:
+    one:
       status: 200
       body: "updated"
-  -
-    request:
-      method: "GET"
-      path: "/test"
-    response:
+-
+  request:
+    method: "GET"
+    path: "/test"
+    parameters:
+      test: "value"
+  response:
+    one:
       status: 200
       body: "fetched"
-  -
-    request:
-      method: "DELETE"
-      path: "/test"
-    response:
+-
+  request:
+    method: "DELETE"
+    path: "/test"
+    parameters:
+      test: "value"
+  response:
+    one:
       status: 200
       body: "deleted"
-  -
-    request:
-      method: "POST"
-      path: "/test"
-      parameters:
-        test: "value"
-    response:
+-
+  request:
+    method: "POST"
+    path: "/test"
+  response:
+    one:
       status: 201
       body: "created"
-  -
-    request:
-      method: "PUT"
-      path: "/test"
-      parameters:
-        test: "value"
-    response:
+-
+  request:
+    method: "PUT"
+    path: "/test"
+  response:
+    one:
       status: 200
       body: "updated"
-  -
-    request:
-      method: "GET"
-      path: "/test"
-      parameters:
-        test: "value"
-    response:
+-
+  name: "fetched_test"
+  request:
+    method: "GET"
+    path: "/test"
+  response:
+    one:
       status: 200
       body: "fetched"
-  -
-    request:
-      method: "DELETE"
-      path: "/test"
-      parameters:
-        test: "value"
-    response:
-      status: 200
-      body: "deleted"
-two:
-  -
-    name: "fetched_test"
-    request:
-      method: "GET"
-      path: "/test"
-    response:
+    two:
       status: 200
       json:
         test: "value"
-three:
-  -
-    name: "request_token_requested"
-    request:
-      method: "POST"
-      path: "/oauth/request_token"
-      oauth:
-        oauth_body_hash: "2jmj7l5rSw0yVb%2FvlWAYkK%2FYBwk%3D"
-        oauth_callback: "oob"
-        oauth_consumer_key: "consumer_id"
-        oauth_signature_method: "HMAC-SHA1"
-        oauth_version: "1.0"
-    response:
-      status: 201
-      body: "oauth_token=12345&oauth_token_secret=secret"
-  -
-    name: "access_token_requested"
-    request:
-      method: "POST"
-      path: "/oauth/access_token"
-      oauth:
-        oauth_body_hash: "2jmj7l5rSw0yVb%2FvlWAYkK%2FYBwk%3D"
-        oauth_consumer_key: "consumer_id"
-        oauth_signature_method: "HMAC-SHA1"
-        oauth_token: "12345"
-        oauth_version: "1.0"
-    response:
-      status: 201
-      body: "oauth_token=23456&oauth_token_secret=secret"
-  -
-    name: "oauth_test_requested"
-    request:
-      method: "GET"
-      path: "/test"
-      oauth:
-        oauth_consumer_key: "consumer_id"
-        oauth_signature_method: "HMAC-SHA1"
-        oauth_token: "23456"
-        oauth_version: "1.0"
-    response:
+-
+  request:
+    method: "DELETE"
+    path: "/test"
+  response:
+    one:
       status: 200
-      body: "ok"
+      body: "deleted"

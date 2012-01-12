@@ -45,7 +45,7 @@ class Holoserve::Request::Matcher
   def match_parameters?
     match = true
     (@request_subset[:parameters] || { }).each do |key, value|
-      match &&= @request[:parameters][key] == value
+      match &&= @request[:parameters].is_a?(Hash) && (@request[:parameters][key] == value)
     end
     match
   end
@@ -53,7 +53,7 @@ class Holoserve::Request::Matcher
   def match_oauth?
     match = true
     (@request_subset[:oauth] || { }).each do |key, value|
-      match &&= @request[:oauth][key] == value
+      match &&= @request[:oauth].is_a?(Hash) && (@request[:oauth][key] == value)
     end
     match
   end

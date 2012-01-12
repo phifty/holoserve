@@ -15,7 +15,7 @@ class Holoserve::Pair::Finder
   private
 
   def layout
-    @configuration.layout ? @configuration.layout[@configuration.situation] : nil
+    @configuration.layout
   end
 
 end

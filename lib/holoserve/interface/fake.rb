@@ -5,12 +5,15 @@ class Holoserve::Interface::Fake
   def call(env)
     request = Holoserve::Request::Decomposer.new(env).hash
     pair = Holoserve::Pair::Finder.new(configuration, request).pair
+    logger.debug pair.pretty_inspect
     if pair
       if name = pair[:name]
         history.pair_names << name
         logger.info "received handled request with name '#{name}'"
       end
-      Holoserve::Response::Composer.new(pair[:response]).response_array
+      responses = pair[:response]
+      response = responses[configuration.situation.to_sym]
+      Holoserve::Response::Composer.new(response).response_array
     else
       bucket.requests << request
       logger.error "received unhandled request\n" + request.pretty_inspect
