@@ -29,18 +29,3 @@ Then /^the current layout should be '([^']+)'$/ do |layout|
   get "/_control/layouts/current"
   last_response_body.should == layout
 end
-
-Then /^the available layouts should include '([^']+)'$/ do |layout|
-  get "/_control/layouts/ids"
-  last_json_response_body.should include(layout)
-end
-
-Then /^the available layouts should not include '([^']+)'$/ do |layout|
-  get "/_control/layouts/ids"
-  last_json_response_body.should_not include(layout)
-end
-
-Then /^the available layouts should be empty$/ do
-  get "/_control/layouts/ids"
-  last_json_response_body.should be_empty
-end

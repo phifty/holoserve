@@ -18,17 +18,9 @@ class Holoserve::Interface::Control < Sinatra::Base
     respond_json_acknowledgement
   end
 
-  get "/_control/layouts/ids" do
-    respond_json configuration.layout_ids
-  end
-
   put "/_control/layouts/:id/current" do |id|
-    if configuration.layout_id?(id)
-      configuration.layout_id = id
-      respond_json_acknowledgement
-    else
-      not_found
-    end
+    configuration.layout_id = id
+    respond_json_acknowledgement
   end
 
   get "/_control/layouts/current" do
