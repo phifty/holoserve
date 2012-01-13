@@ -11,7 +11,7 @@ class Holoserve::Interface::Fake
         history.pair_names << name
         logger.info "received handled request with name '#{name}'"
       end
-      responses = pair[:response]
+      responses = pair[:responses]
       response = responses[configuration.situation.to_sym]
       Holoserve::Response::Composer.new(response).response_array
     else
