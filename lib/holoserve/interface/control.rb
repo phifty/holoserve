@@ -4,11 +4,21 @@ require 'json'
 
 class Holoserve::Interface::Control < Sinatra::Base
 
+  mime_type :yaml, "application/x-yaml"
+  mime_type :json, "application/json"
+
   post "/_control/layout.:format" do |format|
     begin
-      configuration.load_layout_from_yml_file params["file"][:tempfile]
-      respond_json_acknowledgement
-    rescue Psych::SyntaxError => error
+      if format == "yaml"
+        configuration.load_layout_from_yaml_file params["file"][:tempfile]
+        respond_json_acknowledgement
+      elsif format == "json"
+        configuration.load_layout_from_json_file params["file"][:tempfile]
+        respond_json_acknowledgement
+      else
+        not_acceptable
+      end
+    rescue Holoserve::Configuration::InvalidFormatError => error
       error 400, error.inspect
     end
   end
@@ -57,12 +67,12 @@ class Holoserve::Interface::Control < Sinatra::Base
   end
 
   def respond_json(object)
-    content_type "application/json"
+    content_type :json
     JSON.dump object
   end
 
   def respond_yaml(object)
-    content_type "application/x-yaml"
+    content_type :yaml
     object.to_yaml
   end
 
