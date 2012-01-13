@@ -1,5 +1,5 @@
 
-Feature: Fake handling of requests with json reponse
+Feature: Fake handling of requests with json response
 
   In order to replace a json web api
   As a client application
