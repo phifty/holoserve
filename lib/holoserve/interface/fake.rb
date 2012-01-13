@@ -12,7 +12,8 @@ class Holoserve::Interface::Fake
         logger.info "received handled request with name '#{name}'"
       end
       responses = pair[:responses]
-      response = responses[configuration.situation.to_sym]
+      response_default = responses[:default] || { }
+      response = response_default.merge(responses[configuration.situation.to_sym] || { })
       Holoserve::Response::Composer.new(response).response_array
     else
       bucket.requests << request

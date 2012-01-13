@@ -104,11 +104,11 @@
     method: "GET"
     path: "/test"
   responses:
-    one:
+    default:
       status: 200
+    one:
       body: "fetched"
     two:
-      status: 200
       json:
         test: "value"
 -
