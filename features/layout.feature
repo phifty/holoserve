@@ -6,14 +6,14 @@ Feature: Layout handling
   It should be possible to set and get the internal layout configuration
 
   Scenario Outline: Set the layout
-     When the <test or invalid> layout are set
+     When the <test or invalid> <format> layout are set
      Then the responded status code should be <status code>
       And the responded body should <include or not include> an acknowledgement
     Given the test layout
     Examples:
-      | test or invalid | status code | include or not include |
-      | test            | 200         | include                |
-      | invalid         | 400         | not include            |
+      | test or invalid | format | status code | include or not include |
+      | test            | yaml   | 200         | include                |
+      | invalid         | yaml   | 400         | not include            |
 
   Scenario Outline: Get the layout in different formats
     Given the test layout

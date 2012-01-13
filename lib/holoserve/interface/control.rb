@@ -4,7 +4,7 @@ require 'json'
 
 class Holoserve::Interface::Control < Sinatra::Base
 
-  post "/_control/layout" do
+  post "/_control/layout.:format" do |format|
     begin
       configuration.load_layout_from_yml_file params["file"][:tempfile]
       respond_json_acknowledgement

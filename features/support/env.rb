@@ -17,10 +17,10 @@ class TestWorld
   def initialize
     @port = 4250
     @server = Holoserve::Runner.new :port => @port,
-                                    :layout_filename => File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "test.yml"))
+                                    :layout_filename => File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "test.yaml"))
   end
 
-  def post_yml(path, filename)
+  def post_yaml(path, filename)
     @last_response_status = 200
     @last_response_body = Holoserve::Tool::Uploader.new(
       filename,

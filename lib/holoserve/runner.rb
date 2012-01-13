@@ -20,7 +20,7 @@ class Holoserve::Runner
 
   def start
     @unicorn.start
-    upload_layouts if @layout_filename
+    upload_layout if @layout_filename
     set_situation if @situation
   end
 
@@ -42,11 +42,13 @@ class Holoserve::Runner
 
   private
 
-  def upload_layouts
+  def upload_layout
+    format = File.extname(@layout_filename).sub(/^\./, "")
+    raise ArgumentError, "file extension indicates wrong format '#{format}' (choose yaml or json)" unless [ "yaml", "json" ].include?(format)
     Holoserve::Tool::Uploader.new(
       @layout_filename,
       :post,
-      "http://localhost:#{port}/_control/layout",
+      "http://localhost:#{port}/_control/layout.#{format}",
       :expected_status_code => 200
     ).upload
     nil

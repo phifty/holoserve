@@ -1,6 +1,6 @@
 
 Given /^the test layout$/ do
-  step "the test layout are set"
+  step "the test yaml layout are set"
 end
 
 Given /^a clear layout setting$/ do
@@ -11,12 +11,12 @@ When /^the layout is fetched in format (\w+)$/ do |format|
   get "/_control/layout.#{format}"
 end
 
-When /^the test layout are set$/ do
-  test_layout_filename = File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "test.yml"))
-  post_yml "/_control/layout", test_layout_filename
+When /^the test yaml layout are set$/ do
+  test_layout_filename = File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "test.yaml"))
+  post_yaml "/_control/layout.yaml", test_layout_filename
 end
 
-When /^the invalid layout are set$/ do
-  invalid_layout_filename = File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "invalid.yml"))
-  post_yml "/_control/layout", invalid_layout_filename
+When /^the invalid yaml layout are set$/ do
+  invalid_layout_filename = File.expand_path(File.join(File.dirname(__FILE__), "..", "layouts", "invalid.yaml"))
+  post_yaml "/_control/layout.yaml", invalid_layout_filename
 end
