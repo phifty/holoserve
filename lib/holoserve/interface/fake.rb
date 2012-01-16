@@ -5,7 +5,6 @@ class Holoserve::Interface::Fake
   def call(env)
     request = Holoserve::Request::Decomposer.new(env).hash
     pair = Holoserve::Pair::Finder.new(configuration, request).pair
-    logger.debug pair.pretty_inspect
     if pair
       if name = pair[:name]
         history.pair_names << name
