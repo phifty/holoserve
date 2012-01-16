@@ -29,7 +29,9 @@ To start up an empty Holoserve instance, type...
 
 To load a server layout and define a situation during start up, use these parameters.
 
-  holoserve -l layouts.yml -s backend_without_users
+  holoserve -l layout.yaml -s backend_without_users
+
+Notice, that the layout file must have either the <tt>.yaml</tt> or the <tt>.json</tt> extension.
 
 == Control routes
 
