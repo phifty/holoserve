@@ -7,12 +7,13 @@ run faster and be independent from other API and network problems.
 == Concept
 
 HoloServe runs a rack application server, that matches any incoming request to a list of request profiles defined in
-the server layout. If a match is found, the defined static response is returned. The name of the matched
-request/response pair is saved in a request history. If no match is found, a 404 is returned and the
-request data is stored in the bucket for unhandeled requests. These informations can be used to extend the server layout
-with missing request handlers.
+the server layout. If a match is found, the defined static response is returned. The response is defined by a default
+and the current server situation.
+The name of the matched request/response pair is saved in a request history. If no match is found, a 404 is returned and
+the request data is stored in the bucket for unhandeled requests. These informations can be used to extend the server
+layout with missing request handlers.
 
-Layouts, history and bucket can be accessed via control routes, which are described below.
+The layout, situation, history and bucket can be accessed via control routes, which are described below.
 
 == Installation
 
@@ -26,43 +27,40 @@ To start up an empty Holoserve instance, type...
 
   holoserve
 
-To load and select a server layout during start up, you can provide some parameters.
+To load a server layout and define a situation during start up, use these parameters.
 
-  holoserve -f layouts.yml -l backend
+  holoserve -l layouts.yml -s backend_without_users
 
 == Control routes
 
 If you're using Ruby, you can control Holoserve via the
 {Holoserve Connector}[https://github.com/skrill/holoserve-connector] gem.
 
-=== POST /_control/layouts
+=== POST /_control/layout.:format
 
-It should receive a parameter named <tt>file</tt> that contains an uploaded YML file with the server layouts. See
-{YML server layouts file format}[rdoc-label:YML-server-layouts-file-format] below.
+It should receive a parameter named <tt>file</tt> that contains a file with the server layout. The format of the file
+should fit the specified format. The format can be <tt>yaml</tt> or <tt>json</tt>. See
+{Layout file format}[rdoc-label:Layout-file-format] below.
 
-=== DELETE /_control/layouts
+=== GET /_control/layout.:format
 
-Removes all server layouts.
+Returns the server layout in the requested format.
 
-=== GET /_control/layouts/ids
+=== DELETE /_control/layout
 
-Returns the list of ids of all server layouts.
+Removes the server layout.
 
-==== Response example
+=== PUT /_control/situation/:name
 
-  [ "one", "two" ]
+Sets the current situation.
 
-=== PUT /_control/layouts/:id/current
+=== GET /_control/situation
 
-Makes the layout with id <tt>:id</tt> the currently active one.
-
-=== GET /_control/layouts/current
-
-Returns the id of the current layout.
+Returns the name of the current situation.
 
 ==== Response example
 
-  one
+  backend_without_users
 
 === GET /_control/bucket/requests
 
@@ -106,40 +104,42 @@ Returns a list of all names of pairs that has been triggered.
 
 Removes all entries from the history.
 
-== YML server layouts file format
+== Layout file format
 
-The server layouts file should have the following format.
+The server layout file should have the following format.
 
-  one:
-    -
-      name: "test_received"
-      request:
-        method: "POST"
-        path: "/test"
-        headers:
-          HTTP_USER_AGENT: "Ruby"
-          HTTP_AUTHORIZATION: "OAuth oauth_token=12345"
-        body:
-          "test=value"
-        parameters:
-          test: "value"
-        oauth:
-          oauth_token: "12345"
-      response:
+  -
+    name: "test_received"
+    request:
+      method: "POST"
+      path: "/test"
+      headers:
+        HTTP_USER_AGENT: "Ruby"
+        HTTP_AUTHORIZATION: "OAuth oauth_token=12345"
+      body:
+        "test=value"
+      parameters:
+        test: "value"
+      oauth:
+        oauth_token: "12345"
+    responses:
+      default:
         status: 200
+      one:
         body:
           "ok"
-    -
-      request:
-        method: "GET"
-        path: "/test"
-      response:
+  -
+    request:
+      method: "GET"
+      path: "/test"
+    responses:
+      default:
         status: 200
         body:
           "ok too"
 
-This example would define a server layout named <tt>one</tt> that has two request/response pairs. The first pair would
-have the name <tt>test_received</tt> and would match a <tt>POST</tt> request to the path <tt>/test</tt>.
+This example would define a server layout that has two request/response pairs. The first pair would have the name
+<tt>test_received</tt> and would match a <tt>POST</tt> request to the path <tt>/test</tt>.
 
 Notice, that the given request attributes are the _minimal_ values that have to match the incomong one. An incoming
 request may has much more attributes (see bucket example above). If a request is matched, the corresponding pair name is
@@ -148,3 +148,6 @@ placed in the history.
 As the sections <tt>headers</tt> and <tt>body</tt> are raw values from the request, the sections <tt>parameters</tt> and
 <tt>oauth</tt> contain high-level values. The <tt>parameters</tt> hash is taken from the request body or the query and
 the hash containing the OAuth values is parsed from a fitting <tt>HTTP_AUTHORIZATION</tt> header.
+
+The response is defined in the <tt>responses</tt> section of each pair. The server will response a merge of default
+response and the response defined by the current situation.
