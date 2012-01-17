@@ -15,6 +15,7 @@ class Holoserve::Interface::Editor < Sinatra::Base
 
     js :application, "/javascripts/application.js", [
       "/javascripts/lib/common/*.js",
+      "/javascripts/lib/interface/*.js",
       "/javascripts/lib/transport/*.js",
       "/javascripts/lib/application.js",
     ]
@@ -36,23 +37,11 @@ class Holoserve::Interface::Editor < Sinatra::Base
   end
 
   get "/_control" do
-    erb :main, :layout => false
+    erb :index, :layout => false
+  end
+
+  get "/favicon.ico" do
+    nil
   end
 
 end
-
-__END__
-
-@@ main
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Holoserve layout editor</title>
-    <%= stylesheet_includes %>
-    <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7/dojo/dojo.js"></script>
-    <%= javascript_includes %>
-  </head>
-  <body onload="Application.run();">
-  </body>
-</html>

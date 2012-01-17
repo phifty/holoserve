@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Holoserve layout editor</title>
+    <link rel="stylesheet" href="http://yandex.st/dojo/1.7.1/dijit/themes/claro/claro.css" />
+    <link rel="stylesheet" href="http://yandex.st/dojo/1.7.1/dojox/grid/resources/claroGrid.css" />
+    <%= stylesheet_includes %>
+    <script src="http://yandex.st/dojo/1.7.1/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: true"></script>
+    <%= javascript_includes %>
+  </head>
+  <body class="claro" onload="Application.run();">
+    <div data-dojo-type="dijit.layout.SplitContainer" style="width: 100%; height: 600px;">
+      <div data-dojo-type="dijit.layout.ContentPane">
+        <table data-dojo-type="dojox.grid.DataGrid" id="requestsGrid">
+          <thead>
+            <tr>
+              <th field="method" width="200px">Method</th>
+              <th field="path" width="200px">Path</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div data-dojo-type="dijit.layout.ContentPane" style="width: 200px;">
+
+      </div>
+      <div data-dojo-type="dijit.layout.ContentPane">
+
+      </div>
+    </div>
+  </body>
+</html>
