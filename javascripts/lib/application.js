@@ -3,8 +3,10 @@
   "use strict";
 
   namespace.run = function () {
-    $.Transport.Loader.load();
     $.Interface.initialize();
+    $.Transport.Loader.load(function (data) {
+      $.Interface.load(data);
+    });
   };
 
 })(window, window.Application = window.Application || { });

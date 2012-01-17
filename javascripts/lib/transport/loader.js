@@ -4,11 +4,11 @@
 
   var loaderNamespace = namespace.Loader || { };
 
-  loaderNamespace.load = function () {
+  loaderNamespace.load = function (handler) {
     $.dojo.xhrGet({
       url: "/_control/layout.json",
       load: function (data) {
-        $.Store.set($.dojo.fromJson(data));
+        handler($.dojo.fromJson(data));
       }
     });
   };
