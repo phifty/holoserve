@@ -48,6 +48,7 @@ class Holoserve
   def initialize_rack
     @rack = Rack::Builder.new do
       use Interface::Control
+      use Interface::Editor
       run Interface::Fake.new
     end
   end

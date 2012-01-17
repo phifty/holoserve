@@ -2,6 +2,7 @@ source :rubygems
 
 gem "rack"
 gem "sinatra"
+gem "sinatra-assetpack", :git => "https://github.com/rstacruz/sinatra-assetpack.git", :require => 'sinatra/assetpack'
 gem "unicorn"
 gem "transport"
 
