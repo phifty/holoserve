@@ -29,7 +29,7 @@ class Holoserve::Interface::Fake
   def compose_response(pair)
     responses = pair[:responses]
     response_default = responses[:default] || { }
-    response_situation = configuration.situation ? responses[configuration.situation.to_sym] : { }
+    response_situation = (configuration.situation && responses[configuration.situation.to_sym]) || { }
     Holoserve::Tool::Merger.new(response_default, response_situation).result
   end
 
