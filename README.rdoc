@@ -60,6 +60,10 @@ Sets the current situation.
 
 Returns the name of the current situation.
 
+=== DELETE /_control/situation
+
+Clears the current situation.
+
 ==== Response example
 
   backend_without_users
