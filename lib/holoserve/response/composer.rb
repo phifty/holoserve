@@ -27,7 +27,7 @@ class Holoserve::Response::Composer
       elsif @response.has_key?(:json)
         JSON.dump @response[:json]
       else
-        nil
+        ""
       end
     end
   end

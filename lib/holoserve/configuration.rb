@@ -17,13 +17,18 @@ class Holoserve::Configuration
     @layout = Holoserve::Tool::Hash::KeySymbolizer.new(hash_or_array).hash
   end
 
+  def clear_layout!
+    self.layout = nil
+  end
+
   def situation=(value)
     @situation = value.to_sym
     logger.info "made '#{value}' the current situation"
   end
 
-  def clear_layout!
-    self.layout = nil
+  def clear_situation!
+    @situation = nil
+    logger.info "cleared the current situation"
   end
 
   def load_layout_from_yaml_file(file)

@@ -1,4 +1,8 @@
 
+Transform /^default response for test (get) request$/ do |method|
+  { :status => 200, :body => "" }
+end
+
 Transform /^response for test (post|put|get|delete) request$/ do |method|
   case method.to_sym
     when :post

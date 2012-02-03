@@ -37,3 +37,8 @@ Feature: Fake handling of requests
       | put    | one        |
       | get    | one        |
       | delete | one        |
+
+  Scenario: Handle request without a situation set
+    Given no situation
+     When the regular test get request is performed
+     Then the default response for test get request should be returned

@@ -10,3 +10,8 @@ Feature: Situation handling
      Then the responded status code should be 200
       And the responded body should include an acknowledgement
       And the current situation should be 'one'
+
+  Scenario: Clear the current situation
+    Given the situation 'one'
+     When the current situation is cleared
+     Then there should be no situation set

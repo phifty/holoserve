@@ -10,8 +10,7 @@ class Holoserve::Interface::Fake
         history.pair_names << name
         logger.info "received handled request with name '#{name}'"
       end
-      responses = pair[:responses]
-      response = Holoserve::Tool::Merger.new(responses[:default] || { }, responses[configuration.situation.to_sym] || { }).result
+      response = compose_response pair
       if response.empty?
         logger.warn "received request #{pair[:name]} with undefined response"
         not_found
@@ -26,6 +25,13 @@ class Holoserve::Interface::Fake
   end
 
   private
+
+  def compose_response(pair)
+    responses = pair[:responses]
+    response_default = responses[:default] || { }
+    response_situation = configuration.situation ? responses[configuration.situation.to_sym] : { }
+    Holoserve::Tool::Merger.new(response_default, response_situation).result
+  end
 
   def not_found
     [ 404, { "Content-Type" => "text/plain" }, [ "no response found for this request" ] ]

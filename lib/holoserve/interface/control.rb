@@ -47,6 +47,10 @@ class Holoserve::Interface::Control < Sinatra::Base
     configuration.situation.to_s
   end
 
+  delete "/_control/situation" do
+    configuration.clear_situation!
+  end
+
   get "/_control/bucket/requests" do
     respond_json bucket.requests
   end
