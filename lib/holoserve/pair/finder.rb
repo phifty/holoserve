@@ -6,16 +6,17 @@ class Holoserve::Pair::Finder
   end
 
   def pair
-    return nil unless layout
-    layout.detect do |pair|
-      Holoserve::Request::Matcher.new(@request, pair[:request]).match?
+    return nil unless pairs
+    pairs.each do |name, pair|
+      return pair.merge(:name => name) if Holoserve::Request::Matcher.new(@request, pair[:request]).match?
     end
+    nil
   end
 
   private
 
-  def layout
-    @configuration.layout
+  def pairs
+    @configuration.pairs
   end
 
 end

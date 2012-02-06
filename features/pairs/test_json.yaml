@@ -1,0 +1,8 @@
+request:
+  method: "GET"
+  path: "/test-json"
+responses:
+  default:
+    status: 200
+    json:
+      test: "value"

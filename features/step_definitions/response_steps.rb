@@ -1,53 +1,30 @@
 
-Transform /^default response for test (get) request$/ do |method|
-  { :status => 200, :body => "" }
+Then /^the test response should be returned/ do
+  last_response_status.should == 200
+  last_response_body.should == "test_request"
 end
 
-Transform /^response for test (post|put|get|delete) request$/ do |method|
-  case method.to_sym
-    when :post
-      { :status => 201, :body => "created" }
-    when :put
-      { :status => 200, :body => "updated" }
-    when :get
-      { :status => 200, :body => "fetched" }
-    when :delete
-      { :status => 200, :body => "deleted" }
-  end
+Then /^the test parameters response should be returned/ do
+  last_response_status.should == 200
+  last_response_body.should == "test_parameters"
 end
 
-Transform /^response for unhandled (post|put|get|delete) request$/ do |method|
-  { :status => 404, :body => "no response found for this request" }
+Then /^the test headers response should be returned/ do
+  last_response_status.should == 200
+  last_response_body.should == "test_headers"
 end
 
-Then /^the responded status code should be (\d+)$/ do |status_code|
-  last_response_status.to_i.should == status_code.to_i
+Then /^the test json response should be returned/ do
+  last_response_status.should == 200
+  last_json_response_body.should == { "test" => "value" }
 end
 
-Then /^the responded body should include an acknowledgement$/ do
-  last_json_response_body.should == { "ok" => true }
+Then /^the test oauth response should be returned/ do
+  last_response_status.should == 200
+  last_response_body.should == "test_oauth"
 end
 
-Then /^the responded body should not include an acknowledgement$/ do
-  begin
-    last_json_response_body.should_not == { "ok" => true }
-  rescue JSON::ParserError
-
-  end
-end
-
-Then /^the responded body should contain yaml data$/ do
-  lambda do
-    YAML.load last_response_body
-  end.should_not raise_error
-end
-
-Then /^the responded body should contain json data$/ do
-  lambda do
-    JSON.parse last_response_body
-  end.should_not raise_error
-end
-
-Then /^the responded body should contain invalid data$/ do
-
+Then /^the test response default should be returned/ do
+  last_response_status.should == 200
+  last_response_body.should == ""
 end

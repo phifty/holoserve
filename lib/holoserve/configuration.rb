@@ -6,19 +6,12 @@ class Holoserve::Configuration
 
   attr_reader :logger
 
-  attr_reader :layout
   attr_reader :situation
+  attr_accessor :pairs
 
   def initialize(logger)
     @logger = logger
-  end
-
-  def layout=(hash_or_array)
-    @layout = Holoserve::Tool::Hash::KeySymbolizer.new(hash_or_array).hash
-  end
-
-  def clear_layout!
-    self.layout = nil
+    @pairs = { }
   end
 
   def situation=(value)
@@ -29,22 +22,6 @@ class Holoserve::Configuration
   def clear_situation!
     @situation = nil
     logger.info "cleared the current situation"
-  end
-
-  def load_layout_from_yaml_file(file)
-    self.layout = YAML::load_file file
-    logger.info "loaded layouts from yaml file #{file.path}"
-  rescue Psych::SyntaxError => error
-    self.clear_layout!
-    raise InvalidFormatError, error.to_s
-  end
-
-  def load_layout_from_json_file(file)
-    self.layout = JSON.parse File.read(file)
-    logger.info "loaded layouts from json file #{file.path}"
-  rescue JSON::ParserError => error
-    self.clear_layout!
-    raise InvalidFormatError, error.to_s
   end
 
 end

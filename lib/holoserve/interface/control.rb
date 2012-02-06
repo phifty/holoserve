@@ -7,35 +7,34 @@ class Holoserve::Interface::Control < Sinatra::Base
   mime_type :yaml, "application/x-yaml"
   mime_type :json, "application/json"
 
-  post "/_control/layout.:format" do |format|
-    begin
-      if format == "yaml"
-        configuration.load_layout_from_yaml_file params["file"][:tempfile]
-        respond_json_acknowledgement
-      elsif format == "json"
-        configuration.load_layout_from_json_file params["file"][:tempfile]
-        respond_json_acknowledgement
-      else
-        not_acceptable
-      end
-    rescue Holoserve::Configuration::InvalidFormatError => error
-      error 400, error.inspect
-    end
-  end
-
-  get "/_control/layout.:format" do |format|
-    if format == "yaml"
-      respond_yaml configuration.layout
-    elsif format == "json"
-      respond_json configuration.layout
+  post "/_control/pairs" do
+    pair = load_pair_from_file params["file"][:tempfile]
+    if pair
+      id = File.basename params["file"][:filename], ".*"
+      configuration.pairs[id] = Holoserve::Tool::Hash::KeySymbolizer.new(pair).hash
+      acknowledgement
     else
-      not_acceptable
+      bad_request
     end
   end
 
-  delete "/_control/layout" do
-    configuration.clear_layout!
-    respond_json_acknowledgement
+  get "/_control/pairs/:id.:format" do |id, format|
+    pp configuration.pairs
+    pair = configuration.pairs[id]
+    if pair
+      if format == "yaml"
+        respond_yaml pair
+      elsif format == "json"
+        respond_json pair
+      else
+        bad_request
+      end
+    else not_found
+    end
+  end
+
+  delete "/_control/pairs" do
+    configuration.pairs.clear
   end
 
   put "/_control/situation/:name" do |situation|
@@ -51,8 +50,12 @@ class Holoserve::Interface::Control < Sinatra::Base
     configuration.clear_situation!
   end
 
-  get "/_control/bucket/requests" do
+  get "/_control/bucket" do
     respond_json bucket.requests
+  end
+
+  delete "/_control/bucket" do
+    bucket.requests.clear
   end
 
   get "/_control/history" do
@@ -80,8 +83,26 @@ class Holoserve::Interface::Control < Sinatra::Base
     object.to_yaml
   end
 
+  def acknowledgement
+    [ 200, { }, [ "" ] ]
+  end
+
+  def bad_request
+    [ 400, { }, [ "bad request" ] ]
+  end
+
   def not_acceptable
     [ 406, { }, [ "format not acceptable" ] ]
+  end
+
+  def load_pair_from_file(filename)
+    YAML::load_file filename
+  rescue Psych::SyntaxError
+    begin
+      JSON.parse File.read(filename)
+    rescue JSON::ParserError
+      nil
+    end
   end
 
   def bucket

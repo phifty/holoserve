@@ -1,0 +1,9 @@
+request:
+  method: "GET"
+  path: "/test-headers"
+  headers:
+    HTTP_TEST: "value"
+responses:
+  default:
+    status: 200
+    body: "test_headers"

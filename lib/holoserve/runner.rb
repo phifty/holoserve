@@ -7,7 +7,7 @@ class Holoserve::Runner
 
   def initialize(options = { })
     @port = options[:port] || 4250
-    @layout_filename = options[:layout_filename]
+    @pair_file_pattern = options[:pair_file_pattern]
     @situation = options[:situation]
 
     @rackup_options = Unicorn::Configurator::RACKUP
@@ -20,7 +20,7 @@ class Holoserve::Runner
 
   def start
     @unicorn.start
-    upload_layout if @layout_filename
+    upload_pairs if @pair_file_pattern
     set_situation if @situation
   end
 
@@ -42,13 +42,19 @@ class Holoserve::Runner
 
   private
 
-  def upload_layout
-    format = File.extname(@layout_filename).sub(/^\./, "")
+  def upload_pairs
+    Dir[ @pair_file_pattern ].each do |filename|
+      upload_pair filename
+    end
+  end
+
+  def upload_pair(filename)
+    format = File.extname(filename).sub(/^\./, "")
     raise ArgumentError, "file extension indicates wrong format '#{format}' (choose yaml or json)" unless [ "yaml", "json" ].include?(format)
     Holoserve::Tool::Uploader.new(
-      @layout_filename,
+      filename,
       :post,
-      "http://localhost:#{port}/_control/layout.#{format}",
+      "http://localhost:#{port}/_control/pairs",
       :expected_status_code => 200
     ).upload
     nil

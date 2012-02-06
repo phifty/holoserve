@@ -6,20 +6,11 @@ Feature: Bucket handling
   It should list all unhandled requests in the bucket
 
   Scenario: Perform a request without any layout loaded
-    Given a clear layout setting
-     When the regular test get request is performed
-     Then the response for unhandled get request should be returned
-      And the bucket should contain the test get request
-    Given the test layout
+    Given no pairs
+     When the test request is performed
+     Then the bucket should contain the test request
 
-  Scenario Outline: Perform an unhandled request
-    Given the situation 'one'
-     When the regular unhandled <method> request is performed
-     Then the response for unhandled <method> request should be returned
-      And the bucket should contain the unhandled <method> request
-    Examples:
-      | method |
-      | post   |
-      | put    |
-      | get    |
-      | delete |
+  Scenario: Clearing the bucket
+    Given a bucket containing the test request
+     When the bucket is cleared
+     Then the bucket should be empty

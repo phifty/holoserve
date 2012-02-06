@@ -1,18 +1,20 @@
 
-Transform /^(test|unhandled) (post|put|get|delete) request$/ do |type, method|
-  { "method" => method.upcase, "path" => "/#{type}" }
+When /^the test request is performed$/ do
+  get "/test-request"
 end
 
-Transform /^parameter set '([^']+)'$/ do |parameter_set_name|
-  case parameter_set_name.to_sym
-    when :one
-      { "parameters" => { "test" => "value" } }
-  end
+When /^the test request is performed with the test parameters$/ do
+  get "/test-parameters", :test => "value"
 end
 
-Transform /^header set '([^']+)'$/ do |header_set_name|
-  case header_set_name.to_sym
-    when :one
-      { "headers" => { "Test" => "Value" } }
-  end
+When /^the test request is performed with the test headers$/ do
+  get "/test-headers", { }, "test" => "value"
+end
+
+When /^the test json request is performed$/ do
+  get "/test-json"
+end
+
+When /^the test request is performed with the test oauth headers$/ do
+  get "/test-oauth", { }, "authorization" => "OAuth test=\"value\""
 end

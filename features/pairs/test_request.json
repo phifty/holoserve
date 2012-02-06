@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/test-request"
+  },
+  "responses": {
+    "default": {
+      "status": 200,
+      "body": "ok"
+    }
+  }
+}
