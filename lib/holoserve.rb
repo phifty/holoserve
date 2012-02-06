@@ -3,9 +3,6 @@ require 'logger'
 
 class Holoserve
 
-  autoload :Bucket, File.join(File.dirname(__FILE__), "holoserve", "bucket")
-  autoload :Configuration, File.join(File.dirname(__FILE__), "holoserve", "configuration")
-  autoload :History, File.join(File.dirname(__FILE__), "holoserve", "history")
   autoload :Interface, File.join(File.dirname(__FILE__), "holoserve", "interface")
   autoload :Pair, File.join(File.dirname(__FILE__), "holoserve", "pair")
   autoload :Request, File.join(File.dirname(__FILE__), "holoserve", "request")
@@ -15,15 +12,11 @@ class Holoserve
 
   attr_reader :logger
   attr_reader :configuration
-  attr_reader :bucket
-  attr_reader :history
   attr_reader :rack
 
   def initialize
     initialize_logger
     initialize_configuration
-    initialize_bucket
-    initialize_history
     initialize_rack
   end
 
@@ -34,15 +27,12 @@ class Holoserve
   end
 
   def initialize_configuration
-    @configuration = Configuration.new @logger
-  end
-
-  def initialize_bucket
-    @bucket = Bucket.new
-  end
-
-  def initialize_history
-    @history = History.new
+    @configuration = {
+      :pairs => { },
+      :situation => nil,
+      :bucket => [ ],
+      :history => [ ]
+    }
   end
 
   def initialize_rack

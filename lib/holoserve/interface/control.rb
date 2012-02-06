@@ -11,7 +11,7 @@ class Holoserve::Interface::Control < Sinatra::Base
     pair = load_pair_from_file params["file"][:tempfile]
     if pair
       id = File.basename params["file"][:filename], ".*"
-      configuration.pairs[id] = Holoserve::Tool::Hash::KeySymbolizer.new(pair).hash
+      pairs[id] = Holoserve::Tool::Hash::KeySymbolizer.new(pair).hash
       acknowledgement
     else
       bad_request
@@ -19,8 +19,7 @@ class Holoserve::Interface::Control < Sinatra::Base
   end
 
   get "/_control/pairs/:id.:format" do |id, format|
-    pp configuration.pairs
-    pair = configuration.pairs[id]
+    pair = pairs[id]
     if pair
       if format == "yaml"
         respond_yaml pair
@@ -34,36 +33,36 @@ class Holoserve::Interface::Control < Sinatra::Base
   end
 
   delete "/_control/pairs" do
-    configuration.pairs.clear
+    pairs.clear
   end
 
   put "/_control/situation/:name" do |situation|
-    configuration.situation = situation
+    configuration[:situation] = situation
     respond_json_acknowledgement
   end
 
   get "/_control/situation" do
-    configuration.situation.to_s
+    (configuration[:situation] || "").to_s
   end
 
   delete "/_control/situation" do
-    configuration.clear_situation!
+    configuration.delete :situation
   end
 
   get "/_control/bucket" do
-    respond_json bucket.requests
+    respond_json bucket
   end
 
   delete "/_control/bucket" do
-    bucket.requests.clear
+    bucket.clear
   end
 
   get "/_control/history" do
-    respond_json history.pair_names
+    respond_json history
   end
 
   delete "/_control/history" do
-    history.clear!
+    history.clear
     respond_json_acknowledgement
   end
 
@@ -105,12 +104,16 @@ class Holoserve::Interface::Control < Sinatra::Base
     end
   end
 
+  def pairs
+    configuration[:pairs]
+  end
+
   def bucket
-    Holoserve.instance.bucket
+    configuration[:bucket]
   end
 
   def history
-    Holoserve.instance.history
+    configuration[:history]
   end
 
   def configuration

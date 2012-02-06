@@ -7,7 +7,7 @@ class Holoserve::Interface::Fake
     pair = Holoserve::Pair::Finder.new(configuration, request).pair
     if pair
       if name = pair[:name]
-        history.pair_names << name
+        history << name
         logger.info "received handled request with name '#{name}'"
       end
       response = compose_response pair
@@ -18,7 +18,7 @@ class Holoserve::Interface::Fake
         Holoserve::Response::Composer.new(response).response_array
       end
     else
-      bucket.requests << request
+      bucket << request
       logger.error "received unhandled request\n" + request.pretty_inspect
       not_found
     end
@@ -29,7 +29,7 @@ class Holoserve::Interface::Fake
   def compose_response(pair)
     responses = pair[:responses]
     response_default = responses[:default] || { }
-    response_situation = (configuration.situation && responses[configuration.situation.to_sym]) || { }
+    response_situation = (configuration[:situation] && responses[configuration[:situation].to_sym]) || { }
     Holoserve::Tool::Merger.new(response_default, response_situation).result
   end
 
@@ -38,19 +38,19 @@ class Holoserve::Interface::Fake
   end
 
   def logger
-    configuration.logger
+    Holoserve.instance.logger
   end
 
-  def layout
-    configuration.layout
+  def pairs
+    configuration[:pairs]
   end
 
   def bucket
-    Holoserve.instance.bucket
+    configuration[:bucket]
   end
 
   def history
-    Holoserve.instance.history
+    configuration[:history]
   end
 
   def configuration

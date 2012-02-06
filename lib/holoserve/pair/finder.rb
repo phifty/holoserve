@@ -16,7 +16,7 @@ class Holoserve::Pair::Finder
   private
 
   def pairs
-    @configuration.pairs
+    @configuration[:pairs]
   end
 
 end
