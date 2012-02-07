@@ -18,6 +18,7 @@ class TestWorld
   def initialize
     @port = 4250
     @server = Holoserve::Runner.new :port => @port,
+                                    :fixture_file_pattern => File.expand_path(File.join(File.dirname(__FILE__), "..", "fixtures", "test_*.yaml")),
                                     :pair_file_pattern => File.expand_path(File.join(File.dirname(__FILE__), "..", "pairs", "test_*.yaml"))
   end
 

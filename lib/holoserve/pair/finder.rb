@@ -8,7 +8,7 @@ class Holoserve::Pair::Finder
   def pair
     return nil unless pairs
     pairs.each do |name, pair|
-      return pair.merge(:name => name) if Holoserve::Request::Matcher.new(@request, pair[:request]).match?
+      return pair.merge(:name => name) if Holoserve::Request::Matcher.new(@request, pair[:request], fixtures).match?
     end
     nil
   end
@@ -17,6 +17,10 @@ class Holoserve::Pair::Finder
 
   def pairs
     @configuration[:pairs]
+  end
+
+  def fixtures
+    @configuration[:fixtures]
   end
 
 end

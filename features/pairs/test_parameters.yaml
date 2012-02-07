@@ -2,8 +2,11 @@ request:
   method: "GET"
   path: "/test-parameters"
   parameters:
-    test: "value"
+    imports:
+      -
+        path: "test_fixture.test_model"
 responses:
   default:
-    status: 200
-    body: "test_parameters"
+    data:
+      status: 200
+      body: "test_parameters"

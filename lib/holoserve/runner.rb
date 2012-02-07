@@ -7,6 +7,7 @@ class Holoserve::Runner
 
   def initialize(options = { })
     @port = options[:port] || 4250
+    @fixture_file_pattern = options[:fixture_file_pattern]
     @pair_file_pattern = options[:pair_file_pattern]
     @situation = options[:situation]
 
@@ -20,6 +21,7 @@ class Holoserve::Runner
 
   def start
     @unicorn.start
+    upload_fixtures if @fixture_file_pattern
     upload_pairs if @pair_file_pattern
     set_situation if @situation
   end
@@ -42,21 +44,22 @@ class Holoserve::Runner
 
   private
 
-  def upload_pairs
-    Dir[ @pair_file_pattern ].each do |filename|
-      upload_pair filename
+  def upload_fixtures
+    Dir[ @fixture_file_pattern ].each do |filename|
+      upload_file "http://localhost:#{port}/_control/fixtures", filename
     end
   end
 
-  def upload_pair(filename)
+  def upload_pairs
+    Dir[ @pair_file_pattern ].each do |filename|
+      upload_file "http://localhost:#{port}/_control/pairs", filename
+    end
+  end
+
+  def upload_file(url, filename)
     format = File.extname(filename).sub(/^\./, "")
     raise ArgumentError, "file extension indicates wrong format '#{format}' (choose yaml or json)" unless [ "yaml", "json" ].include?(format)
-    Holoserve::Tool::Uploader.new(
-      filename,
-      :post,
-      "http://localhost:#{port}/_control/pairs",
-      :expected_status_code => 200
-    ).upload
+    Holoserve::Tool::Uploader.new(filename, :post, url, :expected_status_code => 200).upload
     nil
   end
 

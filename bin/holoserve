@@ -14,8 +14,11 @@ OptionParser.new do |parser|
   parser.on("-p", "--port PORT", Integer, "The port holoserve should listen to.") do |value|
     options[:port] = value
   end
-  parser.on("-l", "--layout-file FILE", "Load the specified layout file on startup.") do |value|
-    options[:layout_filename] = value
+  parser.on("-f", "--fixture-files PATTERN", "Load the specified fixture files on startup.") do |value|
+    options[:fixture_file_pattern] = value
+  end
+  parser.on("-d", "--pair-files PATTERN", "Load the specified pair files on startup.") do |value|
+    options[:pair_file_pattern] = value
   end
   parser.on("-s", "--situation SITUATION", "Sets the situation.") do |value|
     options[:situation] = value

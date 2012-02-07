@@ -2,8 +2,10 @@ request:
   method: "GET"
   path: "/test-headers"
   headers:
-    HTTP_TEST: "value"
+    data:
+      HTTP_TEST: "value"
 responses:
   default:
-    status: 200
-    body: "test_headers"
+    data:
+      status: 200
+      body: "test_headers"

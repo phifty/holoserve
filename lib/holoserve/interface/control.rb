@@ -14,7 +14,7 @@ class Holoserve::Interface::Control < Sinatra::Base
   end
 
   get "/_control/pairs/:id.:format" do |id, format|
-    pair = pairs[id]
+    pair = pairs[id.to_sym]
     if pair
       respond_formatted pair, format
     else
@@ -33,7 +33,7 @@ class Holoserve::Interface::Control < Sinatra::Base
   end
 
   get "/_control/fixtures/:id.:format" do |id, format|
-    fixture = fixtures[id]
+    fixture = fixtures[id.to_sym]
     if fixture
       respond_formatted fixture, format
     else
@@ -113,7 +113,7 @@ class Holoserve::Interface::Control < Sinatra::Base
     data = load_file params["file"][:tempfile]
     return false unless data
     id = File.basename params["file"][:filename], ".*"
-    hash[id] = Holoserve::Tool::Hash::KeySymbolizer.new(data).hash
+    hash[id.to_sym] = Holoserve::Tool::Hash::KeySymbolizer.new(data).hash
     true
   end
 

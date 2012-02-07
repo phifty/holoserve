@@ -3,6 +3,7 @@ request:
   path: "/test-json"
 responses:
   default:
-    status: 200
-    json:
-      test: "value"
+    data:
+      status: 200
+      json:
+        test: "value"
