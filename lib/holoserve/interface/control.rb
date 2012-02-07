@@ -8,26 +8,15 @@ class Holoserve::Interface::Control < Sinatra::Base
   mime_type :json, "application/json"
 
   post "/_control/pairs" do
-    pair = load_file params["file"][:tempfile]
-    if pair
-      id = File.basename params["file"][:filename], ".*"
-      pairs[id] = Holoserve::Tool::Hash::KeySymbolizer.new(pair).hash
-      acknowledgement
-    else
+    load_file_into(pairs) ?
+      acknowledgement :
       bad_request
-    end
   end
 
   get "/_control/pairs/:id.:format" do |id, format|
     pair = pairs[id]
     if pair
-      if format == "yaml"
-        respond_yaml pair
-      elsif format == "json"
-        respond_json pair
-      else
-        bad_request
-      end
+      respond_formatted pair, format
     else
       not_found
     end
@@ -38,26 +27,15 @@ class Holoserve::Interface::Control < Sinatra::Base
   end
 
   post "/_control/fixtures" do
-    fixture = load_file params["file"][:tempfile]
-    if fixture
-      id = File.basename params["file"][:filename], ".*"
-      fixtures[id] = Holoserve::Tool::Hash::KeySymbolizer.new(fixture).hash
-      acknowledgement
-    else
+    load_file_into(fixtures) ?
+      acknowledgement :
       bad_request
-    end
   end
 
   get "/_control/fixtures/:id.:format" do |id, format|
     fixture = fixtures[id]
     if fixture
-      if format == "yaml"
-        respond_yaml fixture
-      elsif format == "json"
-        respond_json fixture
-      else
-        bad_request
-      end
+      respond_formatted fixture, format
     else
       not_found
     end
@@ -99,6 +77,16 @@ class Holoserve::Interface::Control < Sinatra::Base
     respond_json :ok => true
   end
 
+  def respond_formatted(data, format)
+    if format == "yaml"
+      respond_yaml data
+    elsif format == "json"
+      respond_json data
+    else
+      bad_request
+    end
+  end
+
   def respond_json(object)
     content_type :json
     JSON.dump object
@@ -119,6 +107,14 @@ class Holoserve::Interface::Control < Sinatra::Base
 
   def not_acceptable
     [ 406, { }, [ "format not acceptable" ] ]
+  end
+
+  def load_file_into(hash)
+    data = load_file params["file"][:tempfile]
+    return false unless data
+    id = File.basename params["file"][:filename], ".*"
+    hash[id] = Holoserve::Tool::Hash::KeySymbolizer.new(data).hash
+    true
   end
 
   def load_file(filename)
