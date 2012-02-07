@@ -36,17 +36,13 @@ class Holoserve::Interface::Control < Sinatra::Base
     pairs.clear
   end
 
-  put "/_control/situation/:name" do |situation|
-    configuration[:situation] = situation
+  put "/_control/situation" do
+    configuration[:situation] = params[:name]
     respond_json_acknowledgement
   end
 
   get "/_control/situation" do
-    (configuration[:situation] || "").to_s
-  end
-
-  delete "/_control/situation" do
-    configuration.delete :situation
+    respond_json :name => configuration[:situation]
   end
 
   get "/_control/bucket" do

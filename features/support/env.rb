@@ -4,6 +4,7 @@ require 'cucumber/formatter/unicode'
 require 'rspec/expectations'
 require 'json'
 require 'transport'
+require 'uri'
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "lib", "holoserve"))
 
 class TestWorld
@@ -35,19 +36,31 @@ class TestWorld
   end
 
   def post(path, parameters = { }, headers = { })
-    perform "method" => "POST", "path" => path, "parameters" => parameters, "headers" => headers
+    perform "method" => "POST",
+            "path" => path,
+            "body" => URI.encode_www_form(parameters),
+            "headers" => headers.merge("Content-Type" => "application/x-www-form-urlencoded")
   end
 
   def put(path, parameters = { }, headers = { })
-    perform "method" => "PUT", "path" => path, "parameters" => parameters, "headers" => headers
+    perform "method" => "PUT",
+            "path" => path,
+            "body" => URI.encode_www_form(parameters),
+            "headers" => headers.merge("Content-Type" => "application/x-www-form-urlencoded")
   end
 
   def get(path, parameters = { }, headers = { })
-    perform "method" => "GET", "path" => path, "parameters" => parameters, "headers" => headers
+    perform "method" => "GET",
+            "path" => path,
+            "parameters" => parameters,
+            "headers" => headers
   end
 
   def delete(path, parameters = { }, headers = { })
-    perform "method" => "DELETE", "path" => path, "parameters" => parameters, "headers" => headers
+    perform "method" => "DELETE",
+            "path" => path,
+            "body" => URI.encode_www_form(parameters),
+            "headers" => headers.merge("Content-Type" => "application/x-www-form-urlencoded")
   end
 
   def perform(request)
