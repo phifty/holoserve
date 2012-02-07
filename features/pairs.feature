@@ -8,7 +8,7 @@ Feature: Handling pairs
   Scenario Outline: Adding a pair
     Given no pairs
      When the <format> pairs are added
-     Then the pair should be <present or absent>
+     Then the test pair should be <present or absent>
     Examples:
       | format  | present or absent |
       | yaml    | present           |

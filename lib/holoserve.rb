@@ -29,6 +29,7 @@ class Holoserve
   def initialize_configuration
     @configuration = {
       :pairs => { },
+      :fixtures => { },
       :situation => nil,
       :bucket => [ ],
       :history => [ ]

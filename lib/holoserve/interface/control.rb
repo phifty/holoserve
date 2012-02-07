@@ -8,7 +8,7 @@ class Holoserve::Interface::Control < Sinatra::Base
   mime_type :json, "application/json"
 
   post "/_control/pairs" do
-    pair = load_pair_from_file params["file"][:tempfile]
+    pair = load_file params["file"][:tempfile]
     if pair
       id = File.basename params["file"][:filename], ".*"
       pairs[id] = Holoserve::Tool::Hash::KeySymbolizer.new(pair).hash
@@ -28,12 +28,43 @@ class Holoserve::Interface::Control < Sinatra::Base
       else
         bad_request
       end
-    else not_found
+    else
+      not_found
     end
   end
 
   delete "/_control/pairs" do
     pairs.clear
+  end
+
+  post "/_control/fixtures" do
+    fixture = load_file params["file"][:tempfile]
+    if fixture
+      id = File.basename params["file"][:filename], ".*"
+      fixtures[id] = Holoserve::Tool::Hash::KeySymbolizer.new(fixture).hash
+      acknowledgement
+    else
+      bad_request
+    end
+  end
+
+  get "/_control/fixtures/:id.:format" do |id, format|
+    fixture = fixtures[id]
+    if fixture
+      if format == "yaml"
+        respond_yaml fixture
+      elsif format == "json"
+        respond_json fixture
+      else
+        bad_request
+      end
+    else
+      not_found
+    end
+  end
+
+  delete "/_control/fixtures" do
+    fixtures.clear
   end
 
   put "/_control/situation" do
@@ -90,7 +121,7 @@ class Holoserve::Interface::Control < Sinatra::Base
     [ 406, { }, [ "format not acceptable" ] ]
   end
 
-  def load_pair_from_file(filename)
+  def load_file(filename)
     YAML::load_file filename
   rescue Psych::SyntaxError
     begin
@@ -102,6 +133,10 @@ class Holoserve::Interface::Control < Sinatra::Base
 
   def pairs
     configuration[:pairs]
+  end
+
+  def fixtures
+    configuration[:fixtures]
   end
 
   def bucket

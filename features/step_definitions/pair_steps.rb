@@ -17,12 +17,12 @@ When /^the (yaml|json|invalid) pairs are added$/ do |format|
   end
 end
 
-Then /^the pair should be present$/ do
+Then /^the test pair should be present$/ do
   get "/_control/pairs/test_request.json"
   last_response_status.should == 200
 end
 
-Then /^the pair should be absent$/ do
+Then /^the test pair should be absent$/ do
   get "/_control/pairs/test_request.json"
   last_response_status.should == 404
 end
