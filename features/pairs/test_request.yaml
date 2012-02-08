@@ -3,8 +3,6 @@ request:
   path: "/test-request"
 responses:
   default:
-    data:
-      status: 200
+    status: 200
   one:
-    data:
-      body: "test_request"
+    body: "test_request"

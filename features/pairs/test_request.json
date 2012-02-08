@@ -5,10 +5,8 @@
   },
   "responses": {
     "default": {
-      "data": {
-        "status": 200,
-        "body": "ok"
-      }
+      "status": 200,
+      "body": "ok"
     }
   }
 }

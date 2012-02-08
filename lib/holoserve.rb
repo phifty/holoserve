@@ -3,7 +3,7 @@ require 'logger'
 
 class Holoserve
 
-  autoload :Data, File.join(File.dirname(__FILE__), "holoserve", "data")
+  autoload :Fixture, File.join(File.dirname(__FILE__), "holoserve", "fixture")
   autoload :Interface, File.join(File.dirname(__FILE__), "holoserve", "interface")
   autoload :Pair, File.join(File.dirname(__FILE__), "holoserve", "pair")
   autoload :Request, File.join(File.dirname(__FILE__), "holoserve", "request")

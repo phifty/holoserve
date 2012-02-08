@@ -2,10 +2,8 @@ request:
   method: "GET"
   path: "/test-oauth"
   oauth:
-    data:
-      test: "value"
+    test: "value"
 responses:
   default:
-    data:
-      status: 200
-      body: "test_oauth"
+    status: 200
+    body: "test_oauth"
