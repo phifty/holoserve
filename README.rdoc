@@ -126,48 +126,63 @@ Removes all entries from the history.
 
 == Pair file format
 
-The server layout file should have the following format.
+The request/response pair file should have the following format.
 
-  -
-    name: "test_received"
-    request:
+  - request:
+      imports:
+        - path: "test_fixture.users.0"
+          as: "parameters"
+          only: [ "username", "password" ]
       method: "POST"
-      path: "/test"
+      path: "/session"
       headers:
         HTTP_USER_AGENT: "Ruby"
-        HTTP_AUTHORIZATION: "OAuth oauth_token=12345"
-      body:
-        "test=value"
-      parameters:
-        test: "value"
       oauth:
         oauth_token: "12345"
     responses:
       default:
         status: 200
-      one:
-        body:
-          "ok"
-  -
-    request:
-      method: "GET"
-      path: "/test"
+      user_exists:
+        imports:
+          - path: "test_fixture.users.0"
+            as: "json.user"
+      user_is_missing:
+        json:
+          message: "user not found"
+  - request:
+      imports:
+        - path: "test_fixture.users.0"
+          as: "parameters"
+          only: "username"
+      method: "POST"
+      path: "/session"
+      headers:
+        HTTP_USER_AGENT: "Ruby"
+      parameters:
+        password: "invalid"
+      oauth:
+        oauth_token: "12345"
     responses:
-      default:
+      user_exists:
+        status: 401
+        json:
+          message: "invalid password"
+      user_is_missing:
         status: 200
-        body:
-          "ok too"
+        json:
+          message: "user not found"
 
-This example would define a server layout that has two request/response pairs. The first pair would have the name
-<tt>test_received</tt> and would match a <tt>POST</tt> request to the path <tt>/test</tt>.
+The fixture data where this example pair definition relies on, could look like to following.
 
-Notice, that the given request attributes are the _minimal_ values that have to match the incomong one. An incoming
-request may has much more attributes (see bucket example above). If a request is matched, the corresponding pair name is
-placed in the history.
+  users:
+    - email: "one@test.com"
+      username: "one"
+      password: "valid"
 
-As the sections <tt>headers</tt> and <tt>body</tt> are raw values from the request, the sections <tt>parameters</tt> and
-<tt>oauth</tt> contain high-level values. The <tt>parameters</tt> hash is taken from the request body or the query and
-the hash containing the OAuth values is parsed from a fitting <tt>HTTP_AUTHORIZATION</tt> header.
+This example defines two request/response pairs and two situations. The two pairs differs only the parameters that they
+match against. The first one handles the case in which the parameters <tt>username=one</tt> and <tt>password=valid</tt>
+are posted and the second one reacts on the transmission of <tt>username=one</tt> and <tt>password=invalid</tt>.
 
-The response is defined in the <tt>responses</tt> section of each pair. The server will response a merge of default
-response and the response defined by the current situation.
+If the situation is set to <tt>user_exists</tt>, the first situation would return the complete user object encoded as
+json, while the second one would reply the message "invalid password". In the situation "user_is_missing", both requests
+would be replied with the message "user not found".
