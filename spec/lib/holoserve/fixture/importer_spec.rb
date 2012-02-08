@@ -2,7 +2,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "he
 
 describe Holoserve::Fixture::Importer do
 
-  let(:fixtures) { { :test => { :nested => "value" }, :another => "value" } }
+  let(:fixtures) { { :test => { :nested => "value", :second => "value" }, :another => "value" } }
 
   subject { described_class.new nil, fixtures }
 
@@ -31,6 +31,15 @@ describe Holoserve::Fixture::Importer do
         ]
       }
       subject.hash.should == { :test => "value" }
+    end
+
+    it "should return a hash with imported and filtered fixtures" do
+      subject.hash = {
+        :imports => [
+          { :path => "test", :as => "test", :only => [ "second" ] }
+        ]
+      }
+      subject.hash.should == { :test => { :second => "value" } }
     end
 
     it "should return a hash where all the imports are imported" do

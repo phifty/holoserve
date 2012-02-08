@@ -25,7 +25,14 @@ class Holoserve::Fixture::Importer
     @imports.each do |import|
       path = import[:path]
       as = import[:as] || path
+      only = import[:only]
+
       value = Holoserve::Tool::DataPath.new(path, @fixtures).fetch
+
+      value.delete_if do |key, v|
+        ![ only ].flatten.compact.include?(key.to_s)
+      end if only.respond_to?(:include?) && value.respond_to?(:delete_if)
+
       @result = Holoserve::Tool::DataPath.new(as, @result || { }).store value
     end
   end
