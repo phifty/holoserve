@@ -6,14 +6,18 @@ run faster and be independent from other API and network problems.
 
 == Concept
 
-HoloServe runs a rack application server, that matches any incoming request to a list of request profiles defined in
-the server layout. If a match is found, the defined static response is returned. The response is defined by a default
-and the current server situation.
-The name of the matched request/response pair is saved in a request history. If no match is found, a 404 is returned and
-the request data is stored in the bucket for unhandeled requests. These informations can be used to extend the server
-layout with missing request handlers.
+HoloServe runs a rack application server, that matches any incoming request to a list of request profiles. These
+profiles are defined in set of request/response-pairs. If a match is found, the defined static response is returned. The
+other half of the matched profile contains a set of responses. One for each situation the faked API can be possibily in.
+The response for the currently set situation will be merged with a default response and returned. The name of the
+matched request/response pair is saved in a request history. If no match is found, a 404 is returned and the request
+data is stored in the bucket for unhandeled requests. These informations can be used to extend the server layout with
+missing request handlers.
 
-The layout, situation, history and bucket can be accessed via control routes, which are described below.
+To avoid too much duplication in the definition of the request/response-pairs, it is possible upload some fixture data
+that is shared between all pair definitions. The pair can than refer to these fixtures.
+
+The pairs, fixtures, situation, history and bucket can be accessed via control routes, which are described below.
 
 == Installation
 
@@ -27,48 +31,58 @@ To start up an empty Holoserve instance, type...
 
   holoserve
 
-To load a server layout and define a situation during start up, use these parameters.
+To load the server with a couple of pairs, fixtures and define a situation during start up, use these parameters.
 
-  holoserve -l layout.yaml -s backend_without_users
+  holoserve -d path/to/pairs/*.yaml -f path/to/fixtures/*.yaml -s backend_without_users
 
-Notice, that the layout file must have either the <tt>.yaml</tt> or the <tt>.json</tt> extension.
+Notice, that the files must have either the <tt>.yaml</tt> or the <tt>.json</tt> extension.
 
 == Control routes
 
 If you're using Ruby, you can control Holoserve via the
 {Holoserve Connector}[https://github.com/skrill/holoserve-connector] gem.
 
-=== POST /_control/layout.:format
+=== POST /_control/pairs
 
-It should receive a parameter named <tt>file</tt> that contains a file with the server layout. The format of the file
-should fit the specified format. The format can be <tt>yaml</tt> or <tt>json</tt>. See
-{Layout file format}[rdoc-label:Layout-file-format] below.
+Adds a pair definition to Holoserve. It should receive a parameter named <tt>file</tt> that contains a file with exactly
+one pair. The format of the file should fit the specified format. The format can be <tt>yaml</tt> or <tt>json</tt>. See
+{Pair file format}[rdoc-label:Pair-file-format] below. The basename of the transmitted file will be taken as the pair
+id.
 
-=== GET /_control/layout.:format
+=== GET /_control/pairs/:id.:format
 
-Returns the server layout in the requested format.
+Returns the pair definition in the requested format.
 
-=== DELETE /_control/layout
+=== DELETE /_control/pairs
 
-Removes the server layout.
+Removes all pairs.
 
-=== PUT /_control/situation/:name
+=== POST /_control/fixtures
 
-Sets the current situation.
+Adds fixture data to Holoserve. The request is similar to <tt>POST /_control/pairs</tt>. The upload file can contain any
+yaml or json formatted data. The basename of the file will be taken as the fixture id.
+
+=== GET /_control/fixtures/:id
+
+Returns the requested fixture.
+
+=== DELETE /_control/fixtures
+
+Removes all fixtures.
+
+=== PUT /_control/situation
+
+Sets the current situation with the transmitted <tt>name</tt> parameter.
 
 === GET /_control/situation
 
 Returns the name of the current situation.
 
-=== DELETE /_control/situation
-
-Clears the current situation.
-
 ==== Response example
 
   backend_without_users
 
-=== GET /_control/bucket/requests
+=== GET /_control/bucket
 
 Returns a list of all requests that has been received, but couldn't be handled.
 
@@ -110,7 +124,7 @@ Returns a list of all names of pairs that has been triggered.
 
 Removes all entries from the history.
 
-== Layout file format
+== Pair file format
 
 The server layout file should have the following format.
 
