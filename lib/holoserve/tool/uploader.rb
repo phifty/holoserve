@@ -7,10 +7,7 @@ class Holoserve::Tool::Uploader
   end
 
   def upload
-    options = @options
-    options[:headers] = (@options[:headers] || { }).merge(headers)
-    options[:body] = body
-    Transport::HTTP.request @http_method, @url, options
+    Transport::HTTP.request @http_method, @url, @options.merge(:headers => headers, :body => body)
   end
 
   private
@@ -22,11 +19,18 @@ class Holoserve::Tool::Uploader
   def body
     "--#{boundary}\r\n" +
     "Content-Disposition: form-data; name=\"file\"; filename=\"#{File.basename(@filename)}\"\r\n" +
-    "Content-Type: application/x-yaml\r\n" +
+    "Content-Type: #{content_type}\r\n" +
     "\r\n" +
     File.read(@filename) +
     "\r\n" +
     "--#{boundary}--\r\n"
+  end
+
+  def content_type
+    {
+      "yaml" => "application/x-yaml",
+      "json" => "application/json"
+    }[ File.extname(@filename) ] || "text/plain"
   end
 
   def boundary

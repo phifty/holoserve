@@ -9,11 +9,7 @@ end
 
 When /^the (yaml|json|invalid) pairs are added$/ do |format|
   Dir[ File.join(File.dirname(__FILE__), "..", "pairs", "test_*.#{format}") ].each do |filename|
-    post_file "/_control/pairs", filename, {
-      "yaml" => "application/x-yaml",
-      "json" => "application/json",
-      "invalid" => "application/x-yaml"
-    }[format]
+    post_file "/_control/pairs", filename
   end
 end
 

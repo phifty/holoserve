@@ -22,13 +22,12 @@ class TestWorld
                                     :pair_file_pattern => File.expand_path(File.join(File.dirname(__FILE__), "..", "pairs", "test_*.yaml"))
   end
 
-  def post_file(path, filename, content_type = nil)
+  def post_file(path, filename)
     @last_response_status = 200
     @last_response_body = Holoserve::Tool::Uploader.new(
       filename,
       :post,
       "http://localhost:#{port}#{path}",
-      :headers => { "Content-Type" => content_type || "text/plain" },
       :expected_status_code => 200
     ).upload
   rescue Transport::UnexpectedStatusCodeError => error

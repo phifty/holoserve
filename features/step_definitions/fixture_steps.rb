@@ -5,11 +5,7 @@ end
 
 When /^the (yaml|json|invalid) fixtures are added$/ do |format|
   Dir[ File.join(File.dirname(__FILE__), "..", "fixtures", "test_*.#{format}") ].each do |filename|
-    post_file "/_control/fixtures", filename, {
-      "yaml" => "application/x-yaml",
-      "json" => "application/json",
-      "invalid" => "application/x-yaml"
-    }[format]
+    post_file "/_control/fixtures", filename
   end
 end
 
