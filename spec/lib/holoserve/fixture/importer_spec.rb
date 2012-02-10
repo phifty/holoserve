@@ -4,9 +4,9 @@ describe Holoserve::Fixture::Importer do
 
   let(:fixtures) do
     {
-      :test => { :nested => "value", :second => "value" },
-      :another => "value",
-      :another_nested => { :test => "value" }
+      :one => { :first => 1, :second => 2 },
+      :two => 3,
+      :three => { :third => 4 }
     }
   end
 
@@ -24,86 +24,87 @@ describe Holoserve::Fixture::Importer do
     it "should return a hash with imported fixtures" do
       subject.hash = {
         :imports => [
-          { :path => "test" }
+          { :path => "one" }
         ]
       }
-      subject.hash.should == { :nested => "value", :second => "value" }
+      subject.hash.should == { :first => 1, :second => 2 }
     end
 
     it "should return a hash with imported fixtures at a target path" do
       subject.hash = {
         :imports => [
-          { :path => "test.nested", :as => "test" }
+          { :path => "one.first", :as => "test" }
         ]
       }
-      subject.hash.should == { :test => "value" }
+      subject.hash.should == { :test => 1 }
     end
 
     it "should return a hash with imported and filtered fixtures" do
       subject.hash = {
         :imports => [
-          { :path => "test", :as => "test", :only => [ "second" ] }
+          { :path => "one", :as => "test", :only => [ "second" ] }
         ]
       }
-      subject.hash.should == { :test => { :second => "value" } }
+      subject.hash.should == { :test => { :second => 2 } }
     end
 
     it "should return a hash where all the imports are imported" do
       subject.hash = {
         :imports => [
-          { :path => "test.nested", :as => "test" },
-          { :path => "another", :as => "another.test" }
+          { :path => "one.first", :as => "test" },
+          { :path => "two", :as => "another.test" }
         ]
       }
-      subject.hash.should == { :test => "value", :another => { :test => "value" } }
+      subject.hash.should == { :test => 1, :another => { :test => 3 } }
     end
 
     it "should return a hash where all the imports are merged together" do
       subject.hash = {
         :imports => [
-          { :path => "test" },
-          { :path => "another_nested" }
+          { :path => "one" },
+          { :path => "three" }
         ]
       }
-      subject.hash.should == { :nested => "value", :second => "value", :test => "value" }
+      subject.hash.should == { :first => 1, :second => 2, :third => 4 }
     end
 
     it "should return a hash where the data is merged with the imports" do
       subject.hash = {
         :imports => [
-          { :path => "test.nested", :as => "test" }
+          { :path => "one.first", :as => "test" }
         ],
         :another => "value"
       }
-      subject.hash.should == { :test => "value", :another => "value" }
+      subject.hash.should == { :test => 1, :another => "value" }
     end
 
     it "should return a hash where the data is deep merged with the imports" do
       subject.hash = {
         :imports => [
-          { :path => "test.nested", :as => "test.nested" }
+          { :path => "one.first", :as => "test.nested" }
         ],
         :test => {
           :another => "value"
         }
       }
-      subject.hash.should == { :test => { :nested => "value", :another => "value" } }
+      subject.hash.should == { :test => { :nested => 1, :another => "value" } }
     end
 
     it "should not destroy the original hash and stay repeatable" do
       hash = {
         :imports => [
-          { :path => "test.nested", :as => "test.nested" }
+          { :path => "three" },
+          { :path => "one.first", :as => "test.nested" }
         ],
         :test => {
           :another => "value"
         }
       }
       subject.hash = hash
-      subject.hash.should == { :test => { :nested => "value", :another => "value" } }
+      subject.hash.should == { :third => 4, :test => { :nested => 1, :another => "value" } }
 
       importer = described_class.new hash, fixtures
-      importer.hash.should == { :test => { :nested => "value", :another => "value" } }
+      importer.hash.should == { :third => 4, :test => { :nested => 1, :another => "value" } }
     end
 
   end

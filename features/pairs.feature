@@ -20,3 +20,4 @@ Feature: Handling pairs
       And the test pairs
      Then the list of pairs should contain the test pair
       And the list of evaluated pairs should contain the evaluated test parameters pair
+      And the list of evaluated pairs should contain the evaluated test parameters pair
