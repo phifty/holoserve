@@ -3,7 +3,7 @@
 Gem::Specification.new do |specification|
   specification.name              = "holoserve"
   specification.version           = "0.3.1"
-  specification.date              = "2012-02-09"
+  specification.date              = "2012-02-10"
 
   specification.authors           = [ "Philipp Brüll" ]
   specification.email             = "philipp.bruell@skrill.com"
