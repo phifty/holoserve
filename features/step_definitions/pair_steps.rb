@@ -22,3 +22,27 @@ Then /^the test pair should be absent$/ do
   get "/_control/pairs/test_request.json"
   last_response_status.should == 404
 end
+
+Then /the list of pairs should contain the test pair/ do
+  get "/_control/pairs.json"
+  last_json_response_body.keys.should include("test_request")
+end
+
+Then /^the list of evaluated pairs should contain the evaluated test parameters pair$/ do
+  get "/_control/pairs.json", :evaluate => true
+  response = last_json_response_body
+  response.keys.should include("test_parameters")
+  response["test_parameters"].should == {
+    "request" => {
+      "method" => "GET",
+      "path" => "/test-parameters",
+      "parameters" => { "test" => "value" }
+    },
+    "responses" => {
+      "default" => {
+        "status" => 200,
+        "body" => "test_parameters"
+      }
+    }
+  }
+end

@@ -14,3 +14,9 @@ Feature: Handling pairs
       | yaml    | present           |
       | json    | present           |
       | invalid | absent            |
+
+  Scenario: Listing all pairs
+    Given the test fixtures
+      And the test pairs
+     Then the list of pairs should contain the test pair
+      And the list of evaluated pairs should contain the evaluated test parameters pair

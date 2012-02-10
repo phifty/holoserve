@@ -3,6 +3,10 @@ Given /^no fixtures$/ do
   delete "/_control/fixtures"
 end
 
+Given /^the test fixtures$/ do
+  step "the yaml fixtures are added"
+end
+
 When /^the (yaml|json|invalid) fixtures are added$/ do |format|
   Dir[ File.join(File.dirname(__FILE__), "..", "fixtures", "test_*.#{format}") ].each do |filename|
     post_file "/_control/fixtures", filename

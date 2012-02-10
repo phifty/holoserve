@@ -16,8 +16,12 @@ class Holoserve::Interface::Control < Sinatra::Base
     end
   end
 
+  get "/_control/pairs.:format" do |format|
+    respond_formatted params["evaluate"] ? evaluated_pairs : pairs, format
+  end
+
   get "/_control/pairs/:id.:format" do |id, format|
-    pair = pairs[id.to_sym]
+    pair = (params["evaluate"] ? evaluated_pairs : pairs)[id.to_sym]
     if pair
       respond_formatted pair, format
     else
@@ -132,6 +136,19 @@ class Holoserve::Interface::Control < Sinatra::Base
     rescue JSON::ParserError
       nil
     end
+  end
+
+  def evaluated_pairs
+    result = { }
+    pairs.each do |id, pair|
+      result[id] = { }
+      result[id][:request] = Holoserve::Fixture::Importer.new(pair[:request], fixtures).hash
+      result[id][:responses] = { }
+      pair[:responses].each do |situation, response|
+        result[id][:responses][situation] = Holoserve::Fixture::Importer.new(response, fixtures).hash
+      end
+    end
+    result
   end
 
   def pairs

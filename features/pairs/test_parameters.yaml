@@ -7,5 +7,6 @@ request:
   path: "/test-parameters"
 responses:
   default:
-    status: 200
+    imports:
+      - path: "test_fixture.ok_status"
     body: "test_parameters"
