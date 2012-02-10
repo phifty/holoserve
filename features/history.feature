@@ -6,7 +6,8 @@ Feature: History handling
   It should list the names of the triggered request/response-pairs
 
   Background:
-    Given the test pairs
+    Given the test fixtures
+      And the test pairs
 
   Scenario: A pair is triggered
     Given no history

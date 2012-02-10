@@ -1,0 +1,12 @@
+request:
+  imports:
+    - path: "test_requests.test_evaluation"
+    - path: "test_fixture.test_model"
+      as: "parameters"
+    - path: "test_fixture.test"
+      as: "parameters.another"
+responses:
+  default:
+    imports:
+      - path: "test_fixture.ok_status"
+    body: "test_evaluation"

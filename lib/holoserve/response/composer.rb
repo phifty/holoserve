@@ -13,7 +13,7 @@ class Holoserve::Response::Composer
   private
 
   def status
-    @response[:status]
+    @response[:status] || 200
   end
 
   def headers

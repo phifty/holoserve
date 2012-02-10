@@ -32,7 +32,7 @@ class Holoserve::Tool::DataPath
     path = @path ? @path.split(PATH_SEPARATOR) : [ ]
     return Holoserve::Tool::Merger.new(@data, value).result if path.empty?
 
-    selected = @data
+    result = selected = clone @data
     key = parse_key path.shift
 
     while path.length > 0
@@ -44,13 +44,17 @@ class Holoserve::Tool::DataPath
     end
 
     selected[key] = value
-    @data
+    result
   end
 
   private
 
   def parse_key(key)
     key =~ /^\d+$/ ? key.to_i : key.to_sym
+  end
+
+  def clone(object)
+    Marshal.load Marshal.dump(object)
   end
 
 end

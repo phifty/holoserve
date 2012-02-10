@@ -46,3 +46,21 @@ Then /^the list of evaluated pairs should contain the evaluated test parameters 
     }
   }
 end
+
+Then /^the test evaluation pair should be evaluated$/ do
+  get "/_control/pairs/test_evaluation.json", :evaluate => true
+  response = last_json_response_body
+  response.should == {
+    "request" => {
+      "method" => "GET",
+      "path" => "/test-evaluation",
+      "parameters" => { "test" => "value", "another" => "value" }
+    },
+    "responses" => {
+      "default" => {
+        "status" => 200,
+        "body" => "test_evaluation"
+      }
+    }
+  }
+end

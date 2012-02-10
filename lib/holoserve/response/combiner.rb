@@ -13,13 +13,13 @@ class Holoserve::Response::Combiner
 
   def default_response
     @responses[:default] ?
-      Holoserve::Fixture::Importer.new(@responses[:default], fixtures).hash :
+      Holoserve::Fixture::Importer.new(@responses[:default], fixtures).result :
       { }
   end
 
   def situation_response
     situation && @responses[situation.to_sym] ?
-      Holoserve::Fixture::Importer.new(@responses[situation.to_sym], fixtures).hash :
+      Holoserve::Fixture::Importer.new(@responses[situation.to_sym], fixtures).result :
       { }
   end
   

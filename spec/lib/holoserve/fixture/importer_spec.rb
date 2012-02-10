@@ -4,10 +4,10 @@ describe Holoserve::Fixture::Importer do
 
   let(:fixtures) do
     {
-      :one => { :first => 1, :second => 2 },
+      :one => { :first => 1, :second => 2 }.freeze,
       :two => 3,
-      :three => { :third => 4 }
-    }
+      :three => { :third => 4 }.freeze
+    }.freeze
   end
 
   subject { described_class.new nil, fixtures }
@@ -18,7 +18,7 @@ describe Holoserve::Fixture::Importer do
       subject.hash = {
         :test => "value"
       }
-      subject.hash.should == { :test => "value" }
+      subject.result.should == { :test => "value" }
     end
 
     it "should return a hash with imported fixtures" do
@@ -27,7 +27,7 @@ describe Holoserve::Fixture::Importer do
           { :path => "one" }
         ]
       }
-      subject.hash.should == { :first => 1, :second => 2 }
+      subject.result.should == { :first => 1, :second => 2 }
     end
 
     it "should return a hash with imported fixtures at a target path" do
@@ -36,7 +36,7 @@ describe Holoserve::Fixture::Importer do
           { :path => "one.first", :as => "test" }
         ]
       }
-      subject.hash.should == { :test => 1 }
+      subject.result.should == { :test => 1 }
     end
 
     it "should return a hash with imported and filtered fixtures" do
@@ -45,7 +45,7 @@ describe Holoserve::Fixture::Importer do
           { :path => "one", :as => "test", :only => [ "second" ] }
         ]
       }
-      subject.hash.should == { :test => { :second => 2 } }
+      subject.result.should == { :test => { :second => 2 } }
     end
 
     it "should return a hash where all the imports are imported" do
@@ -55,7 +55,7 @@ describe Holoserve::Fixture::Importer do
           { :path => "two", :as => "another.test" }
         ]
       }
-      subject.hash.should == { :test => 1, :another => { :test => 3 } }
+      subject.result.should == { :test => 1, :another => { :test => 3 } }
     end
 
     it "should return a hash where all the imports are merged together" do
@@ -65,7 +65,7 @@ describe Holoserve::Fixture::Importer do
           { :path => "three" }
         ]
       }
-      subject.hash.should == { :first => 1, :second => 2, :third => 4 }
+      subject.result.should == { :first => 1, :second => 2, :third => 4 }
     end
 
     it "should return a hash where the data is merged with the imports" do
@@ -75,7 +75,7 @@ describe Holoserve::Fixture::Importer do
         ],
         :another => "value"
       }
-      subject.hash.should == { :test => 1, :another => "value" }
+      subject.result.should == { :test => 1, :another => "value" }
     end
 
     it "should return a hash where the data is deep merged with the imports" do
@@ -87,7 +87,7 @@ describe Holoserve::Fixture::Importer do
           :another => "value"
         }
       }
-      subject.hash.should == { :test => { :nested => 1, :another => "value" } }
+      subject.result.should == { :test => { :nested => 1, :another => "value" } }
     end
 
     it "should not destroy the original hash and stay repeatable" do
@@ -101,10 +101,10 @@ describe Holoserve::Fixture::Importer do
         }
       }
       subject.hash = hash
-      subject.hash.should == { :third => 4, :test => { :nested => 1, :another => "value" } }
+      subject.result.should == { :third => 4, :test => { :nested => 1, :another => "value" } }
 
       importer = described_class.new hash, fixtures
-      importer.hash.should == { :third => 4, :test => { :nested => 1, :another => "value" } }
+      importer.result.should == { :third => 4, :test => { :nested => 1, :another => "value" } }
     end
 
   end

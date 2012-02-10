@@ -142,10 +142,10 @@ class Holoserve::Interface::Control < Sinatra::Base
     result = { }
     pairs.each do |id, pair|
       result[id] = { }
-      result[id][:request] = Holoserve::Fixture::Importer.new(pair[:request], fixtures).hash
+      result[id][:request] = Holoserve::Fixture::Importer.new(pair[:request], fixtures).result
       result[id][:responses] = { }
       pair[:responses].each do |situation, response|
-        result[id][:responses][situation] = Holoserve::Fixture::Importer.new(response, fixtures).hash
+        result[id][:responses][situation] = Holoserve::Fixture::Importer.new(response, fixtures).result
       end
     end
     result
