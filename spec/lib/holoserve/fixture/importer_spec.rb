@@ -51,7 +51,7 @@ describe Holoserve::Fixture::Importer do
     it "should return a hash with imported and black-list filtered fixtures" do
       subject.hash = {
         :imports => [
-          { :path => "one", :as => "test", :expect => [ "second" ] }
+          { :path => "one", :as => "test", :except => [ "second" ] }
         ]
       }
       subject.result.should == { :test => { :first => 1 } }

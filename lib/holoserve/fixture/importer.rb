@@ -19,13 +19,13 @@ class Holoserve::Fixture::Importer
 
   def import
     imports.each do |import|
-      path, as, only, expect = *import.values_at(:path, :as, :only, :expect)
+      path, as, only, except = *import.values_at(:path, :as, :only, :except)
 
       value = Holoserve::Tool::DataPath.new(path, @fixtures).fetch
 
       if value.respond_to?(:reject)
         value = value.reject{ |key, v| ![ only ].flatten.compact.include?(key.to_s) } if only
-        value = value.reject{ |key, v| [ expect ].flatten.compact.include?(key.to_s) } if expect
+        value = value.reject{ |key, v| [ except ].flatten.compact.include?(key.to_s) } if except
       end
 
       @result = Holoserve::Tool::DataPath.new(as, @result || { }).store value
