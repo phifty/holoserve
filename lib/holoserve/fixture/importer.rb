@@ -23,9 +23,7 @@ class Holoserve::Fixture::Importer
 
   def import
     @imports.each do |import|
-      path = import[:path]
-      as = import[:as] || path
-      only = import[:only]
+      path, as, only = *import.values_at(:path, :as, :only)
 
       value = Holoserve::Tool::DataPath.new(path, @fixtures).fetch
 

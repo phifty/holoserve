@@ -30,7 +30,7 @@ class Holoserve::Tool::DataPath
 
   def store(value)
     path = @path ? @path.split(PATH_SEPARATOR) : [ ]
-    return value if path.empty?
+    return Holoserve::Tool::Merger.new(@data, value).result if path.empty?
 
     selected = @data
     key = parse_key path.shift

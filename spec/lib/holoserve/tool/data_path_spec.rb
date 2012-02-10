@@ -46,7 +46,13 @@ describe Holoserve::Tool::DataPath do
 
   describe "store" do
 
-    it "should return the given value if no path is specified" do
+    it "should merge the given value with the root element if no path is given" do
+      subject.path = nil
+      subject.data = { :test => "value" }
+      subject.store(:another => "value").should == { :test => "value", :another => "value" }
+    end
+
+    it "should return the value if no path is given and value is not mergeable" do
       subject.path = nil
       subject.data = { :test => "value" }
       subject.store("value").should == "value"

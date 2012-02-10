@@ -2,7 +2,13 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "he
 
 describe Holoserve::Fixture::Importer do
 
-  let(:fixtures) { { :test => { :nested => "value", :second => "value" }, :another => "value" } }
+  let(:fixtures) do
+    {
+      :test => { :nested => "value", :second => "value" },
+      :another => "value",
+      :another_nested => { :test => "value" }
+    }
+  end
 
   subject { described_class.new nil, fixtures }
 
@@ -18,10 +24,10 @@ describe Holoserve::Fixture::Importer do
     it "should return a hash with imported fixtures" do
       subject.hash = {
         :imports => [
-          { :path => "test.nested" }
+          { :path => "test" }
         ]
       }
-      subject.hash.should == { :test => { :nested => "value" } }
+      subject.hash.should == { :nested => "value", :second => "value" }
     end
 
     it "should return a hash with imported fixtures at a target path" do
@@ -50,6 +56,16 @@ describe Holoserve::Fixture::Importer do
         ]
       }
       subject.hash.should == { :test => "value", :another => { :test => "value" } }
+    end
+
+    it "should return a hash where all the imports are merged together" do
+      subject.hash = {
+        :imports => [
+          { :path => "test" },
+          { :path => "another_nested" }
+        ]
+      }
+      subject.hash.should == { :nested => "value", :second => "value", :test => "value" }
     end
 
     it "should return a hash where the data is merged with the imports" do
