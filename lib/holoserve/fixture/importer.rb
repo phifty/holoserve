@@ -9,8 +9,8 @@ class Holoserve::Fixture::Importer
   end
 
   def hash=(value)
-    @imports = value.respond_to?(:delete) && value.delete(:imports) || [ ]
-    @hash = value
+    @hash = value.dup if value
+    @imports = @hash.respond_to?(:delete) && @hash.delete(:imports) || [ ]
   end
 
   def hash

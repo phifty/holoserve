@@ -90,6 +90,22 @@ describe Holoserve::Fixture::Importer do
       subject.hash.should == { :test => { :nested => "value", :another => "value" } }
     end
 
+    it "should not destroy the original hash and stay repeatable" do
+      hash = {
+        :imports => [
+          { :path => "test.nested", :as => "test.nested" }
+        ],
+        :test => {
+          :another => "value"
+        }
+      }
+      subject.hash = hash
+      subject.hash.should == { :test => { :nested => "value", :another => "value" } }
+
+      importer = described_class.new hash, fixtures
+      importer.hash.should == { :test => { :nested => "value", :another => "value" } }
+    end
+
   end
 
 end
