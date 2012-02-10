@@ -8,9 +8,12 @@ class Holoserve::Interface::Control < Sinatra::Base
   mime_type :json, "application/json"
 
   post "/_control/pairs" do
-    load_file_into(pairs) ?
-      acknowledgement :
+    if pair_id = load_file_into(pairs)
+      logger.info "loaded pair #{pair_id}"
+      acknowledgement
+    else
       bad_request
+    end
   end
 
   get "/_control/pairs/:id.:format" do |id, format|
@@ -27,9 +30,12 @@ class Holoserve::Interface::Control < Sinatra::Base
   end
 
   post "/_control/fixtures" do
-    load_file_into(fixtures) ?
-      acknowledgement :
+    if fixture_id = load_file_into(fixtures)
+      logger.info "loaded fixture #{fixture_id}"
+      acknowledgement
+    else
       bad_request
+    end
   end
 
   get "/_control/fixtures/:id.:format" do |id, format|
@@ -47,6 +53,7 @@ class Holoserve::Interface::Control < Sinatra::Base
 
   put "/_control/situation" do
     configuration[:situation] = params[:name]
+    logger.info "set situation to #{params[:name]}"
     respond_json_acknowledgement
   end
 
@@ -111,10 +118,10 @@ class Holoserve::Interface::Control < Sinatra::Base
 
   def load_file_into(hash)
     data = load_file params["file"][:tempfile]
-    return false unless data
+    return nil unless data
     id = File.basename params["file"][:filename], ".*"
     hash[id.to_sym] = Holoserve::Tool::Hash::KeySymbolizer.new(data).hash
-    true
+    id.to_sym
   end
 
   def load_file(filename)
@@ -145,6 +152,10 @@ class Holoserve::Interface::Control < Sinatra::Base
 
   def configuration
     Holoserve.instance.configuration
+  end
+
+  def logger
+    Holoserve.instance.logger
   end
 
 end

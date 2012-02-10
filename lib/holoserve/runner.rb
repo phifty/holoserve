@@ -65,7 +65,8 @@ class Holoserve::Runner
 
   def set_situation
     Transport::JSON.request :put,
-                            "http://localhost:#{port}/_control/situation/#{@situation}",
+                            "http://localhost:#{port}/_control/situation",
+                            :parameters => { :name => @situation },
                             :expected_status_code => 200
     nil
   end
