@@ -1,8 +1,10 @@
+require 'goliath/api'
 require 'pp'
 
-class Holoserve::Interface::Fake
+class Holoserve::Interface::Fake < Goliath::API
 
-  def call(env)
+  def response(env)
+    p env
     request = Holoserve::Request::Decomposer.new(env).hash
     pair = Holoserve::Pair::Finder.new(configuration, request).pair
     if pair

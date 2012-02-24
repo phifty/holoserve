@@ -11,17 +11,14 @@ OptionParser.new do |parser|
   parser.banner = "Usage: holoserve [options]"
   parser.separator ""
   parser.separator "Options:"
-  parser.on("-p", "--port PORT", Integer, "The port holoserve should listen to.") do |value|
+  parser.on("-P", "--port PORT", Integer, "The port holoserve should listen to.") do |value|
     options[:port] = value
   end
   parser.on("-f", "--fixture-files PATTERN", "Load the specified fixture files on startup.") do |value|
     options[:fixture_file_pattern] = value
   end
-  parser.on("-d", "--pair-files PATTERN", "Load the specified pair files on startup.") do |value|
+  parser.on("-p", "--pair-files PATTERN", "Load the specified pair files on startup.") do |value|
     options[:pair_file_pattern] = value
-  end
-  parser.on("-s", "--situation SITUATION", "Sets the situation.") do |value|
-    options[:situation] = value
   end
   parser.on_tail("-h", "--help", "Shows the help message.") do
     puts parser
@@ -29,5 +26,5 @@ OptionParser.new do |parser|
   end
 end.parse!(ARGV)
 
-runner = Holoserve::Runner.new options
-runner.run
+holoserve = Holoserve.new options
+holoserve.run

@@ -1,13 +1,9 @@
 source :rubygems
 
-gem "rack"
-gem "sinatra"
-gem "unicorn"
-gem "transport"
+gem "goliath"
 
 group :development do
   gem "rake"
-  gem "shotgun"
   gem "rdoc"
 end
 

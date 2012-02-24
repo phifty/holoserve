@@ -1,10 +1,11 @@
-require 'rack/builder'
+require 'goliath/runner'
 require 'logger'
 
 class Holoserve
 
   autoload :Fixture, File.join(File.dirname(__FILE__), "holoserve", "fixture")
   autoload :Interface, File.join(File.dirname(__FILE__), "holoserve", "interface")
+  autoload :Loader, File.join(File.dirname(__FILE__), "holoserve", "loader")
   autoload :Pair, File.join(File.dirname(__FILE__), "holoserve", "pair")
   autoload :Request, File.join(File.dirname(__FILE__), "holoserve", "request")
   autoload :Response, File.join(File.dirname(__FILE__), "holoserve", "response")
@@ -13,12 +14,30 @@ class Holoserve
 
   attr_reader :logger
   attr_reader :configuration
-  attr_reader :rack
 
-  def initialize
+  def initialize(options = { })
+    @port = options[:port] || 4250
+    @environment = options[:environment] || "development"
+    @pid_filename = options[:pid_filename] || File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve_#{@environment}.pid"))
+    @log_filename = options[:log_filename] || File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve_#{@environment}.log"))
+    @fixture_file_pattern = options[:fixture_file_pattern]
+    @pair_file_pattern = options[:pair_file_pattern]
+    @situation = options[:situation]
+
     initialize_logger
-    initialize_configuration
-    initialize_rack
+    load_configuration
+  end
+
+  def start
+    run_goliath true
+  end
+
+  def run
+    run_goliath false
+  end
+
+  def stop
+    kill_goliath
   end
 
   private
@@ -27,25 +46,30 @@ class Holoserve
     @logger = Logger.new STDOUT
   end
 
-  def initialize_configuration
-    @configuration = {
-      :pairs => { },
-      :fixtures => { },
-      :situation => nil,
-      :bucket => [ ],
-      :history => [ ]
-    }
+  def load_configuration
+    @configuration = Loader.new(@fixture_file_pattern, @pair_file_pattern).configuration
+    @configuration[:situation] = @situation
   end
 
-  def initialize_rack
-    @rack = Rack::Builder.new do
-      use Interface::Control
-      run Interface::Fake.new
+  def run_goliath(daemonize)
+    runner = Goliath::Runner.new [
+      "-v", "-P", @pid_filename, "-l", @log_filename, "-e", @environment, "-p", @port.to_s, daemonize ? "-d" : "-s"
+    ], nil
+    runner.api = Interface.new
+    runner.api.configuration = @configuration
+    runner.app = Goliath::Rack::Builder.build Interface, runner.api
+    runner.run
+  end
+
+  def kill_goliath
+    if File.exists?(@pid_filename)
+      system "kill -s QUIT `cat #{@pid_filename}`"
+      File.delete @pid_filename
     end
   end
 
-  def self.instance
-    @instance ||= self.new
+  def self.instance(options = { })
+    @instance ||= self.new options
   end
 
 end
