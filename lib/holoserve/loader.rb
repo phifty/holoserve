@@ -45,8 +45,9 @@ class Holoserve::Loader
       end
     if data
       @configuration[key] ||= { }
-      @configuration[key][id] = data
+      @configuration[key][id] = Holoserve::Tool::Hash::KeySymbolizer.new(data).hash
     end
+    puts "loaded #{key} named '#{id}'"
   end
 
 end

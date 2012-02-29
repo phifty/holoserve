@@ -3,16 +3,17 @@ require 'pp'
 
 class Holoserve::Interface::Fake < Goliath::API
 
+  use Goliath::Rack::Params
+
   def response(env)
-    p env
-    request = Holoserve::Request::Decomposer.new(env).hash
-    pair = Holoserve::Pair::Finder.new(configuration, request).pair
+    request = Holoserve::Request::Decomposer.new(env, params).hash
+    pair = Holoserve::Pair::Finder.new(fixtures, pairs, request).pair
     if pair
       if name = pair[:name]
         history << name
         logger.info "received handled request with name '#{name}'"
       end
-      response = Holoserve::Response::Combiner.new(pair[:responses], configuration).response
+      response = Holoserve::Response::Combiner.new(pair[:responses], config).response
       if response.empty?
         logger.warn "received request #{pair[:name]} with undefined response"
         not_found
@@ -32,24 +33,20 @@ class Holoserve::Interface::Fake < Goliath::API
     [ 404, { "Content-Type" => "text/plain" }, [ "no response found for this request" ] ]
   end
 
-  def logger
-    Holoserve.instance.logger
+  def fixtures
+    config[:fixtures] ||= options[:fixtures]
   end
 
   def pairs
-    configuration[:pairs]
+    config[:pairs] ||= options[:pairs]
   end
 
   def bucket
-    configuration[:bucket]
+    config[:bucket] ||= [ ]
   end
 
   def history
-    configuration[:history]
-  end
-
-  def configuration
-    Holoserve.instance.configuration
+    config[:history] ||= [ ]
   end
 
 end

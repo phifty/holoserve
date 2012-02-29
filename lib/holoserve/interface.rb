@@ -5,7 +5,11 @@ class Holoserve::Interface < Goliath::API
   autoload :Control, File.join(File.dirname(__FILE__), "interface", "control")
   autoload :Fake, File.join(File.dirname(__FILE__), "interface", "fake")
 
-  attr_accessor :configuration
+  put "/_control/situation", Control::UpdateSituation
+  get "/_control/situation", Control::FetchSituation
+  get "/_control/bucket", Control::FetchBucket
+  get "/_control/history", Control::FetchHistory
+  delete "/_control/history", Control::DestroyHistory
 
   map "/*", Fake
 

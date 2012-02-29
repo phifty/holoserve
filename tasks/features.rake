@@ -12,7 +12,9 @@ begin
 
     desc "Run the feature tests in test environment"
     task :fake do
-      holoserve = Holoserve.new :environment => "test"
+      holoserve = Holoserve.new :environment => "test",
+                                :fixture_file_pattern => File.expand_path(File.join(File.dirname(__FILE__), "..", "features", "fixtures", "*.yaml")),
+                                :pair_file_pattern => File.expand_path(File.join(File.dirname(__FILE__), "..", "features", "pairs", "*.yaml"))
       begin
         holoserve.start
         Rake::Task["features"].invoke

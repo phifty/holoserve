@@ -5,9 +5,6 @@ Feature: Fake handling of requests
   As a client application
   It should handle all http requests
 
-  Background:
-    Given the test pairs
-
   Scenario: Handle a request
     Given the situation 'one'
      When the test request is performed

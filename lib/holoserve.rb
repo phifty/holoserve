@@ -24,7 +24,6 @@ class Holoserve
     @pair_file_pattern = options[:pair_file_pattern]
     @situation = options[:situation]
 
-    initialize_logger
     load_configuration
   end
 
@@ -42,10 +41,6 @@ class Holoserve
 
   private
 
-  def initialize_logger
-    @logger = Logger.new STDOUT
-  end
-
   def load_configuration
     @configuration = Loader.new(@fixture_file_pattern, @pair_file_pattern).configuration
     @configuration[:situation] = @situation
@@ -53,10 +48,16 @@ class Holoserve
 
   def run_goliath(daemonize)
     runner = Goliath::Runner.new [
-      "-v", "-P", @pid_filename, "-l", @log_filename, "-e", @environment, "-p", @port.to_s, daemonize ? "-d" : "-s"
+      "-v",
+      "-P", @pid_filename,
+      "-l", @log_filename,
+      "-e", @environment,
+      "-p", @port.to_s,
+      daemonize ? "-d" : "-s"
     ], nil
+    runner.options[:fixtures] = @configuration[:fixtures]
+    runner.options[:pairs] = @configuration[:pairs]
     runner.api = Interface.new
-    runner.api.configuration = @configuration
     runner.app = Goliath::Rack::Builder.build Interface, runner.api
     runner.run
   end

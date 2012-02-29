@@ -14,9 +14,9 @@ Then /^the bucket should be empty$/ do
   last_json_response_body.should == [ ]
 end
 
-Then /^the bucket should contain the test request$/ do
+Then /^the bucket should contain the test unhandled request$/ do
   get "/_control/bucket"
   last_json_response_body.detect do |request|
-    request["method"] == "GET" && request["path"] == "/test-request"
+    request["method"] == "GET" && request["path"] == "/test-unhandled"
   end.should_not be_nil
 end

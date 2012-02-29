@@ -1,178 +1,94 @@
-require 'sinatra'
 require 'yaml'
 require 'json'
+require 'goliath/api'
 
-class Holoserve::Interface::Control < Sinatra::Base
+module Holoserve::Interface::Control
 
-  mime_type :yaml, "application/x-yaml"
-  mime_type :json, "application/json"
+  module Helper
 
-  post "/_control/pairs" do
-    if pair_id = load_file_into(pairs)
-      logger.info "loaded pair #{pair_id}"
-      acknowledgement
-    else
-      bad_request
+    def respond_json_acknowledgement
+      respond_json :ok => true
     end
-  end
 
-  get "/_control/pairs.:format" do |format|
-    respond_formatted params["evaluate"] ? evaluated_pairs : pairs, format
-  end
-
-  get "/_control/pairs/:id.:format" do |id, format|
-    pair = (params["evaluate"] ? evaluated_pairs : pairs)[id.to_sym]
-    if pair
-      respond_formatted pair, format
-    else
-      not_found
+    def respond_json(object)
+      ok JSON.dump(object)
     end
-  end
 
-  delete "/_control/pairs" do
-    pairs.clear
-  end
-
-  post "/_control/fixtures" do
-    if fixture_id = load_file_into(fixtures)
-      logger.info "loaded fixture #{fixture_id}"
-      acknowledgement
-    else
-      bad_request
+    def ok(content)
+      logger.info content.inspect
+      [ 200, { }, [ content ] ]
     end
-  end
 
-  get "/_control/fixtures/:id.:format" do |id, format|
-    fixture = fixtures[id.to_sym]
-    if fixture
-      respond_formatted fixture, format
-    else
-      not_found
+    def bad_request
+      [ 400, { }, [ "bad request" ] ]
     end
-  end
 
-  delete "/_control/fixtures" do
-    fixtures.clear
-  end
-
-  put "/_control/situation" do
-    configuration[:situation] = params[:name]
-    logger.info "set situation to #{params[:name]}"
-    respond_json_acknowledgement
-  end
-
-  get "/_control/situation" do
-    respond_json :name => configuration[:situation]
-  end
-
-  get "/_control/bucket" do
-    respond_json bucket
-  end
-
-  delete "/_control/bucket" do
-    bucket.clear
-  end
-
-  get "/_control/history" do
-    respond_json history
-  end
-
-  delete "/_control/history" do
-    history.clear
-    respond_json_acknowledgement
-  end
-
-  private
-
-  def respond_json_acknowledgement
-    respond_json :ok => true
-  end
-
-  def respond_formatted(data, format)
-    if format == "yaml"
-      respond_yaml data
-    elsif format == "json"
-      respond_json data
-    else
-      bad_request
+    def pairs
+      config[:pairs] ||= options[:pairs]
     end
-  end
 
-  def respond_json(object)
-    content_type :json
-    JSON.dump object
-  end
-
-  def respond_yaml(object)
-    content_type :yaml
-    object.to_yaml
-  end
-
-  def acknowledgement
-    [ 200, { }, [ "" ] ]
-  end
-
-  def bad_request
-    [ 400, { }, [ "bad request" ] ]
-  end
-
-  def not_acceptable
-    [ 406, { }, [ "format not acceptable" ] ]
-  end
-
-  def load_file_into(hash)
-    data = load_file params["file"][:tempfile]
-    return nil unless data
-    id = File.basename params["file"][:filename], ".*"
-    hash[id.to_sym] = Holoserve::Tool::Hash::KeySymbolizer.new(data).hash
-    id.to_sym
-  end
-
-  def load_file(filename)
-    YAML::load_file filename
-  rescue Psych::SyntaxError
-    begin
-      JSON.parse File.read(filename)
-    rescue JSON::ParserError
-      nil
+    def fixtures
+      config[:fixtures] ||= options[:fixtures]
     end
-  end
 
-  def evaluated_pairs
-    result = { }
-    pairs.each do |id, pair|
-      result[id] = { }
-      result[id][:request] = Holoserve::Fixture::Importer.new(pair[:request], fixtures).result
-      result[id][:responses] = { }
-      pair[:responses].each do |situation, response|
-        result[id][:responses][situation] = Holoserve::Fixture::Importer.new(response, fixtures).result
-      end
+    def bucket
+      config[:bucket] ||= [ ]
     end
-    result
+
+    def history
+      config[:history] ||= [ ]
+    end
+
   end
 
-  def pairs
-    configuration[:pairs]
+  class UpdateSituation < Goliath::API
+    include Helper
+
+    use Goliath::Rack::Params
+
+    def response(environment)
+      config[:situation] = params[:name]
+      logger.info "set situation to #{params[:name]}"
+      respond_json_acknowledgement
+    end
+
   end
 
-  def fixtures
-    configuration[:fixtures]
+  class FetchSituation < Goliath::API
+    include Helper
+
+    def response(environment)
+      respond_json :name => config[:situation]
+    end
+
   end
 
-  def bucket
-    configuration[:bucket]
+  class FetchBucket < Goliath::API
+    include Helper
+
+    def response(environment)
+      respond_json bucket
+    end
+
   end
 
-  def history
-    configuration[:history]
+  class FetchHistory < Goliath::API
+    include Helper
+
+    def response(environment)
+      respond_json history
+    end
+
   end
 
-  def configuration
-    Holoserve.instance.configuration
-  end
+  class DestroyHistory < Goliath::API
+    include Helper
 
-  def logger
-    Holoserve.instance.logger
+    def response(environment)
+      history.clear
+      respond_json_acknowledgement
+    end
+
   end
 
 end
