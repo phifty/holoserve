@@ -1,7 +1,7 @@
 
-Given /^a bucket containing the test request$/ do
-  step "no pairs"
-  step "the test request is performed"
+Given /^a bucket containing the test unhandled request$/ do
+  step "the bucket is cleared"
+  step "the test unhandled request is performed"
 end
 
 When /^the bucket is cleared$/ do

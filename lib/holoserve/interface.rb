@@ -8,6 +8,7 @@ class Holoserve::Interface < Goliath::API
   put "/_control/situation", Control::UpdateSituation
   get "/_control/situation", Control::FetchSituation
   get "/_control/bucket", Control::FetchBucket
+  delete "/_control/bucket", Control::DestroyBucket
   get "/_control/history", Control::FetchHistory
   delete "/_control/history", Control::DestroyHistory
 

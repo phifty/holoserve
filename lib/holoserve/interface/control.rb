@@ -72,6 +72,16 @@ module Holoserve::Interface::Control
 
   end
 
+  class DestroyBucket < Goliath::API
+    include Helper
+
+    def response(environment)
+      bucket.clear
+      respond_json_acknowledgement
+    end
+
+  end
+
   class FetchHistory < Goliath::API
     include Helper
 
