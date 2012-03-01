@@ -1,6 +1,4 @@
-require 'yaml'
 require 'json'
-require 'goliath/api'
 
 module Holoserve::Interface::Control
 
