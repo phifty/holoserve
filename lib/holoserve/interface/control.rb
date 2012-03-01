@@ -4,6 +4,10 @@ require 'goliath/api'
 
 module Holoserve::Interface::Control
 
+  autoload :Bucket, File.join(File.dirname(__FILE__), "control", "bucket")
+  autoload :History, File.join(File.dirname(__FILE__), "control", "history")
+  autoload :Situation, File.join(File.dirname(__FILE__), "control", "situation")
+
   module Helper
 
     def respond_json_acknowledgement
@@ -37,66 +41,6 @@ module Holoserve::Interface::Control
 
     def history
       config[:history] ||= [ ]
-    end
-
-  end
-
-  class UpdateSituation < Goliath::API
-    include Helper
-
-    use Goliath::Rack::Params
-
-    def response(environment)
-      config[:situation] = params[:name]
-      logger.info "set situation to #{params[:name]}"
-      respond_json_acknowledgement
-    end
-
-  end
-
-  class FetchSituation < Goliath::API
-    include Helper
-
-    def response(environment)
-      respond_json :name => config[:situation]
-    end
-
-  end
-
-  class FetchBucket < Goliath::API
-    include Helper
-
-    def response(environment)
-      respond_json bucket
-    end
-
-  end
-
-  class DestroyBucket < Goliath::API
-    include Helper
-
-    def response(environment)
-      bucket.clear
-      respond_json_acknowledgement
-    end
-
-  end
-
-  class FetchHistory < Goliath::API
-    include Helper
-
-    def response(environment)
-      respond_json history
-    end
-
-  end
-
-  class DestroyHistory < Goliath::API
-    include Helper
-
-    def response(environment)
-      history.clear
-      respond_json_acknowledgement
     end
 
   end
