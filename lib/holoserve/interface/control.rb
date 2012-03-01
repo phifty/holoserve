@@ -18,7 +18,6 @@ module Holoserve::Interface::Control
     end
 
     def ok(content, content_type = "text/plain")
-      logger.info content.inspect
       [ 200, { "Content-Type" => content_type }, [ content ] ]
     end
 

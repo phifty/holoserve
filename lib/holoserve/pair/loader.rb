@@ -3,9 +3,10 @@ require 'json'
 
 class Holoserve::Pair::Loader
 
-  def initialize(fixture_file_pattern, pair_file_pattern)
+  def initialize(fixture_file_pattern, pair_file_pattern, logger)
     @fixtures, @pairs = { }, { }
     @fixture_file_pattern, @pair_file_pattern = fixture_file_pattern, pair_file_pattern
+    @logger = logger
   end
 
   def pairs
@@ -21,7 +22,7 @@ class Holoserve::Pair::Loader
       id = extract_id filename
       fixture = load_file filename
       @fixtures[id] = fixture if fixture
-      puts "loaded fixture '#{id}'"
+      @logger.info "loaded fixture '#{id}'"
     end
     @fixtures.freeze
   end
@@ -31,7 +32,7 @@ class Holoserve::Pair::Loader
       id = extract_id filename
       pair = load_file filename
       @pairs[id] = pair_with_imports pair if pair
-      puts "loaded pair '#{id}'"
+      @logger.info "loaded pair '#{id}'"
     end
     @pairs.freeze
   end

@@ -9,7 +9,7 @@ module Holoserve::Interface::Control::Situation
 
     def response(environment)
       config[:situation] = params[:name]
-      logger.info "set situation to #{params[:name]}"
+      logger.info "set situation to '#{params[:name]}'"
       respond_json_acknowledgement
     end
 

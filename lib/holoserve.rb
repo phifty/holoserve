@@ -1,5 +1,5 @@
 require 'goliath/runner'
-require 'pp'
+require 'logger'
 
 class Holoserve
 
@@ -10,6 +10,14 @@ class Holoserve
   autoload :Response, File.join(File.dirname(__FILE__), "holoserve", "response")
   autoload :Runner, File.join(File.dirname(__FILE__), "holoserve", "runner")
   autoload :Tool, File.join(File.dirname(__FILE__), "holoserve", "tool")
+
+  attr_accessor :port
+  attr_accessor :environment
+  attr_accessor :pid_filename
+  attr_accessor :log_filename
+  attr_accessor :fixture_file_pattern
+  attr_accessor :pair_file_pattern
+  attr_accessor :situation
 
   def initialize(options = { })
     @port = options[:port] || 4250
@@ -22,11 +30,13 @@ class Holoserve
   end
 
   def start
+    initialize_logger
     load_pairs
     run_goliath true
   end
 
   def run
+    initialize_logger
     load_pairs
     run_goliath false
   end
@@ -37,8 +47,12 @@ class Holoserve
 
   private
 
+  def initialize_logger
+    @logger = Logger.new @log_filename
+  end
+
   def load_pairs
-    @pairs = Pair::Loader.new(@fixture_file_pattern, @pair_file_pattern).pairs
+    @pairs = Pair::Loader.new(@fixture_file_pattern, @pair_file_pattern, @logger).pairs
   end
 
   def run_goliath(daemonize)
