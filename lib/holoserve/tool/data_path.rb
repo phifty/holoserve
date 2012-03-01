@@ -4,10 +4,14 @@ class Holoserve::Tool::DataPath
   PATH_SEPARATOR = ".".freeze unless defined?(PATH_SEPARATOR)
 
   attr_accessor :path
-  attr_accessor :data
+  attr_reader :data
 
   def initialize(path, data)
-    @path, @data = path, data
+    self.path, self.data = path, data
+  end
+
+  def data=(value)
+    @data = Holoserve::Tool::Hash::KeySymbolizer.new(value).hash
   end
 
   def fetch

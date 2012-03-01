@@ -5,8 +5,6 @@ request:
       as: "parameters"
     - path: "test_fixture.test"
       as: "parameters.another"
-  method: "GET"
-  path: "/test-evaluation"
 responses:
   default:
     imports:

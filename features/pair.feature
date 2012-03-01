@@ -12,3 +12,7 @@ Feature: Handling pairs
   Scenario: Fetch a specific pair
      When the pair of the test request is fetched
      Then the returned pair should contain the test request
+
+  Scenario: Fetch a evaluated pair
+     When the pair of the test evaluation request is fetched
+     Then the returned pair should contain the test evaluation request

@@ -1,8 +1,8 @@
 
 class Holoserve::Response::Combiner
 
-  def initialize(responses, configuration)
-    @responses, @configuration = responses, configuration
+  def initialize(responses, situation)
+    @responses, @situation = responses, situation
   end
 
   def response
@@ -13,22 +13,14 @@ class Holoserve::Response::Combiner
 
   def default_response
     @responses[:default] ?
-      Holoserve::Fixture::Importer.new(@responses[:default], fixtures).result :
+      @responses[:default] :
       { }
   end
 
   def situation_response
-    situation && @responses[situation.to_sym] ?
-      Holoserve::Fixture::Importer.new(@responses[situation.to_sym], fixtures).result :
+    @situation && @responses[@situation.to_sym] ?
+      @responses[@situation.to_sym] :
       { }
-  end
-  
-  def fixtures
-    @configuration[:fixtures]
-  end
-
-  def situation
-    @configuration[:situation]
   end
 
 end

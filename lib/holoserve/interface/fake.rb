@@ -7,22 +7,19 @@ class Holoserve::Interface::Fake < Goliath::API
 
   def response(env)
     request = Holoserve::Request::Decomposer.new(env, params).hash
-    pair = Holoserve::Pair::Finder.new(fixtures, pairs, request).pair
+    pair = Holoserve::Pair::Finder.new(pairs, request).pair
     if pair
-      if name = pair[:name]
-        history << name
-        logger.info "received handled request with name '#{name}'"
-      end
-      response = Holoserve::Response::Combiner.new(pair[:responses], config).response
-      if response.empty?
-        logger.warn "received request #{pair[:name]} with undefined response"
-        not_found
-      else
-        Holoserve::Response::Composer.new(response).response_array
-      end
+      id, responses = *pair.values_at(:id, :responses)
+
+      history << id
+      logger.info "received handled request with id '#{id}'"
+
+      response = Holoserve::Response::Combiner.new(responses, situation).response
+      Holoserve::Response::Composer.new(response).response_array
     else
       bucket << request
       logger.error "received unhandled request\n" + request.pretty_inspect
+
       not_found
     end
   end
@@ -33,12 +30,12 @@ class Holoserve::Interface::Fake < Goliath::API
     [ 404, { "Content-Type" => "text/plain" }, [ "no response found for this request" ] ]
   end
 
-  def fixtures
-    config[:fixtures] ||= options[:fixtures]
-  end
-
   def pairs
     config[:pairs] ||= options[:pairs]
+  end
+
+  def situation
+    config[:situation] ||= options[:situation]
   end
 
   def bucket

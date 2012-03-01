@@ -1,19 +1,15 @@
 require 'goliath/runner'
-require 'logger'
+require 'pp'
 
 class Holoserve
 
   autoload :Fixture, File.join(File.dirname(__FILE__), "holoserve", "fixture")
   autoload :Interface, File.join(File.dirname(__FILE__), "holoserve", "interface")
-  autoload :Loader, File.join(File.dirname(__FILE__), "holoserve", "loader")
   autoload :Pair, File.join(File.dirname(__FILE__), "holoserve", "pair")
   autoload :Request, File.join(File.dirname(__FILE__), "holoserve", "request")
   autoload :Response, File.join(File.dirname(__FILE__), "holoserve", "response")
   autoload :Runner, File.join(File.dirname(__FILE__), "holoserve", "runner")
   autoload :Tool, File.join(File.dirname(__FILE__), "holoserve", "tool")
-
-  attr_reader :logger
-  attr_reader :configuration
 
   def initialize(options = { })
     @port = options[:port] || 4250
@@ -23,15 +19,15 @@ class Holoserve
     @fixture_file_pattern = options[:fixture_file_pattern]
     @pair_file_pattern = options[:pair_file_pattern]
     @situation = options[:situation]
-
-    load_configuration
   end
 
   def start
+    load_pairs
     run_goliath true
   end
 
   def run
+    load_pairs
     run_goliath false
   end
 
@@ -41,9 +37,8 @@ class Holoserve
 
   private
 
-  def load_configuration
-    @configuration = Loader.new(@fixture_file_pattern, @pair_file_pattern).configuration
-    @configuration[:situation] = @situation
+  def load_pairs
+    @pairs = Pair::Loader.new(@fixture_file_pattern, @pair_file_pattern).pairs
   end
 
   def run_goliath(daemonize)
@@ -55,8 +50,8 @@ class Holoserve
       "-p", @port.to_s,
       daemonize ? "-d" : "-s"
     ], nil
-    runner.options[:fixtures] = @configuration[:fixtures]
-    runner.options[:pairs] = @configuration[:pairs]
+    runner.options[:pairs] = @pairs
+    runner.options[:situation] = @situation
     runner.api = Interface.new
     runner.app = Goliath::Rack::Builder.build Interface, runner.api
     runner.run
@@ -67,10 +62,6 @@ class Holoserve
       system "kill -s QUIT `cat #{@pid_filename}`"
       File.delete @pid_filename
     end
-  end
-
-  def self.instance(options = { })
-    @instance ||= self.new options
   end
 
 end

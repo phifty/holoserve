@@ -14,12 +14,12 @@ module Holoserve::Interface::Control
     end
 
     def respond_json(object)
-      ok JSON.dump(object)
+      ok JSON.dump(object), "application/json"
     end
 
-    def ok(content)
+    def ok(content, content_type = "text/plain")
       logger.info content.inspect
-      [ 200, { }, [ content ] ]
+      [ 200, { "Content-Type" => content_type }, [ content ] ]
     end
 
     def bad_request
@@ -28,10 +28,6 @@ module Holoserve::Interface::Control
 
     def pairs
       config[:pairs] ||= options[:pairs]
-    end
-
-    def fixtures
-      config[:fixtures] ||= options[:fixtures]
     end
 
     def bucket
