@@ -4,6 +4,7 @@ module Holoserve::Interface::Control
 
   autoload :Bucket, File.join(File.dirname(__FILE__), "control", "bucket")
   autoload :History, File.join(File.dirname(__FILE__), "control", "history")
+  autoload :Pair, File.join(File.dirname(__FILE__), "control", "pair")
   autoload :Situation, File.join(File.dirname(__FILE__), "control", "situation")
 
   module Helper
