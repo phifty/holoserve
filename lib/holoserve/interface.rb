@@ -14,8 +14,9 @@ class Holoserve::Interface < Goliath::API
   get "/_control/pairs", Control::Pair::Index
   get "/_control/pairs/:id", Control::Pair::Fetch
 
-  put "/_control/situation", Control::Situation::Update
-  get "/_control/situation", Control::Situation::Fetch
+  put "/_control/state", Control::State::Update
+  get "/_control/state", Control::State::Fetch
+  delete "/_control/state", Control::State::Delete
 
   map "/*", Fake
 

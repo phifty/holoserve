@@ -26,7 +26,6 @@ class Holoserve
     @log_filename = options[:log_filename] || File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve_#{@environment}.log"))
     @fixture_file_pattern = options[:fixture_file_pattern]
     @pair_file_pattern = options[:pair_file_pattern]
-    @situation = options[:situation]
   end
 
   def start
@@ -57,7 +56,6 @@ class Holoserve
 
   def run_goliath(daemonize)
     runner = Goliath::Runner.new [
-      "-v",
       "-P", @pid_filename,
       "-l", @log_filename,
       "-e", @environment,
@@ -65,7 +63,7 @@ class Holoserve
       daemonize ? "-d" : "-s"
     ], nil
     runner.options[:pairs] = @pairs
-    runner.options[:situation] = @situation
+    runner.options[:state] = { }
     runner.api = Interface.new
     runner.app = Goliath::Rack::Builder.build Interface, runner.api
     runner.run

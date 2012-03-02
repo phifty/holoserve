@@ -14,7 +14,7 @@ class Holoserve::Interface::Fake < Goliath::API
       history << id
       logger.info "received handled request with id '#{id}'"
 
-      response = Holoserve::Response::Combiner.new(responses, situation).response
+      response = Holoserve::Response::Combiner.new(responses, state, logger).response
       Holoserve::Response::Composer.new(response).response_array
     else
       bucket << request
@@ -27,15 +27,7 @@ class Holoserve::Interface::Fake < Goliath::API
   private
 
   def not_found
-    [ 404, { "Content-Type" => "text/plain" }, [ "no response found for this request" ] ]
-  end
-
-  def pairs
-    config[:pairs] ||= options[:pairs]
-  end
-
-  def situation
-    config[:situation] ||= options[:situation]
+    [ 404, { :"Content-Type" => "text/plain" }, [ "no response found for this request" ] ]
   end
 
   def bucket
@@ -44,6 +36,14 @@ class Holoserve::Interface::Fake < Goliath::API
 
   def history
     config[:history] ||= [ ]
+  end
+
+  def pairs
+    config[:pairs] ||= options[:pairs]
+  end
+
+  def state
+    config[:state] ||= options[:state]
   end
 
 end

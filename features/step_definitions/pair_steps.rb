@@ -27,7 +27,7 @@ Then /^the returned pair should contain the test request$/ do
       "default" => {
         "status" => 200
       },
-      "one" => {
+      "test == 'value'" => {
         "body" => "test_request"
       }
     }

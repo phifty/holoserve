@@ -1,12 +1,27 @@
 
 class Holoserve::Response::Combiner
 
-  def initialize(responses, situation)
-    @responses, @situation = responses, situation
+  class Sandbox
+
+    def initialize(state)
+      state.each do |resource, state|
+        define_singleton_method resource.to_sym do
+          state
+        end
+      end
+    end
+
+  end
+
+  def initialize(responses, state, logger)
+    @responses, @logger = responses, logger
+    @sandbox = Sandbox.new state
   end
 
   def response
-    Holoserve::Tool::Merger.new(default_response, situation_response).result
+    matching_responses.inject default_response do |result, response|
+      Holoserve::Tool::Merger.new(result, response).result
+    end
   end
 
   private
@@ -17,10 +32,20 @@ class Holoserve::Response::Combiner
       { }
   end
 
-  def situation_response
-    @situation && @responses[@situation.to_sym] ?
-      @responses[@situation.to_sym] :
-      { }
+  def matching_responses
+    result = [ ]
+    (@responses || { }).each do |line, response|
+      next if line.to_s == "default"
+      begin
+        match = @sandbox.instance_eval do
+          eval line.to_s
+        end
+        result << response if match
+      rescue Object => error
+        @logger.error error.inspect
+      end
+    end
+    result
   end
 
 end
