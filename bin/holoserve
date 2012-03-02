@@ -6,7 +6,7 @@ require 'optparse'
 
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "lib", "holoserve"))
 
-options = { }
+options = { :state => { } }
 OptionParser.new do |parser|
   parser.banner = "Usage: holoserve [options]"
   parser.separator ""
@@ -19,6 +19,10 @@ OptionParser.new do |parser|
   end
   parser.on("-p", "--pair-files PATTERN", "Load the specified pair files on startup.") do |value|
     options[:pair_file_pattern] = value
+  end
+  parser.on("-s", "--state SETTING", "Set a specific state. Use the pattern key=value. Can be applied multiple times.") do |value|
+    resource, state = *value.split("=").map(&:strip)
+    options[:state][resource] = state
   end
   parser.on_tail("-h", "--help", "Shows the help message.") do
     puts parser
