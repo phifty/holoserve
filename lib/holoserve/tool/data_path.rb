@@ -36,7 +36,7 @@ class Holoserve::Tool::DataPath
     path = @path ? @path.split(PATH_SEPARATOR) : [ ]
     return Holoserve::Tool::Merger.new(@data, value).result if path.empty?
 
-    result = selected = clone @data
+    result = selected = clone(@data)
     key = parse_key path.shift
 
     while path.length > 0
