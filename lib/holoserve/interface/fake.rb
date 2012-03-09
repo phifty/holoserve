@@ -14,7 +14,10 @@ class Holoserve::Interface::Fake < Goliath::API
       history << id
       logger.info "received handled request with id '#{id}'"
 
-      response = Holoserve::Response::Combiner.new(responses, state, logger).response
+      selector = Holoserve::Response::Selector.new responses, state, logger
+      default_response, selected_responses = selector.default_response, selector.selected_responses
+
+      response = Holoserve::Response::Combiner.new(default_response, selected_responses).response
       Holoserve::Response::Composer.new(response).response_array
     else
       bucket << request
