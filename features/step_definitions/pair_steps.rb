@@ -28,7 +28,10 @@ Then /^the returned pair should contain the test request$/ do
         "status" => 200
       },
       "test == 'value'" => {
-        "body" => "test_request"
+        "body" => "test_request",
+        "transitions" => {
+          "test" => "another value"
+        }
       }
     }
   }

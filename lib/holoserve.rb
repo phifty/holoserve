@@ -9,15 +9,8 @@ class Holoserve
   autoload :Request, File.join(File.dirname(__FILE__), "holoserve", "request")
   autoload :Response, File.join(File.dirname(__FILE__), "holoserve", "response")
   autoload :Runner, File.join(File.dirname(__FILE__), "holoserve", "runner")
+  autoload :State, File.join(File.dirname(__FILE__), "holoserve", "state")
   autoload :Tool, File.join(File.dirname(__FILE__), "holoserve", "tool")
-
-  attr_accessor :port
-  attr_accessor :environment
-  attr_accessor :pid_filename
-  attr_accessor :log_filename
-  attr_accessor :fixture_file_pattern
-  attr_accessor :pair_file_pattern
-  attr_accessor :situation
 
   def initialize(options = { })
     @port = options[:port] || 4250

@@ -17,6 +17,8 @@ class Holoserve::Interface::Fake < Goliath::API
       selector = Holoserve::Response::Selector.new responses, state, logger
       default_response, selected_responses = selector.default_response, selector.selected_responses
 
+      update_state default_response, selected_responses
+
       response = Holoserve::Response::Combiner.new(default_response, selected_responses).response
       Holoserve::Response::Composer.new(response).response_array
     else
@@ -28,6 +30,13 @@ class Holoserve::Interface::Fake < Goliath::API
   end
 
   private
+
+  def update_state(default_response, selected_responses)
+    Holoserve::State::Updater.new(state, default_response[:transitions]).perform
+    (selected_responses || [ ]).each do |response|
+      Holoserve::State::Updater.new(state, response[:transitions]).perform
+    end
+  end
 
   def not_found
     [ 404, { :"Content-Type" => "text/plain" }, [ "no response found for this request" ] ]

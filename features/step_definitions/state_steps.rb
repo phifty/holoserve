@@ -27,3 +27,9 @@ Then /^the state should be undefined$/ do
   last_response_status.should == 200
   last_json_response_body.should == { }
 end
+
+Then /^the state should have been updated$/ do
+  get "/_control/state"
+  last_response_status.should == 200
+  last_json_response_body.should == { "test" => "another value" }
+end
