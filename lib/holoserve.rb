@@ -8,7 +8,6 @@ class Holoserve
   autoload :Pair, File.join(File.dirname(__FILE__), "holoserve", "pair")
   autoload :Request, File.join(File.dirname(__FILE__), "holoserve", "request")
   autoload :Response, File.join(File.dirname(__FILE__), "holoserve", "response")
-  autoload :Runner, File.join(File.dirname(__FILE__), "holoserve", "runner")
   autoload :State, File.join(File.dirname(__FILE__), "holoserve", "state")
   autoload :Tool, File.join(File.dirname(__FILE__), "holoserve", "tool")
 
