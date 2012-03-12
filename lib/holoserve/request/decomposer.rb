@@ -65,7 +65,7 @@ class Holoserve::Request::Decomposer
 
   def json
     @json ||= if @request["CONTENT_TYPE"] == "application/json"
-      JSON.parse(@body)
+      Holoserve::Tool::Hash::KeySymbolizer.new(JSON.parse(@body)).hash
     else
       { }
     end
