@@ -6,7 +6,7 @@ class Holoserve::Response::Selector
     def initialize(state)
       state.each do |resource, value|
         define_singleton_method resource.to_sym do
-          value
+          value ? value.to_sym : nil
         end
       end
     end
