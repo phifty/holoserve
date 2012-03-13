@@ -130,6 +130,8 @@ The request/response pair file should have the following format.
         imports:
           - path: "test_fixture.users.0"
             as: "json.user"
+        transitions:
+          session_one: "existing"
       "user_one == :missing":
         json:
           message: "user not found"
@@ -170,3 +172,6 @@ are posted and the second one reacts on the transmission of <tt>username=one</tt
 If the state includes <tt>user_one == :existing</tt>, the first response would return the complete user object encoded
 as json, while the second one would reply the message "invalid password". In the state includes
 <tt>user_one == :missing</tt>, both requests would be replied with the message "user not found".
+
+The <tt>transitions</tt> part of the response allows you set the successor state. If a response is selected, the
+corresponding transitions will be evaluated.
