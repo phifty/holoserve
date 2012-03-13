@@ -42,6 +42,13 @@ class TestWorld
             "headers" => headers.merge("Content-Type" => "application/x-www-form-urlencoded")
   end
 
+  def post_json(path, hash = { })
+    perform "method" => "POST",
+            "path" => path,
+            "body" => JSON.dump(hash),
+            "headers" => { "Content-Type" => "application/json" }
+  end
+
   def put(path, parameters = { }, headers = { })
     perform "method" => "PUT",
             "path" => path,
@@ -49,11 +56,12 @@ class TestWorld
             "headers" => headers.merge("Content-Type" => "application/x-www-form-urlencoded")
   end
 
-  def get(path, parameters = { }, headers = { })
+  def get(path, parameters = { }, headers = { }, body = nil)
     perform "method" => "GET",
             "path" => path,
             "parameters" => parameters,
-            "headers" => headers
+            "headers" => headers,
+            "body" => body
   end
 
   def delete(path, parameters = { }, headers = { })

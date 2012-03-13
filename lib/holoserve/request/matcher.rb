@@ -10,9 +10,10 @@ class Holoserve::Request::Matcher
     match_method? &&
       match_path? &&
       match_headers? &&
-      (@request_subset[:json] ? match_json? : match_body?) &&
+      match_body? &&
       match_parameters? &&
-      match_oauth?
+      match_oauth? &&
+      match_json?
   end
 
   private
@@ -59,16 +60,16 @@ class Holoserve::Request::Matcher
     match
   end
 
-  def match_hash? key
-    match = true
-    (@request_subset[key] || {}).each do |entry|
-      match &&= @request[key].is_a?(Hash) && (@request[key][entry[0]] == entry[1])
-    end
-    match
-  end
-
   def match_json?
     match_hash? :json
+  end
+
+  def match_hash?(hash_key)
+    match = true
+    (@request_subset[hash_key] || { }).each do |key, value|
+      match &&= @request[hash_key].is_a?(Hash) && (@request[hash_key][key] == value)
+    end
+    match
   end
 
 end

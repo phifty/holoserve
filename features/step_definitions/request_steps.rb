@@ -12,7 +12,7 @@ When /^the test request is performed with the test headers$/ do
 end
 
 When /^the test json request is performed$/ do
-  get "/test-json"
+  post_json "/test-json", :test => "value"
 end
 
 When /^the test request is performed with the test oauth headers$/ do
