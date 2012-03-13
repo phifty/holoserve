@@ -14,6 +14,7 @@ class Holoserve::Request::Decomposer
     hash.merge! :body => body unless body.nil?
     hash.merge! :parameters => parameters unless parameters.empty?
     hash.merge! :oauth => oauth unless oauth.empty?
+    hash.merge! :json => json unless json.empty?
     hash
   end
 
@@ -59,6 +60,14 @@ class Holoserve::Request::Decomposer
         end
       end
       oauth
+    end
+  end
+
+  def json
+    @json ||= if @request["CONTENT_TYPE"] == "application/json"
+      Holoserve::Tool::Hash::KeySymbolizer.new(JSON.parse(@body)).hash
+    else
+      { }
     end
   end
 
