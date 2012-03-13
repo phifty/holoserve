@@ -1,53 +1,61 @@
+require 'goliath/api'
 require 'pp'
 
-class Holoserve::Interface::Fake
+class Holoserve::Interface::Fake < Goliath::API
 
-  def call(env)
-    request = Holoserve::Request::Decomposer.new(env).hash
-    pair = Holoserve::Pair::Finder.new(configuration, request).pair
+  use Goliath::Rack::Params
+
+  def response(env)
+    request = Holoserve::Request::Decomposer.new(env, params).hash
+    pair = Holoserve::Pair::Finder.new(pairs, request).pair
     if pair
-      if name = pair[:name]
-        history << name
-        logger.info "received handled request with name '#{name}'"
-      end
-      response = Holoserve::Response::Combiner.new(pair[:responses], configuration).response
-      if response.empty?
-        logger.warn "received request #{pair[:name]} with undefined response"
-        not_found
-      else
-        Holoserve::Response::Composer.new(response).response_array
-      end
+      id, responses = *pair.values_at(:id, :responses)
+
+      history << id
+      logger.info "received handled request with id '#{id}'"
+
+      selector = Holoserve::Response::Selector.new responses, state, logger
+      default_response, selected_responses = selector.default_response, selector.selected_responses
+
+      update_state default_response, selected_responses
+
+      response = Holoserve::Response::Combiner.new(default_response, selected_responses).response
+      Holoserve::Response::Composer.new(response).response_array
     else
       bucket << request
       logger.error "received unhandled request\n" + request.pretty_inspect
+
       not_found
     end
   end
 
   private
 
+  def update_state(default_response, selected_responses)
+    Holoserve::State::Updater.new(state, default_response[:transitions]).perform
+    (selected_responses || [ ]).each do |response|
+      Holoserve::State::Updater.new(state, response[:transitions]).perform
+    end
+  end
+
   def not_found
-    [ 404, { "Content-Type" => "text/plain" }, [ "no response found for this request" ] ]
-  end
-
-  def logger
-    Holoserve.instance.logger
-  end
-
-  def pairs
-    configuration[:pairs]
+    [ 404, { :"Content-Type" => "text/plain" }, [ "no response found for this request" ] ]
   end
 
   def bucket
-    configuration[:bucket]
+    config[:bucket] ||= [ ]
   end
 
   def history
-    configuration[:history]
+    config[:history] ||= [ ]
   end
 
-  def configuration
-    Holoserve.instance.configuration
+  def pairs
+    config[:pairs] ||= options[:pairs]
+  end
+
+  def state
+    config[:state] ||= options[:state]
   end
 
 end

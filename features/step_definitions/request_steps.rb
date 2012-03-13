@@ -18,3 +18,7 @@ end
 When /^the test request is performed with the test oauth headers$/ do
   get "/test-oauth", { }, "authorization" => "OAuth test=\"value\""
 end
+
+When /^the test unhandled request is performed$/ do
+  get "/test-unhandled"
+end

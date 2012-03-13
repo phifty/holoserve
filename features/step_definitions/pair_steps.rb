@@ -1,60 +1,52 @@
 
-Given /^no pairs$/ do
-  delete "/_control/pairs"
+When /^the list of pairs is fetched$/ do
+  get "/_control/pairs"
 end
 
-Given /^the test pairs$/ do
-  step "the yaml pairs are added"
+When /^the pair of the test request is fetched$/ do
+  get "/_control/pairs/test_request"
 end
 
-When /^the (yaml|json|invalid) pairs are added$/ do |format|
-  Dir[ File.join(File.dirname(__FILE__), "..", "pairs", "test_*.#{format}") ].each do |filename|
-    post_file "/_control/pairs", filename
-  end
+When /^the pair of the test evaluation request is fetched$/ do
+  get "/_control/pairs/test_evaluation"
 end
 
-Then /^the test pair should be present$/ do
-  get "/_control/pairs/test_request.json"
+Then /^the returned list should contain the pair of the test request$/ do
   last_response_status.should == 200
-end
-
-Then /^the test pair should be absent$/ do
-  get "/_control/pairs/test_request.json"
-  last_response_status.should == 404
-end
-
-Then /the list of pairs should contain the test pair/ do
-  get "/_control/pairs.json"
   last_json_response_body.keys.should include("test_request")
 end
 
-Then /^the list of evaluated pairs should contain the evaluated test parameters pair$/ do
-  get "/_control/pairs.json", :evaluate => true
-  response = last_json_response_body
-  response.keys.should include("test_parameters")
-  response["test_parameters"].should == {
+Then /^the returned pair should contain the test request$/ do
+  last_response_status.should == 200
+  last_json_response_body.should == {
     "request" => {
       "method" => "GET",
-      "path" => "/test-parameters",
-      "parameters" => { "test" => "value" }
+      "path" => "/test-request"
     },
     "responses" => {
       "default" => {
-        "status" => 200,
-        "body" => "test_parameters"
+        "status" => 200
+      },
+      "test == :value" => {
+        "body" => "test_request",
+        "transitions" => {
+          "test" => "another value"
+        }
       }
     }
   }
 end
 
-Then /^the test evaluation pair should be evaluated$/ do
-  get "/_control/pairs/test_evaluation.json", :evaluate => true
-  response = last_json_response_body
-  response.should == {
+Then /^the returned pair should contain the test evaluation request$/ do
+  last_response_status.should == 200
+  last_json_response_body.should == {
     "request" => {
       "method" => "GET",
       "path" => "/test-evaluation",
-      "parameters" => { "test" => "value", "another" => "value" }
+      "parameters" => {
+        "test" => "value",
+        "another" => "value"
+      }
     },
     "responses" => {
       "default" => {

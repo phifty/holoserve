@@ -9,25 +9,15 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "lib", "h
 
 class TestWorld
 
-  attr_reader :port
-  attr_reader :server
-
   attr_reader :last_response_status
   attr_reader :last_response_body
-
-  def initialize
-    @port = 4250
-    @server = Holoserve::Runner.new :port => @port,
-                                    :fixture_file_pattern => File.expand_path(File.join(File.dirname(__FILE__), "..", "fixtures", "test_*.yaml")),
-                                    :pair_file_pattern => File.expand_path(File.join(File.dirname(__FILE__), "..", "pairs", "test_*.yaml"))
-  end
 
   def post_file(path, filename)
     @last_response_status = 200
     @last_response_body = Holoserve::Tool::Uploader.new(
       filename,
       :post,
-      "http://localhost:#{port}#{path}",
+      "http://localhost:4250#{path}",
       :expected_status_code => 200
     ).upload
   rescue Transport::UnexpectedStatusCodeError => error
@@ -74,7 +64,7 @@ class TestWorld
   def perform(request)
     @last_response_status = 200
     @last_response_body = Transport::HTTP.request :"#{request["method"].downcase}",
-                                                  "http://localhost:#{port}#{request["path"]}",
+                                                  "http://localhost:4250#{request["path"]}",
                                                   :headers => request["headers"],
                                                   :body => request["body"],
                                                   :parameters => request["parameters"],
@@ -91,10 +81,4 @@ class TestWorld
 end
 
 test_world = TestWorld.new
-test_world.server.start
-
 World { test_world }
-
-at_exit do
-  test_world.server.stop
-end

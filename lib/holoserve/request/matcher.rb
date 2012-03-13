@@ -1,9 +1,8 @@
 
 class Holoserve::Request::Matcher
 
-  def initialize(request, request_subset, fixtures)
-    @request = request
-    @request_subset = Holoserve::Fixture::Importer.new(request_subset, fixtures).result
+  def initialize(request, request_subset)
+    @request, @request_subset = request, request_subset
   end
 
   def match?

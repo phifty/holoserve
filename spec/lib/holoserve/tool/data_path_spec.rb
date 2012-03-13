@@ -18,6 +18,12 @@ describe Holoserve::Tool::DataPath do
       subject.fetch.should == "value"
     end
 
+    it "should return the value even if string keys are used" do
+      subject.path = "test"
+      subject.data = { "test" => "value" }.freeze
+      subject.fetch.should == "value"
+    end
+
     it "should return the nested value specified by the given path" do
       subject.path = "test.nested"
       subject.data = { :test => { :nested => "value" }.freeze }.freeze

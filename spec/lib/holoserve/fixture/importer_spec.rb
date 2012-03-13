@@ -25,9 +25,10 @@ describe Holoserve::Fixture::Importer do
       subject.hash = {
         :imports => [
           { :path => "one" }
-        ]
+        ],
+        :test => "value"
       }
-      subject.result.should == { :first => 1, :second => 2 }
+      subject.result.should == { :first => 1, :second => 2, :test => "value" }
     end
 
     it "should return a hash with imported fixtures at a target path" do
@@ -75,6 +76,20 @@ describe Holoserve::Fixture::Importer do
         ]
       }
       subject.result.should == { :first => 1, :second => 2, :third => 4 }
+    end
+
+    it "should return a hash where all the imports (with and without an :as statement) are properly merged together" do
+      subject.hash = {
+        :imports => [
+          { :path => "one" },
+          { :path => "three", :as => "test" },
+          { :path => "two", :as => "test.another" }
+        ],
+        :test => {
+          :fifth => 6
+        }
+      }
+      subject.result.should == { :first => 1, :second => 2, :test => { :third => 4, :another => 3, :fifth => 6 } }
     end
 
     it "should return a hash where the data is merged with the imports" do

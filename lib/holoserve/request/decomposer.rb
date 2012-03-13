@@ -1,20 +1,29 @@
 
 class Holoserve::Request::Decomposer
 
-  def initialize(request)
-    @request = request
+  ONLY_HEADERS = [
+    "SERVER_SOFTWARE",
+    "SERVER_NAME",
+    "SERVER_PORT",
+    "REMOTE_ADDR",
+    "SCRIPT_NAME",
+    "CONTENT_TYPE"
+  ].freeze unless defined?(ONLY_HEADERS)
+
+  def initialize(request, parameters)
+    @request, @parameters = request, parameters
   end
 
   def hash
     hash = {
       :method => @request["REQUEST_METHOD"],
-      :path => @request["PATH_INFO"]
+      :path => @request["REQUEST_PATH"]
     }
-    hash.merge! :headers => headers unless headers.empty?
-    hash.merge! :body => body unless body.nil?
-    hash.merge! :parameters => parameters unless parameters.empty?
-    hash.merge! :oauth => oauth unless oauth.empty?
-    hash.merge! :json => json unless json.empty?
+    hash[:headers] = headers unless headers.empty?
+    hash[:body] = body unless body.nil?
+    hash[:parameters] = parameters unless parameters.empty?
+    hash[:oauth] = oauth unless oauth.empty?
+    hash[:json] = json unless json.empty?
     hash
   end
 
@@ -23,7 +32,7 @@ class Holoserve::Request::Decomposer
   def headers
     headers = { }
     @request.each do |key, value|
-      headers[ key.to_sym ] = value unless key =~ /^rack\./
+      headers[ key.to_sym ] = value if ONLY_HEADERS.include?(key) || key =~ /^HTTP_/
     end
     headers
   end
@@ -36,15 +45,7 @@ class Holoserve::Request::Decomposer
   end
 
   def parameters
-    Holoserve::Tool::Hash::KeySymbolizer.new(query_hash.merge(form_hash)).hash
-  end
-
-  def query_hash
-    @request["rack.request.query_hash"] || { }
-  end
-
-  def form_hash
-    @request["rack.request.form_hash"] || { }
+    Holoserve::Tool::Hash::KeySymbolizer.new(@parameters).hash
   end
 
   def oauth

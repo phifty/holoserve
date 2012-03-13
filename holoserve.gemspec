@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |specification|
   specification.name              = "holoserve"
-  specification.version           = "0.3.1"
+  specification.version           = "0.4.0"
   specification.date              = "2012-02-10"
 
   specification.authors           = [ "Philipp Brüll" ]
@@ -21,11 +21,10 @@ Gem::Specification.new do |specification|
 
   specification.test_files        = Dir["spec/**/*_spec.rb"]
 
-  specification.add_dependency "rack"
-  specification.add_dependency "sinatra"
-  specification.add_dependency "unicorn"
-  specification.add_dependency "transport"
+  specification.add_dependency "goliath"
 
+  specification.add_development_dependency "rake"
+  specification.add_development_dependency "rdoc"
   specification.add_development_dependency "cucumber"
   specification.add_development_dependency "rspec"
   specification.add_development_dependency "transport"

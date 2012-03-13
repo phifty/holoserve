@@ -4,5 +4,7 @@ request:
 responses:
   default:
     status: 200
-  one:
+  "test == :value":
     body: "test_request"
+    transitions:
+      test: "another value"
