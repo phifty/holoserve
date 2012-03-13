@@ -18,7 +18,7 @@ class Holoserve
     @log_filename = options[:log_filename] || File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve_#{@environment}.log"))
     @fixture_file_pattern = options[:fixture_file_pattern]
     @pair_file_pattern = options[:pair_file_pattern]
-    @state = options[:state]
+    @state = options[:state] || { }
   end
 
   def start
