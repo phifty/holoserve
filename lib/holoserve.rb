@@ -13,9 +13,8 @@ class Holoserve
 
   def initialize(options = { })
     @port = options[:port] || 4250
-    @environment = options[:environment] || "development"
-    @pid_filename = options[:pid_filename] || File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve_#{@environment}.pid"))
-    @log_filename = options[:log_filename] || File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve_#{@environment}.log"))
+    @pid_filename = options[:pid_filename] || File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve.pid"))
+    @log_filename = options[:log_filename] || File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve.log"))
     @fixture_file_pattern = options[:fixture_file_pattern]
     @pair_file_pattern = options[:pair_file_pattern]
     @state = options[:state] || { }
@@ -48,10 +47,12 @@ class Holoserve
   end
 
   def run_goliath(daemonize)
+    saved_directory = Dir.pwd
+
     runner = Goliath::Runner.new [
       "-P", @pid_filename,
       "-l", @log_filename,
-      "-e", @environment,
+      "-e", "production",
       "-p", @port.to_s,
       daemonize ? "-d" : "-s"
     ], nil
@@ -60,6 +61,8 @@ class Holoserve
     runner.api = Interface.new
     runner.app = Goliath::Rack::Builder.build Interface, runner.api
     runner.run
+
+    Dir.chdir saved_directory
   end
 
   def kill_goliath
