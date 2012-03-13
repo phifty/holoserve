@@ -24,6 +24,7 @@ class Holoserve
     initialize_logger
     load_pairs
     run_goliath true
+    wait_until_running
   end
 
   def run
@@ -34,6 +35,18 @@ class Holoserve
 
   def stop
     kill_goliath
+  end
+
+  def running?
+    !!(process_id && Process.kill(0, process_id) == 1)
+  rescue Errno::ESRCH
+    false
+  end
+
+  def process_id
+    File.read(@pid_filename).to_i
+  rescue Errno::ENOENT
+    nil
   end
 
   private
@@ -63,6 +76,10 @@ class Holoserve
     runner.run
 
     Dir.chdir saved_directory
+  end
+
+  def wait_until_running
+    sleep 0.2 while !self.running?
   end
 
   def kill_goliath

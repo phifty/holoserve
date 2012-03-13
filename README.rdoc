@@ -126,11 +126,11 @@ The request/response pair file should have the following format.
     responses:
       default:
         status: 200
-      "user_one == 'existing'":
+      "user_one == :existing":
         imports:
           - path: "test_fixture.users.0"
             as: "json.user"
-      "user_one == 'missing'":
+      "user_one == :missing":
         json:
           message: "user not found"
   - request:
@@ -147,11 +147,11 @@ The request/response pair file should have the following format.
       oauth:
         oauth_token: "12345"
     responses:
-      "user_one == 'existing'":
+      "user_one == :existing":
         status: 401
         json:
           message: "invalid password"
-      "user_one == 'missing'":
+      "user_one == :missing":
         status: 200
         json:
           message: "user not found"
@@ -167,6 +167,6 @@ This example defines two request/response pairs and two situations. The two pair
 match against. The first one handles the case in which the parameters <tt>username=one</tt> and <tt>password=valid</tt>
 are posted and the second one reacts on the transmission of <tt>username=one</tt> and <tt>password=invalid</tt>.
 
-If the state includes <tt>user_one == 'existing'</tt>, the first response would return the complete user object encoded
+If the state includes <tt>user_one == :existing</tt>, the first response would return the complete user object encoded
 as json, while the second one would reply the message "invalid password". In the state includes
-<tt>user_one == 'missing'</tt>, both requests would be replied with the message "user not found".
+<tt>user_one == :missing</tt>, both requests would be replied with the message "user not found".

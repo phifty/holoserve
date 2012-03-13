@@ -2,3 +2,4 @@
 pkg
 html
 *.log
+*.pid
