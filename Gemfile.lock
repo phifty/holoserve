@@ -33,7 +33,7 @@ GEM
       url_mount (~> 0.2.1)
     json (1.6.5)
     log4r (1.1.10)
-    multi_json (1.0.4)
+    multi_json (1.1.0)
     oauth (0.4.5)
     rack (1.4.1)
     rack-accept-media-types (0.9)
