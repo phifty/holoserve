@@ -20,11 +20,11 @@ class Holoserve::Tool::Merger
   def merged_hash
     result = { }
     (@hash_or_array_one.keys + @hash_or_array_two.keys).uniq.each do |key|
-      value_one, value_two = @hash_or_array_one[key],@hash_or_array_two[key]
+      value_one, value_two = @hash_or_array_one[key], @hash_or_array_two[key]
       result[key] = if values_mergeable?(value_one, value_two)
         self.class.new(value_one, value_two).result
       else
-        value_two || value_one
+        @hash_or_array_two.has_key?(key) ? value_two : value_one
       end
     end
     result
@@ -37,7 +37,7 @@ class Holoserve::Tool::Merger
       result[index] = if values_mergeable?(value_one, value_two)
         self.class.new(value_one, value_two).result
       else
-        value_two || value_one
+        index < @hash_or_array_two.length ? value_two : value_one
       end
     end
     result

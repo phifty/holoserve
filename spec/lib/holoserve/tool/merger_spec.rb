@@ -17,6 +17,17 @@ describe Holoserve::Tool::Merger do
 
     end
 
+    context "of two hashes with boolean values" do
+
+      let(:argument_one) { { :one => false, :two => true } }
+      let(:argument_two) { { :one => true, :two => false } }
+
+      it "should merge hashes with boolean values" do
+        subject.result.should == { :one => true, :two => false }
+      end
+
+    end
+
     context "of two nested hashes" do
 
       let(:argument_one) { { :test => { :regular =>"value", :nested => "value" } } }
