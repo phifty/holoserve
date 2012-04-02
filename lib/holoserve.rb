@@ -14,7 +14,7 @@ class Holoserve
   def initialize(options = { })
     @port = options[:port] || 4250
     @pid_filename = options[:pid_filename] || File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve.pid"))
-    @log_filename = options[:log_filename] || File.expand_path(File.join(File.dirname(__FILE__), "..", "holoserve.log"))
+    @log_filename = options[:log_filename]
     @fixture_file_pattern = options[:fixture_file_pattern]
     @pair_file_pattern = options[:pair_file_pattern]
     @state = options[:state] || { }
@@ -52,7 +52,7 @@ class Holoserve
   private
 
   def initialize_logger
-    @logger = Logger.new @log_filename
+    @logger = Logger.new(@log_filename ? @log_filename : $stdout)
   end
 
   def load_pairs
@@ -64,11 +64,11 @@ class Holoserve
 
     runner = Goliath::Runner.new [
       "-P", @pid_filename,
-      "-l", @log_filename,
+      @log_filename ? [ "-l", @log_filename ] : "-s",
       "-e", "production",
       "-p", @port.to_s,
-      daemonize ? "-d" : "-s"
-    ], nil
+      daemonize ? "-d" : nil
+    ].flatten.compact, nil
     runner.options[:pairs] = @pairs
     runner.options[:state] = Tool::Hash::KeySymbolizer.new(@state).hash
     runner.api = Interface.new

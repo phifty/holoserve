@@ -14,6 +14,9 @@ OptionParser.new do |parser|
   parser.on("-P", "--port PORT", Integer, "The port holoserve should listen to.") do |value|
     options[:port] = value
   end
+  parser.on("-l", "--log-file FILE", "The file where the messages go to.") do |value|
+    options[:log_filename] = value
+  end
   parser.on("-f", "--fixture-files PATTERN", "Load the specified fixture files on startup.") do |value|
     options[:fixture_file_pattern] = value
   end
