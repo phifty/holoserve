@@ -3,7 +3,8 @@ class Holoserve::Response::Selector
 
   class Sandbox
 
-    def initialize(state)
+    def initialize(state, logger)
+      @logger = logger
       state.each do |resource, value|
         define_singleton_method resource.to_sym do
           value ? value.to_sym : nil
@@ -11,11 +12,16 @@ class Holoserve::Response::Selector
       end
     end
 
+    def method_missing(method_name, *arguments, &block)
+      @logger.warn "tried to use undefined state key '#{method_name}'"
+      nil
+    end
+
   end
 
   def initialize(responses, state, logger)
     @responses, @logger = responses, logger
-    @sandbox = Sandbox.new state
+    @sandbox = Sandbox.new state, logger
   end
 
   def default_response
