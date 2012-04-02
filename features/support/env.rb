@@ -12,19 +12,6 @@ class TestWorld
   attr_reader :last_response_status
   attr_reader :last_response_body
 
-  def post_file(path, filename)
-    @last_response_status = 200
-    @last_response_body = Holoserve::Tool::Uploader.new(
-      filename,
-      :post,
-      "http://localhost:4250#{path}",
-      :expected_status_code => 200
-    ).upload
-  rescue Transport::UnexpectedStatusCodeError => error
-    @last_response_status = error.status_code
-    @last_response_body = error.message
-  end
-
   def post(path, parameters = { }, headers = { })
     perform "method" => "POST",
             "path" => path,

@@ -70,7 +70,7 @@ class Holoserve
       daemonize ? "-d" : "-s"
     ], nil
     runner.options[:pairs] = @pairs
-    runner.options[:state] = @state
+    runner.options[:state] = Tool::Hash::KeySymbolizer.new(@state).hash
     runner.api = Interface.new
     runner.app = Goliath::Rack::Builder.build Interface, runner.api
     runner.run

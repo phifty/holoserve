@@ -8,7 +8,7 @@ module Holoserve::Interface::Control::State
     use Goliath::Rack::Params
 
     def response(environment)
-      state.merge! params
+      state.merge! Holoserve::Tool::Hash::KeySymbolizer.new(params).hash
       logger.info "set state to '#{state.inspect}'"
       respond_json_acknowledgement
     end

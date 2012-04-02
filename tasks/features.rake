@@ -7,7 +7,8 @@ begin
   def start_holoserve
     @holoserve ||= begin
       holoserve = Holoserve.new :fixture_file_pattern => File.expand_path(File.join(File.dirname(__FILE__), "..", "features", "fixtures", "*.yaml")),
-                                :pair_file_pattern => File.expand_path(File.join(File.dirname(__FILE__), "..", "features", "pairs", "*.yaml"))
+                                :pair_file_pattern => File.expand_path(File.join(File.dirname(__FILE__), "..", "features", "pairs", "*.yaml")),
+                                :state => { :test => "value" }
       holoserve.start
       holoserve
     end

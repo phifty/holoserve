@@ -4,4 +4,5 @@ begin
 
   RSpec::Core::RakeTask.new
 rescue LoadError
+  # Ignore
 end
