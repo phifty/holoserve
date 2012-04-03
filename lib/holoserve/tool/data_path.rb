@@ -42,10 +42,12 @@ class Holoserve::Tool::DataPath
     while path.length > 0
       break unless selected.respond_to?(:[])
 
-      selected[key] ||= { }
+      selected[key] ||= path.first.to_s == "@" ? [ ] : { }
       selected = selected[key]
       key = parse_key path.shift
     end
+
+    key = selected.length if key.to_s == "@"
 
     selected[key] = value
     result

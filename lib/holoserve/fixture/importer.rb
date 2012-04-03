@@ -33,7 +33,7 @@ class Holoserve::Fixture::Importer
   end
 
   def merge
-    @result = Holoserve::Tool::Merger.new(@result, hash_without_imports).result
+    @result = Holoserve::Tool::Merger.new(@result, hash_without_imports, :fusion).result
   end
 
   def hash_without_imports

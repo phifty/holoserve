@@ -40,6 +40,25 @@ describe Holoserve::Fixture::Importer do
       subject.result.should == { :test => 1 }
     end
 
+    it "should return a hash with imported fixtures at a new target array" do
+      subject.hash = {
+        :imports => [
+          { :path => "one.first", :as => "test.@" }
+        ]
+      }
+      subject.result.should == { :test => [ 1 ] }
+    end
+
+    it "should return a hash with imported fixtures at an existing target array" do
+      subject.hash = {
+        :imports => [
+          { :path => "one.second", :as => "test.@" }
+        ],
+        :test => [ 1 ]
+      }
+      subject.result.should == { :test => [ 2, 1 ] }
+    end
+
     it "should return a hash with imported and white-list filtered fixtures" do
       subject.hash = {
         :imports => [

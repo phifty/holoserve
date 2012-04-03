@@ -82,6 +82,18 @@ describe Holoserve::Tool::DataPath do
       subject.store("value").should == { :test => "value", :another => { :test => "value" } }
     end
 
+    it "should store the given value at the specified path and place it in a new array" do
+      subject.path = "test.@"
+      subject.data = { }.freeze
+      subject.store("value").should == { :test => [ "value" ] }
+    end
+
+    it "should store the given value at the specified path and place it in an existing array" do
+      subject.path = "test.@"
+      subject.data = { :test => [ 1 ] }.freeze
+      subject.store(2).should == { :test => [ 1, 2 ] }
+    end
+
   end
 
 end

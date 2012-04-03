@@ -67,6 +67,21 @@ describe Holoserve::Tool::Merger do
 
     end
 
+    context "of two arrays in fusion mode" do
+
+      before :each do
+        subject.mode = :fusion
+      end
+
+      let(:argument_one) { [ 1 ] }
+      let(:argument_two) { [ 2, 3 ] }
+
+      it "should combine all arrays" do
+        subject.result.should == [ 1, 2, 3 ]
+      end
+
+    end
+
   end
 
 end
