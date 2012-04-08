@@ -1,6 +1,9 @@
 source :rubygems
 
 gem "goliath"
+gem "slim"
+gem "sass"
+gem "coffee-script"
 
 group :development do
   gem "rake"

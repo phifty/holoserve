@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title Holoserve control panel
+    link rel="shortcut icon" type="image/x-icon" href="/_control/favicon.ico"
+    link rel="stylesheet" type="text/css" href="/_control/stylesheets/screen.css"
+    script type="text/javascript" src="/_control/javascripts/vendor/jquery-1.7.2.min.js"
+    script type="text/javascript" src="/_control/javascripts/all.js"
+
+  body onload="Application.load();"
+    div id="navigation"
+      a id="pairs" href="javascript:void(0)"
+        | Pairs
+      | &nbsp;
+      a id="history" href="javascript:void(0)"
+        | History
+      | &nbsp;
+      a id="bucket" href="javascript:void(0)"
+        | Bucket
+    br
+    div id="content"

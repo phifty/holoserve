@@ -4,6 +4,7 @@ module Holoserve::Interface::Control
 
   autoload :Bucket, File.join(File.dirname(__FILE__), "control", "bucket")
   autoload :History, File.join(File.dirname(__FILE__), "control", "history")
+  autoload :Index, File.join(File.dirname(__FILE__), "control", "index")
   autoload :Pair, File.join(File.dirname(__FILE__), "control", "pair")
   autoload :State, File.join(File.dirname(__FILE__), "control", "state")
 
@@ -23,6 +24,10 @@ module Holoserve::Interface::Control
 
     def bad_request
       [ 400, { }, [ "bad request" ] ]
+    end
+
+    def not_found
+      [ 404, { }, [ "not found" ] ]
     end
 
     def bucket

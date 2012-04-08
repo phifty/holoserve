@@ -5,6 +5,15 @@ class Holoserve::Interface < Goliath::API
   autoload :Control, File.join(File.dirname(__FILE__), "interface", "control")
   autoload :Fake, File.join(File.dirname(__FILE__), "interface", "fake")
 
+  ROOT = File.expand_path(File.join(File.dirname(__FILE__), "..", "..")).freeze unless defined?(ROOT)
+
+  use Rack::Static,
+      :root => File.join(ROOT, "public"),
+      :urls => {
+        "/_control/favicon.ico" => "favicon.ico",
+        "/_control/javascripts/vendor/jquery-1.7.2.min.js" => "javascripts/vendor/jquery-1.7.2.min.js"
+      }
+
   get "/_control/bucket", Control::Bucket::Fetch
   delete "/_control/bucket", Control::Bucket::Delete
 
@@ -17,6 +26,8 @@ class Holoserve::Interface < Goliath::API
   put "/_control/state", Control::State::Update
   get "/_control/state", Control::State::Fetch
   delete "/_control/state", Control::State::Delete
+
+  get "/_control*", Control::Index::Fetch
 
   map "/*", Fake
 
