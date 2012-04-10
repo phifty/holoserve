@@ -3,6 +3,7 @@ require 'goliath/api'
 class Holoserve::Interface < Goliath::API
 
   autoload :Control, File.join(File.dirname(__FILE__), "interface", "control")
+  autoload :Event, File.join(File.dirname(__FILE__), "interface", "event")
   autoload :Fake, File.join(File.dirname(__FILE__), "interface", "fake")
 
   ROOT = File.expand_path(File.join(File.dirname(__FILE__), "..", "..")).freeze unless defined?(ROOT)
@@ -11,8 +12,11 @@ class Holoserve::Interface < Goliath::API
       :root => File.join(ROOT, "public"),
       :urls => {
         "/_control/favicon.ico" => "favicon.ico",
-        "/_control/javascripts/vendor/jquery-1.7.2.min.js" => "javascripts/vendor/jquery-1.7.2.min.js"
+        "/_control/javascripts/vendor/jquery-1.7.2.min.js" => "javascripts/vendor/jquery-1.7.2.min.js",
+        "/_control/javascripts/vendor/jquery.color.js" => "javascripts/vendor/jquery.color.js"
       }
+
+  map "/_control/event", Event
 
   get "/_control/bucket", Control::Bucket::Fetch
   delete "/_control/bucket", Control::Bucket::Delete

@@ -2,17 +2,33 @@
 module = (name) =>
   window[name] = window[name] or { }
 
-module "Page"
+module "Template"
 
-Page.renderPairs = (pairs) =>
-  html = "<h1>Pairs</h1>"
-  html += "<table>"
-  html += "<thead><th>ID</th><th>Method</th><th>Path</th></thead>"
-  html += "<tbody>"
-  html += "<tr><td>#{id}</td><td>#{pair.request.method}</td><td>#{pair.request.path}</td></tr>" for id, pair of pairs
-  html += "</tbody>"
-  html += "</table>"
+Template.renderPairs = (pairs) =>
+  html = "<h1>Pairs</h1>\n"
+  html += "<table>\n"
+  html += "<thead><th>ID</th><th>Method</th><th>Path</th></thead>\n"
+  html += "<tbody>\n"
+  html += "<tr id=\"row_#{id}\"><td>#{id}</td><td>#{pair.request.method}</td><td>#{pair.request.path}</td></tr>\n" for id, pair of pairs
+  html += "</tbody>\n"
+  html += "</table>\n"
   $("#content").html html
+
+Template.renderHistory = (history) =>
+  html = "<h1>History</h1>\n"
+  html += "<ol>\n"
+  html += "<li>#{pairId}</li>\n" for pairId in history
+  html += "</ol>\n"
+  $("#content").html html
+
+Template.renderBucket = (bucket) =>
+  html = "<h1>Bucket</h1>\n"
+  html += "<ol>\n"
+  html += "<li>#{pair.method} #{pair.path}</li>\n" for pair in bucket
+  html += "</ol>\n"
+  $("#content").html html
+
+module "Page"
 
 Page.showPairs = () =>
   $.ajax
@@ -20,14 +36,7 @@ Page.showPairs = () =>
     url: "/_control/pairs"
     dataType: "json"
     success: (response) =>
-      Page.renderPairs response
-
-Page.renderHistory = (history) =>
-  html = "<h1>History</h1>"
-  html += "<ol>"
-  html += "<li>#{pairId}</li>" for pairId in history
-  html += "</ol>"
-  $("#content").html html
+      Template.renderPairs response
 
 Page.showHistory = () =>
   $.ajax
@@ -35,14 +44,7 @@ Page.showHistory = () =>
     url: "/_control/history"
     dataType: "json"
     success: (response) =>
-      Page.renderHistory response
-
-Page.renderBucket = (bucket) =>
-  html = "<h1>Bucket</h1>"
-  html += "<ol>"
-  html += "<li>#{pair.method} #{pair.path}</li>" for pair in bucket
-  html += "</ol>"
-  $("#content").html html
+      Template.renderHistory response
 
 Page.showBucket = () =>
   $.ajax
@@ -50,7 +52,27 @@ Page.showBucket = () =>
     url: "/_control/bucket"
     dataType: "json"
     success: (response) =>
-      Page.renderBucket response
+      Template.renderBucket response
+
+module "Effect"
+
+Effect.flashPair = (id) =>
+  rowElement = $ "#row_#{id}"
+  rowElement = rowElement.animate { backgroundColor: "yellow" }, { duration: 200 }
+  rowElement.animate { backgroundColor: "transparent" }, { duration: 2000 }
+
+module "Event"
+
+Event.connect = () =>
+  webSocket = new WebSocket "ws://localhost:4250/_control/event"
+  webSocket.onopen = () =>
+    console.log "open"
+  webSocket.onclose = () =>
+    console.log "close"
+  webSocket.onmessage = (event) =>
+    pairId = event.data
+    console.log "message: #{pairId}"
+    Effect.flashPair pairId
 
 module "Application"
 
@@ -63,5 +85,7 @@ Application.load = () =>
 
   $("#bucket").click () =>
     Page.showBucket()
+
+  Event.connect()
 
   Page.showPairs()

@@ -12,6 +12,7 @@ class Holoserve::Interface::Fake < Goliath::API
       id, responses = *pair.values_at(:id, :responses)
 
       history << id
+      Holoserve::Interface::Event.send_message id
       logger.info "received handled request with id '#{id}'"
 
       selector = Holoserve::Response::Selector.new responses, state, logger
