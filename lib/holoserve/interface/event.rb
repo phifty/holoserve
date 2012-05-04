@@ -1,4 +1,5 @@
 require 'goliath/websocket'
+require 'json'
 
 class Holoserve::Interface::Event < Goliath::WebSocket
 
@@ -20,6 +21,14 @@ class Holoserve::Interface::Event < Goliath::WebSocket
 
   def self.handler=(value)
     @handler = value
+  end
+
+  def self.send_pair_event(id)
+    send_message "pair:#{id}"
+  end
+
+  def self.send_bucket_event(request)
+    send_message "bucket:#{JSON.dump(request)}"
   end
 
   def self.send_message(text)

@@ -12,7 +12,7 @@ class Holoserve::Interface::Fake < Goliath::API
       id, responses = *pair.values_at(:id, :responses)
 
       history << id
-      Holoserve::Interface::Event.send_message id
+      Holoserve::Interface::Event.send_pair_event id
       logger.info "received handled request with id '#{id}'"
 
       selector = Holoserve::Response::Selector.new responses, state, logger
@@ -24,6 +24,7 @@ class Holoserve::Interface::Fake < Goliath::API
       Holoserve::Response::Composer.new(response).response_array
     else
       bucket << request
+      Holoserve::Interface::Event.send_bucket_event request
       logger.error "received unhandled request\n" + request.pretty_inspect
 
       not_found

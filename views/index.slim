@@ -6,14 +6,23 @@ html
     link rel="stylesheet" type="text/css" href="/_control/stylesheets/screen.css"
     script type="text/javascript" src="/_control/javascripts/vendor/jquery-1.7.2.min.js"
     script type="text/javascript" src="/_control/javascripts/vendor/jquery.color.js"
+    script type="text/javascript" src="/_control/javascripts/vendor/bootstrap-transition.js"
     script type="text/javascript" src="/_control/javascripts/all.js"
 
-  body onload="Application.load();"
-    div id="navigation"
-      a id="pairs" href="javascript:void(0)"
-        | Pairs
-      a id="history" href="javascript:void(0)"
-        | History
-      a id="bucket" href="javascript:void(0)"
-        | Bucket
-    div id="content"
+  body onload="Application.load();" class="container-fluid"
+    div class="navbar"
+      div class="navbar-inner"
+        div class="container"
+          a class="brand" href=""
+            | Holoserve
+          ul class="nav"
+            li class="active"
+              a id="pairs" href="javascript:void(0)"
+                | Pairs
+            li
+              a id="history" href="javascript:void(0)"
+                | History
+            li
+              a id="bucket" href="javascript:void(0)"
+                | Bucket
+    div id="content" class="page-header"

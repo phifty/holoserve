@@ -13,7 +13,8 @@ class Holoserve::Interface < Goliath::API
       :urls => {
         "/_control/favicon.ico" => "favicon.ico",
         "/_control/javascripts/vendor/jquery-1.7.2.min.js" => "javascripts/vendor/jquery-1.7.2.min.js",
-        "/_control/javascripts/vendor/jquery.color.js" => "javascripts/vendor/jquery.color.js"
+        "/_control/javascripts/vendor/jquery.color.js" => "javascripts/vendor/jquery.color.js",
+        "/_control/javascripts/vendor/bootstrap-transition.js" => "javascripts/vendor/bootstrap-transition.js"
       }
 
   map "/_control/event", Event
