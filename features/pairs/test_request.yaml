@@ -8,3 +8,21 @@ responses:
     body: "test_request"
     transitions:
       test: "another value"
+
+requests:
+  default:
+    method: "GET"
+    path: "/test-request"
+  with_username:
+    parameters:
+      username: "value"
+  with_email:
+    parameters:
+      email: "test@test.com"
+responses:
+  default:
+    status: 200
+  "test == :value":
+    body: "test_request"
+    transitions:
+      test: "another value"
