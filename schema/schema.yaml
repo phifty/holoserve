@@ -1,0 +1,73 @@
+type: map
+mapping:
+  "request":
+    type: map
+    mapping:
+      "method":
+        type: str
+      "path":
+        type: str
+      "parameters":
+        type: map
+        mapping:
+          "test":
+            type: str
+      "headers":
+        type: map
+        mapping:
+          "HTTP_TEST":
+            type: str
+      "json":
+        type: map
+        mapping:
+          "test":
+            type: str
+      "oauth":
+        type: map
+        mapping:
+          "test":
+            type: str
+      "imports":
+        type: seq
+        sequence:
+          - type: map
+            mapping:
+              "path":
+                type: str
+              "as":
+                type: str
+  "responses":
+    required: yes
+    type: map
+    mapping:
+      "default":
+        type: map
+        mapping:
+          "status":
+            type: int
+          "body":
+            type: str
+          "json":
+            type: map
+            mapping:
+              "test":
+                type: str
+          "imports":
+            type: seq
+            sequence:
+              - type: map
+                mapping:
+                  "path":
+                    type: str
+                  "as":
+                    type: str
+      "test == :value":
+        type: map
+        mapping:
+          "body":
+            type: str
+          "transitions":
+            type: map
+            mapping:
+              "test":
+                type: str

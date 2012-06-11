@@ -22,7 +22,7 @@ class Holoserve::Pair::Loader
       id = extract_id filename
       fixture = load_file filename
       @fixtures[id] = fixture if fixture
-      @logger.info "loaded fixture '#{id}'"
+      @logger.info "loaded fixture '#{id}'" if fixture
     end
     @fixtures.freeze
   end
@@ -31,8 +31,10 @@ class Holoserve::Pair::Loader
     Dir[ @pair_file_pattern ].each do |filename|
       id = extract_id filename
       pair = load_file filename
+      @logger.info "#{filename} has invalid format!" unless Holoserve::Pair::Validator.new(filename).valid?
+      pair = nil unless Holoserve::Pair::Validator.new(filename).valid?
       @pairs[id] = pair_with_imports pair if pair
-      @logger.info "loaded pair '#{id}'"
+      @logger.info "loaded pair '#{id}'" if pair
     end
     @pairs.freeze
   end
@@ -52,7 +54,7 @@ class Holoserve::Pair::Loader
         rescue JSON::ParserError
           nil
         end
-      end
+    end
     Holoserve::Tool::Hash::KeySymbolizer.new(data).hash
   end
 
