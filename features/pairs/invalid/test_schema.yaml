@@ -1,11 +1,11 @@
 type: map
-mapping:
+maping:
   "request":
     required: yes
     type: map
-    mapping:
+    maping:
       "method":
-        type: str
+        type: sr
         enum: [GET, POST, DELETE, PUT]
       "path":
         type: str
@@ -33,7 +33,7 @@ mapping:
         type: seq
         sequence:
           - type: map
-            mapping:
+            maping:
               "path":
                 type: str
                 required: yes

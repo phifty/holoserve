@@ -21,20 +21,31 @@ class Holoserve::Pair::Loader
     Dir[ @fixture_file_pattern ].each do |filename|
       id = extract_id filename
       fixture = load_file filename
-      @fixtures[id] = fixture if fixture
-      @logger.info "loaded fixture '#{id}'" if fixture
+      if fixture
+        @fixtures[id] = fixture
+        @logger.info "loaded fixture '#{id}'"
+      end
     end
     @fixtures.freeze
   end
 
   def load_pairs
+    validator = Holoserve::Pair::Validator.new
+    unless validator.schema_valid?
+      @logger.info "schema file is invalid: " + validator.get_meta_validation_errors
+      return
+    end
     Dir[ @pair_file_pattern ].each do |filename|
       id = extract_id filename
       pair = load_file filename
-      @logger.info "#{filename} has invalid format!" unless Holoserve::Pair::Validator.new(filename).valid?
-      pair = nil unless Holoserve::Pair::Validator.new(filename).valid?
-      @pairs[id] = pair_with_imports pair if pair
-      @logger.info "loaded pair '#{id}'" if pair
+      unless validator.valid? filename
+        @logger.info "#{filename} is invalid: " + validator.get_validation_errors
+        pair = nil
+      end
+      if pair
+        @pairs[id] = pair_with_imports pair
+        @logger.info "loaded pair '#{id}'"
+      end
     end
     @pairs.freeze
   end
