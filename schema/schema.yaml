@@ -1,5 +1,5 @@
 type: map
-mapping:
+maping:
   "request":
     required: yes
     type: map

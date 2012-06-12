@@ -2,12 +2,16 @@ require 'kwalify'
 
 class Holoserve::Pair::Validator
 
+  class InvalidSchemaError < StandardError
+  end
+
   attr_accessor :filename
   attr_accessor :schema_path
 
   def initialize
     @schema_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "schema", "schema.yaml"))
     load_schema
+    raise InvalidSchemaError unless schema_valid?
     @validator = Kwalify::Validator.new(@schema) if schema_valid?
   end
 
