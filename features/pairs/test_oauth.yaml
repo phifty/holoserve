@@ -1,8 +1,9 @@
-request:
-  method: "GET"
-  path: "/test-oauth"
-  oauth:
-    test: "value"
+requests:
+  default:
+    method: "GET"
+    path: "/test-oauth"
+    oauth:
+      test: "value"
 responses:
   default:
     status: 200

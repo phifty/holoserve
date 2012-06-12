@@ -12,7 +12,7 @@ describe Holoserve::Pair::Validator do
   end
 
   let(:valid_hash) do
-    file = YAML::load_file(File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "..", "features", "pairs", "test_headers.yaml")))
+    file = YAML::load_file(File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "..", "features", "pairs", "test_evaluation.yaml")))
     Holoserve::Tool::Hash::KeySymbolizer.new(file).hash
   end
 

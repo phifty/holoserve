@@ -1,44 +1,47 @@
 type: map
 mapping:
-  :request:
+  :requests:
     required: yes
     type: map
     mapping:
-      :method:
-        type: str
-        enum: [GET, POST, DELETE, PUT]
-      :path:
-        type: str
-      :parameters:
+      =:
         type: map
         mapping:
-          :test:
+          :method:
             type: str
-      :headers:
-        type: map
-        mapping:
-          :HTTP_TEST:
+            enum: [GET, POST, DELETE, PUT]
+          :path:
             type: str
-      :json:
-        type: map
-        mapping:
-          :test:
-            type: str
-      :oauth:
-        type: map
-        mapping:
-          :test:
-            type: str
-      :imports:
-        type: seq
-        sequence:
-          - type: map
+          :parameters:
+            type: map
             mapping:
-              :path:
+              =:
                 type: str
-                required: yes
-              :as:
+          :headers:
+            type: map
+            mapping:
+              :HTTP_TEST:
                 type: str
+          :json:
+            type: map
+            mapping:
+              :test:
+                type: str
+          :oauth:
+            type: map
+            mapping:
+              =:
+                type: str
+          :imports:
+            type: seq
+            sequence:
+              - type: map
+                mapping:
+                  :path:
+                    type: str
+                    required: yes
+                  :as:
+                    type: str
   :responses:
     required: yes
     type: map
@@ -48,12 +51,14 @@ mapping:
         mapping:
           :status:
             type: int
+          :condition:
+            type: str
           :body:
             type: str
           :json:
             type: map
             mapping:
-              :test:
+              =:
                 type: str
           :imports:
             type: seq
@@ -67,5 +72,5 @@ mapping:
           :transitions:
             type: map
             mapping:
-              :test:
+              =:
                 type: str

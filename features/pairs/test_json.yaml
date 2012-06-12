@@ -1,8 +1,9 @@
-request:
-  method: "POST"
-  path: "/test-json"
-  json:
-    test: "value"
+requests:
+  default:
+    method: "POST"
+    path: "/test-json"
+    json:
+      test: "value"
 responses:
   default:
     status: 200

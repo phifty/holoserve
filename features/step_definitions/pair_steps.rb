@@ -19,15 +19,18 @@ end
 Then /^the returned pair should contain the test request$/ do
   last_response_status.should == 200
   last_json_response_body.should == {
-    "request" => {
-      "method" => "GET",
-      "path" => "/test-request"
+    "requests" => {
+      "default" => {
+        "method" => "GET",
+        "path" => "/test-request"
+      }
     },
     "responses" => {
       "default" => {
         "status" => 200
       },
-      "test == :value" => {
+      "test_body" => {
+        "condition" => "test == :value",
         "body" => "test_request",
         "transitions" => {
           "test" => "another value"
@@ -40,12 +43,14 @@ end
 Then /^the returned pair should contain the test evaluation request$/ do
   last_response_status.should == 200
   last_json_response_body.should == {
-    "request" => {
-      "method" => "GET",
-      "path" => "/test-evaluation",
-      "parameters" => {
-        "test" => "value",
-        "another" => "value"
+    "requests" => {
+      "default" => {
+        "method" => "GET",
+        "path" => "/test-evaluation",
+        "parameters" => {
+          "test" => "value",
+          "another" => "value"
+        }
       }
     },
     "responses" => {
