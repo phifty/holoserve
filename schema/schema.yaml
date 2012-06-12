@@ -1,76 +1,71 @@
 type: map
-maping:
-  "request":
+mapping:
+  :request:
     required: yes
     type: map
     mapping:
-      "method":
+      :method:
         type: str
         enum: [GET, POST, DELETE, PUT]
-      "path":
+      :path:
         type: str
-      "parameters":
+      :parameters:
         type: map
         mapping:
-          "test":
+          :test:
             type: str
-      "headers":
+      :headers:
         type: map
         mapping:
-          "HTTP_TEST":
+          :HTTP_TEST:
             type: str
-      "json":
+      :json:
         type: map
         mapping:
-          "test":
+          :test:
             type: str
-      "oauth":
+      :oauth:
         type: map
         mapping:
-          "test":
+          :test:
             type: str
-      "imports":
+      :imports:
         type: seq
         sequence:
           - type: map
             mapping:
-              "path":
+              :path:
                 type: str
                 required: yes
-              "as":
+              :as:
                 type: str
-  "responses":
+  :responses:
     required: yes
     type: map
     mapping:
-      "default":
+      =:
         type: map
         mapping:
-          "status":
+          :status:
             type: int
-          "body":
+          :body:
             type: str
-          "json":
+          :json:
             type: map
             mapping:
-              "test":
+              :test:
                 type: str
-          "imports":
+          :imports:
             type: seq
             sequence:
               - type: map
                 mapping:
-                  "path":
+                  :path:
                     type: str
-                  "as":
+                  :as:
                     type: str
-      "test == :value":
-        type: map
-        mapping:
-          "body":
-            type: str
-          "transitions":
+          :transitions:
             type: map
             mapping:
-              "test":
+              :test:
                 type: str

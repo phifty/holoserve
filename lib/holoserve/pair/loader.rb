@@ -7,6 +7,9 @@ class Holoserve::Pair::Loader
     @fixtures, @pairs = { }, { }
     @fixture_file_pattern, @pair_file_pattern = fixture_file_pattern, pair_file_pattern
     @logger = logger
+    @validator = Holoserve::Pair::Validator.new
+  rescue Holoserve::Pair::Validator::InvalidSchemaError => error
+    @logger.error error.inspect
   end
 
   def pairs
@@ -30,24 +33,22 @@ class Holoserve::Pair::Loader
   end
 
   def load_pairs
-    validator = Holoserve::Pair::Validator.new
-    unless validator.schema_valid?
-      @logger.info "schema file is invalid: " + validator.get_meta_validation_errors
-      return
-    end
     Dir[ @pair_file_pattern ].each do |filename|
-      id = extract_id filename
-      pair = load_file filename
-      unless validator.valid? filename
-        @logger.info "#{filename} is invalid: " + validator.get_validation_errors
-        pair = nil
-      end
-      if pair
-        @pairs[id] = pair_with_imports pair
-        @logger.info "loaded pair '#{id}'"
-      end
+      load_pair filename
     end
     @pairs.freeze
+  end
+
+  def load_pair(filename)
+    id = extract_id filename
+    pair = load_file filename
+    if pair
+      @validator.validate(pair)
+      @pairs[id] = pair_with_imports pair
+      @logger.info "loaded pair '#{id}'"
+    end
+  rescue Holoserve::Pair::Validator::InvalidError => error
+    @logger.error error.inspect
   end
 
   def extract_id(filename)

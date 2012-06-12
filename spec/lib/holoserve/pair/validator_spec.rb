@@ -1,4 +1,5 @@
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "helper"))
+require 'yaml'
 
 describe Holoserve::Pair::Validator do
 
@@ -7,42 +8,43 @@ describe Holoserve::Pair::Validator do
   end
 
   let(:invalid_schema_path) do
-    File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "..", "features", "pairs", "invalid", "test_schema.yaml"))
+    File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "..", "features", "pairs", "invalid", "test_invalid_schema.yaml"))
   end
 
-  let(:path_valid) do
-    File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "..", "features", "pairs", "test_headers.yaml"))
+  let(:valid_hash) do
+    file = YAML::load_file(File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "..", "features", "pairs", "test_headers.yaml")))
+    Holoserve::Tool::Hash::KeySymbolizer.new(file).hash
   end
 
-  let(:path_invalid_headers) do
-    File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "..", "features", "pairs", "invalid", "test_invalid_headers.yaml"))
+  let(:invalid_hash) do
+    file = YAML::load_file(File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "..", "features", "pairs", "invalid", "test_invalid_headers.yaml")))
+    Holoserve::Tool::Hash::KeySymbolizer.new(file).hash
   end
 
-  subject { described_class.new }
+  subject { described_class.new valid_schema_path }
 
-  describe "#schema_valid?" do
+  describe "#initialize" do
 
-    it "should return true if a valid schema file is provided" do
-      subject.schema_path = valid_schema_path
-      subject.schema_valid?.should be_true
-    end
-
-    it "should return false if an invalid schema file is provided" do
-      subject.schema_path = invalid_schema_path
-      subject.reload_schema
-      subject.schema_valid?.should be_false
+    it "should raise an InvalidSchemaError if the schema file is invalid" do
+      lambda do
+        described_class.new invalid_schema_path
+      end.should raise_error(described_class::InvalidSchemaError)
     end
 
   end
 
-  describe "#valid?" do
+  describe "#validate" do
 
     it "should return true if a valid pair file is provided" do
-      subject.valid?(path_valid).should be_true
+      lambda do
+        subject.validate(valid_hash)
+      end.should_not raise_error
     end
 
     it "should return false if an invalid pair file is provided" do
-      subject.valid?(path_invalid_headers).should be_false
+      lambda do
+        subject.validate(invalid_hash)
+      end.should raise_error(described_class::InvalidError)
     end
 
   end

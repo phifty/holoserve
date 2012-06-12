@@ -1,76 +1,71 @@
 type: map
 maping:
-  "request":
-    required: yes
-    type: map
-    maping:
-      "method":
-        type: sr
-        enum: [GET, POST, DELETE, PUT]
-      "path":
-        type: str
-      "parameters":
-        type: map
-        mapping:
-          "test":
-            type: str
-      "headers":
-        type: map
-        mapping:
-          "HTTP_TEST":
-            type: str
-      "json":
-        type: map
-        mapping:
-          "test":
-            type: str
-      "oauth":
-        type: map
-        mapping:
-          "test":
-            type: str
-      "imports":
-        type: seq
-        sequence:
-          - type: map
-            maping:
-              "path":
-                type: str
-                required: yes
-              "as":
-                type: str
-  "responses":
+  :request:
     required: yes
     type: map
     mapping:
-      "default":
+      :method:
+        type: str
+        enum: [GET, POST, DELETE, PUT]
+      :path:
+        type: str
+      :parameters:
         type: map
         mapping:
-          "status":
-            type: int
-          "body":
+          :test:
             type: str
-          "json":
+      :headers:
+        type: map
+        mapping:
+          :HTTP_TEST:
+            type: str
+      :json:
+        type: map
+        mapping:
+          :test:
+            type: str
+      :oauth:
+        type: map
+        mapping:
+          :test:
+            type: str
+      :imports:
+        type: seq
+        sequence:
+          - type: map
+            mapping:
+              :path:
+                type: str
+                required: yes
+              :as:
+                type: str
+  :responses:
+    required: yes
+    type: map
+    mapping:
+      =:
+        type: map
+        mapping:
+          :status:
+            type: int
+          :body:
+            type: str
+          :json:
             type: map
             mapping:
-              "test":
+              :test:
                 type: str
-          "imports":
+          :imports:
             type: seq
             sequence:
               - type: map
                 mapping:
-                  "path":
+                  :path:
                     type: str
-                  "as":
+                  :as:
                     type: str
-      "test == :value":
-        type: map
-        mapping:
-          "body":
-            type: str
-          "transitions":
+          :transitions:
             type: map
             mapping:
-              "test":
+              :test:
                 type: str
