@@ -31,7 +31,7 @@ Then /^the history should contain the test pair name at the last position$/ do
   last_json_response_body[last_json_response_body.length-1]["id"].should == "test_request"
 end
 
-Then /^the history should contain the response variant$/ do
+Then /^the history should contain the request variant$/ do
   get "/_control/history"
   last_json_response_body[0]["request_variant"].should == "default"
 end

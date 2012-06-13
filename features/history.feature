@@ -18,7 +18,7 @@ Feature: History handling
   Scenario: A pair is triggered
     Given no history
      When the test request is performed
-     Then the history should contain the response variant
+     Then the history should contain the request variant
 
   Scenario: A pair is triggered
    Given no history
