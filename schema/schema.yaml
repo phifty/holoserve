@@ -20,7 +20,7 @@ mapping:
           :headers:
             type: map
             mapping:
-              :HTTP_TEST:
+              =:
                 type: str
           :json:
             type: map
@@ -37,10 +37,7 @@ mapping:
             sequence:
               - type: map
                 mapping:
-                  :path:
-                    type: str
-                    required: yes
-                  :as:
+                  =:
                     type: str
   :responses:
     required: yes
@@ -55,6 +52,11 @@ mapping:
             type: str
           :body:
             type: str
+          :headers:
+            type: map
+            mapping:
+              =:
+                type: str
           :json:
             type: map
             mapping:
@@ -65,11 +67,14 @@ mapping:
             sequence:
               - type: map
                 mapping:
-                  :path:
-                    type: str
-                  :as:
+                  =:
                     type: str
           :transitions:
+            type: map
+            mapping:
+              =:
+                type: str
+          :oauth:
             type: map
             mapping:
               =:

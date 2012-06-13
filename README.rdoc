@@ -112,17 +112,18 @@ Removes all entries from the history.
 
 The request/response pair file should have the following format.
 
-  - request:
-      imports:
-        - path: "test_fixture.users.0"
-          as: "parameters"
-          only: [ "username", "password" ]
-      method: "POST"
-      path: "/session"
-      headers:
-        HTTP_USER_AGENT: "Ruby"
-      oauth:
-        oauth_token: "12345"
+  - requests:
+      default:
+        imports:
+          - path: "test_fixture.users.0"
+            as: "parameters"
+            only: [ "username", "password" ]
+        method: "POST"
+        path: "/session"
+        headers:
+          HTTP_USER_AGENT: "Ruby"
+        oauth:
+          oauth_token: "12345"
     responses:
       default:
         status: 200
@@ -136,18 +137,19 @@ The request/response pair file should have the following format.
         json:
           message: "user not found"
   - request:
-      imports:
-        - path: "test_fixture.users.0"
-          as: "parameters"
-          only: "username"
-      method: "POST"
-      path: "/session"
-      headers:
-        HTTP_USER_AGENT: "Ruby"
-      parameters:
-        password: "invalid"
-      oauth:
-        oauth_token: "12345"
+      default:
+        imports:
+          - path: "test_fixture.users.0"
+            as: "parameters"
+            only: "username"
+        method: "POST"
+        path: "/session"
+        headers:
+          HTTP_USER_AGENT: "Ruby"
+        parameters:
+          password: "invalid"
+        oauth:
+          oauth_token: "12345"
     responses:
       "user_one == :existing":
         status: 401
@@ -158,7 +160,7 @@ The request/response pair file should have the following format.
         json:
           message: "user not found"
 
-The fixture data where this example pair definition relies on, could look like to following.
+The fixture data where this example pair definition relies on, could look like the following.
 
   users:
     - email: "one@test.com"
