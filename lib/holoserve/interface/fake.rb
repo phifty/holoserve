@@ -9,9 +9,10 @@ class Holoserve::Interface::Fake < Goliath::API
     request = Holoserve::Request::Decomposer.new(env, params).hash
     pair = Holoserve::Pair::Finder.new(pairs, request).pair
     if pair
-      id, responses = *pair.values_at(:id, :responses)
+      responses, id, variant = pair[:responses], pair[:id], pair[:variant]
 
-      history << id
+      history << {:id => id, :variant => variant}
+
       Holoserve::Interface::Event.send_pair_event id
       logger.info "received handled request with id '#{id}'"
 
@@ -41,7 +42,7 @@ class Holoserve::Interface::Fake < Goliath::API
   end
 
   def not_found
-    [ 404, { :"Content-Type" => "text/plain" }, [ "no response found for this request" ] ]
+    [ 404, { :"Content-Type" => "text/plain" }, [ "no response found for this request\n" ] ]
   end
 
   def bucket

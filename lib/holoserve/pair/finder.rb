@@ -8,7 +8,8 @@ class Holoserve::Pair::Finder
   def pair
     return nil unless @pairs
     @pairs.each do |id, pair|
-      return pair.merge(:id => id) if !Holoserve::Request::Selector.new(@request, pair[:requests]).selection.nil?
+      variant = Holoserve::Request::Selector.new(@request, pair[:requests]).selection
+      return pair.merge(:id => id, :variant => variant.to_s) unless variant.nil?
     end
     nil
   end
