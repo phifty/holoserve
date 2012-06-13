@@ -7,19 +7,20 @@ class Holoserve::Interface::Fake < Goliath::API
 
   def response(env)
     request = Holoserve::Request::Decomposer.new(env, params).hash
-    pair = Holoserve::Pair::Finder.new(pairs, request).pair
+    finder = Holoserve::Pair::Finder.new(pairs, request)
+    pair = finder.pair
     if pair
-      responses, id, variant = pair[:responses], pair[:id], pair[:variant]
-
-      history << {:id => id, :variant => variant}
-
-      Holoserve::Interface::Event.send_pair_event id
-      logger.info "received handled request with id '#{id}'"
+      responses, id, request_variant = pair[:responses], finder.id, finder.variant
 
       selector = Holoserve::Response::Selector.new responses, state, logger
       default_response, selected_responses = selector.default_response, selector.selected_responses
-
+      response_variants = selector.find_variants
       update_state default_response, selected_responses
+
+      history << {:id => id, :request_variant => request_variant, :response_variants => response_variants}
+
+      Holoserve::Interface::Event.send_pair_event id
+      logger.info "received handled request with id '#{id}'"
 
       response = Holoserve::Response::Combiner.new(default_response, selected_responses).response
       Holoserve::Response::Composer.new(response).response_array

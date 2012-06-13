@@ -46,4 +46,12 @@ class Holoserve::Response::Selector
     result
   end
 
+  def find_variants
+    result = [ ]
+    @responses.each_key do |key|
+      result << key
+    end
+    result
+  end
+
 end
