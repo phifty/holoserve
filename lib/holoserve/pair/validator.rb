@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'kwalify'
 
 class Holoserve::Pair::Validator
