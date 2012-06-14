@@ -22,6 +22,7 @@ Gem::Specification.new do |specification|
   specification.test_files        = Dir["spec/**/*_spec.rb"]
 
   specification.add_dependency "goliath"
+  specification.add_dependency "kwalify"
 
   specification.add_development_dependency "rake"
   specification.add_development_dependency "rdoc"
