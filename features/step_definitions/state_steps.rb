@@ -15,6 +15,10 @@ When /^the state is cleared$/ do
   delete "/_control/state"
 end
 
+When /^a matching request is paired$/ do
+  perform({"method" => "GET", "path" => "/test-headers"})
+end
+
 Then /^the state of resource '([^']+)' should be '([^']+)'$/ do |resource, state|
   get "/_control/state"
   last_response_status.should == 200
@@ -31,5 +35,5 @@ end
 Then /^the state should have been updated$/ do
   get "/_control/state"
   last_response_status.should == 200
-  last_json_response_body.should == { "test" => "another value" }
+  last_json_response_body.should_not == { }
 end

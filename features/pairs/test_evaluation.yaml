@@ -8,6 +8,7 @@ requests:
         as: "parameters.another"
 responses:
   default:
+    condition: "test == :value"
     imports:
       - path: "test_fixture.ok_status"
     body: "test_evaluation"

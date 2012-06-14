@@ -7,5 +7,6 @@ requests:
       HTTP_TEST: "value"
 responses:
   default:
+    condition: "test == :value"
     status: 200
     body: "test_headers"

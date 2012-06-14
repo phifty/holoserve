@@ -6,5 +6,6 @@ requests:
       test: "value"
 responses:
   default:
+    condition: "test == :value"
     status: 200
     body: "test_parameters"

@@ -98,11 +98,11 @@ Returns a list of all requests that has been received, but couldn't be handled.
 
 === GET /_control/history
 
-Returns a list of all names of pairs that has been triggered.
+Returns a list of hashes, which include the names/id of pairs that has been triggered, with a request variant and a list of response variants.
 
 ==== Response example
 
-  [ "create_received", "update_received" ]
+  [{"id":"test_request","request_variant":"default","response_variants":["default","alternative"]}]
 
 === DELETE /_control/history
 
@@ -112,53 +112,32 @@ Removes all entries from the history.
 
 The request/response pair file should have the following format.
 
-  - requests:
-      default:
-        imports:
-          - path: "test_fixture.users.0"
-            as: "parameters"
-            only: [ "username", "password" ]
-        method: "POST"
-        path: "/session"
-        headers:
-          HTTP_USER_AGENT: "Ruby"
-        oauth:
-          oauth_token: "12345"
-    responses:
-      default:
-        status: 200
-      "user_one == :existing":
-        imports:
-          - path: "test_fixture.users.0"
-            as: "json.user"
-        transitions:
-          session_one: "existing"
-      "user_one == :missing":
-        json:
-          message: "user not found"
-  - request:
-      default:
-        imports:
-          - path: "test_fixture.users.0"
-            as: "parameters"
-            only: "username"
-        method: "POST"
-        path: "/session"
-        headers:
-          HTTP_USER_AGENT: "Ruby"
-        parameters:
-          password: "invalid"
-        oauth:
-          oauth_token: "12345"
-    responses:
-      "user_one == :existing":
-        status: 401
-        json:
-          message: "invalid password"
-      "user_one == :missing":
-        status: 200
-        json:
-          message: "user not found"
+  requests:
+    default:
+      imports:
+        - path: "test_fixtures.users.0"
+          as: "parameters"
+          only: [ "username", "password" ]
+      method: "POST"
+      path: "/session"
+      headers:
+        HTTP_USER_AGENT: "Ruby"
+      oauth:
+        oauth_token: "12345"
+  responses:
+    default:
+      status: 200
+    found:
+      condition: "username == :existing"
+      imports:
+        - path: "test_fixtures.users.0"
+          as: "json.user"
+      transitions:
+        session_one: "existing"
+    not_found:
+      condition: "username == :existing"
+      json:
+        message: "user not found"
 
 The fixture data where this example pair definition relies on, could look like the following.
 
@@ -167,13 +146,11 @@ The fixture data where this example pair definition relies on, could look like t
       username: "one"
       password: "valid"
 
-This example defines two request/response pairs and two situations. The two pairs differs only the parameters that they
-match against. The first one handles the case in which the parameters <tt>username=one</tt> and <tt>password=valid</tt>
-are posted and the second one reacts on the transmission of <tt>username=one</tt> and <tt>password=invalid</tt>.
+This example defines a request/response pair situation. It uses <tt>username=one</tt> and <tt>password=valid</tt>
+as parameters.
 
-If the state includes <tt>user_one == :existing</tt>, the first response would return the complete user object encoded
-as json, while the second one would reply the message "invalid password". In the state includes
-<tt>user_one == :missing</tt>, both requests would be replied with the message "user not found".
+If the state includes <tt>condition: "user_one == :existing"</tt>, the response would return the complete user object encoded
+as json. If the state includes <tt>user_one == :missing</tt>, the request would be replied with the message "user not found".
 
 The <tt>transitions</tt> part of the response allows you set the successor state. If a response is selected, the
 corresponding transitions will be evaluated.

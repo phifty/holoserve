@@ -4,6 +4,7 @@ requests:
     path: "/test-request"
 responses:
   default:
+    condition: "test == :value"
     status: 200
   test_body:
     condition: "test == :value"

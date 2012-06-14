@@ -61,7 +61,7 @@ Template.renderHistory = (history) =>
   html += "<li><a href=\"javascript:Page.showHistory();\">History</a></li>"
   html += "</ul>\n"
   html += "<ol>\n"
-  html += "<li>#{pairId}</li>\n" for pairId in history
+  html += "<li>#{Formatter.prettyJson pairId, ""}</li>\n" for pairId in history
   html += "</ol>\n"
   Template.setContent "history", html
 

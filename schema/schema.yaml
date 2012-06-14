@@ -38,7 +38,7 @@ mapping:
               - type: map
                 mapping:
                   =:
-                    type: str
+                    type: any
   :responses:
     required: yes
     type: map
@@ -50,8 +50,9 @@ mapping:
             type: int
           :condition:
             type: str
+            required: yes
           :body:
-            type: str
+            type: any
           :headers:
             type: map
             mapping:
@@ -68,7 +69,7 @@ mapping:
               - type: map
                 mapping:
                   =:
-                    type: str
+                    type: any
           :transitions:
             type: map
             mapping:

@@ -12,6 +12,8 @@ class Holoserve::Interface::Fake < Goliath::API
     if pair
       responses, id, request_variant = pair[:responses], finder.id, finder.variant
 
+      options[:state] = {:request_variant => request_variant}
+
       selector = Holoserve::Response::Selector.new responses, state, logger
       default_response, selected_responses = selector.default_response, selector.selected_responses
       response_variants = selector.find_variants
