@@ -4,6 +4,7 @@ gem "goliath", :git => "git://github.com/postrank-labs/goliath.git"
 gem "slim"
 gem "sass"
 gem "coffee-script"
+gem "kwalify"
 
 group :development do
   gem "rake"

@@ -18,3 +18,8 @@ Feature: State handling
     Given the test state
      When the test request is performed
      Then the state should have been updated
+
+  Scenario: Set the state to last paired request variant
+    Given the test state
+     When a matching request is paired
+     Then the state should have been updated

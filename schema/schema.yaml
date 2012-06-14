@@ -1,0 +1,82 @@
+type: map
+mapping:
+  :requests:
+    required: yes
+    type: map
+    mapping:
+      =:
+        type: map
+        mapping:
+          :method:
+            type: str
+            enum: [GET, POST, DELETE, PUT]
+          :path:
+            type: str
+          :parameters:
+            type: map
+            mapping:
+              =:
+                type: str
+          :headers:
+            type: map
+            mapping:
+              =:
+                type: str
+          :json:
+            type: map
+            mapping:
+              :test:
+                type: str
+          :oauth:
+            type: map
+            mapping:
+              =:
+                type: str
+          :imports:
+            type: seq
+            sequence:
+              - type: map
+                mapping:
+                  =:
+                    type: any
+  :responses:
+    required: yes
+    type: map
+    mapping:
+      =:
+        type: map
+        mapping:
+          :status:
+            type: int
+          :condition:
+            type: str
+            required: yes
+          :body:
+            type: any
+          :headers:
+            type: map
+            mapping:
+              =:
+                type: str
+          :json:
+            type: map
+            mapping:
+              =:
+                type: str
+          :imports:
+            type: seq
+            sequence:
+              - type: map
+                mapping:
+                  =:
+                    type: any
+          :transitions:
+            type: map
+            mapping:
+              =:
+                type: str
+          :oauth:
+            type: map
+            mapping:
+              =:
+                type: str

@@ -1,10 +1,13 @@
-request:
-  method: "GET"
-  path: "/test-request"
+requests:
+  default:
+    method: "GET"
+    path: "/test-request"
 responses:
   default:
+    condition: "test == :value"
     status: 200
-  "test == :value":
+  test_body:
+    condition: "test == :value"
     body: "test_request"
     transitions:
       test: "another value"

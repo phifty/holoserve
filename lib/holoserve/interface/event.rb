@@ -32,7 +32,7 @@ class Holoserve::Interface::Event < Goliath::WebSocket
   end
 
   def self.send_message(text)
-    raise StandardError, "no handler initialised" unless @handler
+    return unless @handler
     @handler.send_text_frame text
   end
 

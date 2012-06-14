@@ -1,10 +1,12 @@
-request:
-  method: "POST"
-  path: "/test-json"
-  json:
-    test: "value"
+requests:
+  default:
+    method: "POST"
+    path: "/test-json"
+    json:
+      test: "value"
 responses:
   default:
+    condition: "test == :value"
     status: 200
     json:
       test: "value"

@@ -1,9 +1,12 @@
-request:
-  method: "GET"
-  path: "/test-headers"
-  headers:
-    HTTP_TEST: "value"
+requests:
+  default:
+    method: "GET"
+    path: "/test-headers"
+  with_test_headers:
+    headers:
+      HTTP_TEST: "value"
 responses:
   default:
+    condition: "test == :value"
     status: 200
     body: "test_headers"

@@ -7,6 +7,9 @@ class Holoserve::Pair::Loader
     @fixtures, @pairs = { }, { }
     @fixture_file_pattern, @pair_file_pattern = fixture_file_pattern, pair_file_pattern
     @logger = logger
+    @validator = Holoserve::Pair::Validator.new
+  rescue Holoserve::Pair::Validator::InvalidSchemaError => error
+    @logger.error error.inspect
   end
 
   def pairs
@@ -21,20 +24,31 @@ class Holoserve::Pair::Loader
     Dir[ @fixture_file_pattern ].each do |filename|
       id = extract_id filename
       fixture = load_file filename
-      @fixtures[id] = fixture if fixture
-      @logger.info "loaded fixture '#{id}'"
+      if fixture
+        @fixtures[id] = fixture
+        @logger.info "loaded fixture '#{id}'"
+      end
     end
     @fixtures.freeze
   end
 
   def load_pairs
     Dir[ @pair_file_pattern ].each do |filename|
-      id = extract_id filename
-      pair = load_file filename
-      @pairs[id] = pair_with_imports pair if pair
-      @logger.info "loaded pair '#{id}'"
+      load_pair filename
     end
     @pairs.freeze
+  end
+
+  def load_pair(filename)
+    id = extract_id filename
+    pair = load_file filename
+    if pair
+      @validator.validate(pair)
+      @pairs[id] = pair_with_imports pair
+      @logger.info "loaded pair '#{id}'"
+    end
+  rescue Holoserve::Pair::Validator::InvalidError => error
+    @logger.error error.inspect
   end
 
   def extract_id(filename)
@@ -52,13 +66,15 @@ class Holoserve::Pair::Loader
         rescue JSON::ParserError
           nil
         end
-      end
+    end
     Holoserve::Tool::Hash::KeySymbolizer.new(data).hash
   end
 
   def pair_with_imports(pair)
     result = {
-      :request => Holoserve::Fixture::Importer.new(pair[:request], @fixtures).result,
+      :requests => {
+        :default => Holoserve::Fixture::Importer.new(pair[:requests][:default], @fixtures).result
+      },
       :responses => { }
     }
     (pair[:responses] || { }).each do |id, response|

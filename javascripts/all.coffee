@@ -50,7 +50,7 @@ Template.renderPairs = (pairs) =>
   for id, pair of pairs
     html += "<tr id=\"row_#{id}\">"
     html += "<td><a href=\"javascript:Page.showPair('#{id}');\">#{id}</a></td>"
-    html += "<td>#{pair.request.method}</td><td>#{pair.request.path}</td>"
+    html += "<td>#{pair.requests.default.method}</td><td>#{pair.requests.default.path}</td>"
     html += "</tr>\n"
   html += "</tbody>\n"
   html += "</table>\n"
@@ -61,7 +61,7 @@ Template.renderHistory = (history) =>
   html += "<li><a href=\"javascript:Page.showHistory();\">History</a></li>"
   html += "</ul>\n"
   html += "<ol>\n"
-  html += "<li>#{pairId}</li>\n" for pairId in history
+  html += "<li>#{Formatter.prettyJson pairId, ""}</li>\n" for pairId in history
   html += "</ol>\n"
   Template.setContent "history", html
 

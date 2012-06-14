@@ -1,9 +1,11 @@
-request:
-  method: "GET"
-  path: "/test-parameters"
-  parameters:
-    test: "value"
+requests:
+  default:
+    method: "GET"
+    path: "/test-parameters"
+    parameters:
+      test: "value"
 responses:
   default:
+    condition: "test == :value"
     status: 200
     body: "test_parameters"
