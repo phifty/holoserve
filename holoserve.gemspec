@@ -22,6 +22,9 @@ Gem::Specification.new do |specification|
   specification.test_files        = Dir["spec/**/*_spec.rb"]
 
   specification.add_dependency "goliath"
+  specification.add_dependency "slim"
+  specification.add_dependency "sass"
+  specification.add_dependency "coffee-script"
   specification.add_dependency "kwalify"
 
   specification.add_development_dependency "rake"
