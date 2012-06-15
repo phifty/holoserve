@@ -58,10 +58,7 @@ mapping:
               =:
                 type: str
           :json:
-            type: map
-            mapping:
-              =:
-                type: any
+            type: any
           :imports:
             type: seq
             sequence:
