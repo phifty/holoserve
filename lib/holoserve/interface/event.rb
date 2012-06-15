@@ -1,7 +1,6 @@
-require 'goliath/websocket'
 require 'json'
 
-class Holoserve::Interface::Event < Goliath::WebSocket
+class Holoserve::Interface::Event
 
   def on_open(environment)
     self.class.handler = environment["handler"]
