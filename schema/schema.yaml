@@ -16,7 +16,7 @@ mapping:
             type: map
             mapping:
               =:
-                type: str
+                type: any
           :headers:
             type: map
             mapping:
@@ -25,8 +25,8 @@ mapping:
           :json:
             type: map
             mapping:
-              :test:
-                type: str
+              =:
+                type: any
           :oauth:
             type: map
             mapping:
@@ -50,7 +50,6 @@ mapping:
             type: int
           :condition:
             type: str
-            required: yes
           :body:
             type: any
           :headers:
@@ -62,7 +61,7 @@ mapping:
             type: map
             mapping:
               =:
-                type: str
+                type: any
           :imports:
             type: seq
             sequence:
