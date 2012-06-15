@@ -1,6 +1,6 @@
 source :rubygems
 
-gem "goliath", :git => "git://github.com/postrank-labs/goliath.git"
+gem "goliath", :github => "postrank-labs/goliath", :branch => "master"
 gem "slim"
 gem "sass"
 gem "coffee-script"
