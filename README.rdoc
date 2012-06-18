@@ -135,7 +135,7 @@ The request/response pair file should have the following format.
       transitions:
         session_one: "existing"
     not_found:
-      condition: "username == :existing"
+      condition: "username == :missing"
       json:
         message: "user not found"
 
@@ -154,3 +154,34 @@ as json. If the state includes <tt>user_one == :missing</tt>, the request would 
 
 The <tt>transitions</tt> part of the response allows you set the successor state. If a response is selected, the
 corresponding transitions will be evaluated.
+
+
+  requests:
+    default:
+      imports:
+        - path: "test_fixtures.users.0.email"
+          as: "parameters"
+      method: "POST"
+      path: "/valid_email"
+  responses:
+    default:
+      status: 200
+    found:
+      condition: "email == :existing"
+      imports:
+        - path: "test_fixtures.users.0.username"
+          as: "json.user.username"
+      transitions:
+        session_one: "existing"
+    not_found:
+      condition: "email == :missing"
+      json:
+        message: "email address not found"
+
+This example relies on the same fixture file used above.
+
+This time it uses <tt>email=one@test.com</tt> as a parameter.
+If the state includes <tt>condition: "email == :existing"</tt>, the response would return a username of the email address
+owner as json.
+
+If the state includes <tt>email == :missing</tt>, the response would be a message "email address not found" in json.
