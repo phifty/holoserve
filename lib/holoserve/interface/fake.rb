@@ -20,7 +20,7 @@ class Holoserve::Interface::Fake < Goliath::API
       history << {:id => id, :request_variant => request_variant, :response_variants => response_variants}
 
       Holoserve::Interface::Event.send_pair_event id
-      logger.info "received handled request with id '#{id}'"
+      logger.info "received handled request #{id} with request variant #{request_variant} and response variants #{response_variants.join ", "}"
 
       response = Holoserve::Response::Combiner.new(default_response, selected_responses).response
       Holoserve::Response::Composer.new(response).response_array
