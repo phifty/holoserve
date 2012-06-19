@@ -12,8 +12,14 @@ class Holoserve::Interface::Fake < Goliath::API
     if pair
       id, request_variant, responses = finder.id, finder.variant, pair[:responses]
 
+      p id
+      p request_variant
+      p responses
+
       selector = Holoserve::Response::Selector.new responses, state.merge(:request_variant => request_variant), logger
       response_variant = selector.selection
+
+      p response_variant
 
       response = Holoserve::Tool::Merger.new(responses[:default] || { }, responses[response_variant]).result
       Holoserve::State::Updater.new(state, response[:transitions]).perform
