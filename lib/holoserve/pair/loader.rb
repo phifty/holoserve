@@ -71,15 +71,16 @@ class Holoserve::Pair::Loader
   end
 
   def pair_with_imports(pair)
-    result = {
-      :requests => {
-        :default => Holoserve::Fixture::Importer.new(pair[:requests][:default], @fixtures).result
-      },
-      :responses => { }
-    }
-    (pair[:responses] || { }).each do |id, response|
-      result[:responses][id] = Holoserve::Fixture::Importer.new(response, @fixtures).result
+    result = { :requests => { }, :responses => { } }
+
+    pair[:requests].each do |variant, request|
+      result[:requests][variant] = Holoserve::Fixture::Importer.new(request, @fixtures).result
     end
+
+    pair[:responses].each do |variant, response|
+      result[:responses][variant] = Holoserve::Fixture::Importer.new(response, @fixtures).result
+    end
+
     result
   end
 
