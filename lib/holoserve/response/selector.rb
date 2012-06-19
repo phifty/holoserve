@@ -24,34 +24,19 @@ class Holoserve::Response::Selector
     @sandbox = Sandbox.new state, logger
   end
 
-  def default_response
-    @responses[:default] ?
-      @responses[:default] :
-      { }
-  end
-
-  def selected_responses
-    result = [ ]
+  def selection
     (@responses || { }).each do |key, response|
       next if key.to_s == "default"
       begin
         match = @sandbox.instance_eval do
-          eval response[:condition].to_s
+          eval response[:condition]
         end
-        result << response if match
+        return key.to_sym if match
       rescue Object => error
         @logger.error error.inspect
       end
     end
-    result
-  end
-
-  def find_variants
-    result = [ ]
-    @responses.each_key do |key|
-      result << key
-    end
-    result
+    :default
   end
 
 end

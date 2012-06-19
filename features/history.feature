@@ -23,7 +23,7 @@ Feature: History handling
   Scenario: A pair is triggered
    Given no history
     When the test request is performed
-    Then the history should contain the list of response variants
+    Then the history should contain the response variant
 
   Scenario: The history is cleared
     Given a history containing only the test pair name

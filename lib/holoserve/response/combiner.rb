@@ -7,7 +7,7 @@ class Holoserve::Response::Combiner
 
   def response
     @responses.inject @default do |result, response|
-      Holoserve::Tool::Merger.new(result, response, :fusion).result
+      Holoserve::Tool::Merger.new(result, response).result
     end
   end
 

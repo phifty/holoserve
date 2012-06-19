@@ -36,7 +36,7 @@ Then /^the history should contain the request variant$/ do
   last_json_response_body[0]["request_variant"].should == "default"
 end
 
-Then /^the history should contain the list of response variants$/ do
+Then /^the history should contain the response variant$/ do
   get "/_control/history"
-  last_json_response_body[0]["response_variants"].should == ["default","test_body"]
+  last_json_response_body[0]["response_variant"].should == "default"
 end

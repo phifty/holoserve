@@ -10,19 +10,18 @@ class Holoserve::Interface::Fake < Goliath::API
     finder = Holoserve::Pair::Finder.new(pairs, request)
     pair = finder.pair
     if pair
-      responses, id, request_variant = pair[:responses], finder.id, finder.variant
+      id, request_variant, responses = finder.id, finder.variant, pair[:responses]
 
       selector = Holoserve::Response::Selector.new responses, state.merge(:request_variant => request_variant), logger
-      default_response, selected_responses = selector.default_response, selector.selected_responses
-      response_variants = selector.find_variants
-      update_state default_response, selected_responses
+      response_variant = selector.selection
 
-      history << {:id => id, :request_variant => request_variant, :response_variants => response_variants}
+      response = Holoserve::Tool::Merger.new(responses[:default] || { }, responses[response_variant]).result
+      Holoserve::State::Updater.new(state, response[:transitions]).perform
+      history << {:id => id, :request_variant => request_variant, :response_variant => response_variant}
 
       Holoserve::Interface::Event.send_pair_event id
-      logger.info "received handled request #{id} with request variant #{request_variant} and response variants #{response_variants.join ", "}"
+      logger.info "received handled request [#{id}] with request variant [#{request_variant}] and response variant [#{response_variant}]"
 
-      response = Holoserve::Response::Combiner.new(default_response, selected_responses).response
       Holoserve::Response::Composer.new(response).response_array
     else
       bucket << request
@@ -34,13 +33,6 @@ class Holoserve::Interface::Fake < Goliath::API
   end
 
   private
-
-  def update_state(default_response, selected_responses)
-    Holoserve::State::Updater.new(state, default_response[:transitions]).perform
-    (selected_responses || [ ]).each do |response|
-      Holoserve::State::Updater.new(state, response[:transitions]).perform
-    end
-  end
 
   def not_found
     [ 404, { :"Content-Type" => "text/plain" }, [ "no response found for this request\n" ] ]
