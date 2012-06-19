@@ -25,8 +25,8 @@ class Holoserve::Response::Selector
   end
 
   def selection
-    (@responses || { }).each do |key, response|
-      next if key.to_s == "default"
+    @responses.each do |key, response|
+      next if key.to_sym == :default
       begin
         match = @sandbox.instance_eval do
           eval response[:condition]
@@ -36,7 +36,7 @@ class Holoserve::Response::Selector
         @logger.error error.inspect
       end
     end
-    :default
+    @responses.has_key?(:default) ? :default : nil
   end
 
 end

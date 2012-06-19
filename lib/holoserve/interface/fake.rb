@@ -3,6 +3,17 @@ require 'pp'
 
 class Holoserve::Interface::Fake < Goliath::API
 
+  class NoResponseError < StandardError
+
+    attr_reader :id
+    attr_reader :request_variant
+
+    def initialize(id, request_variant)
+      @id, @request_variant = id, request_variant
+    end
+
+  end
+
   use Goliath::Rack::Params
 
   def response(env)
@@ -12,21 +23,21 @@ class Holoserve::Interface::Fake < Goliath::API
     if pair
       id, request_variant, responses = finder.id, finder.variant, pair[:responses]
 
-      p id
-      p request_variant
-      p responses
-
       selector = Holoserve::Response::Selector.new responses, state.merge(:request_variant => request_variant), logger
       response_variant = selector.selection
 
-      p response_variant
-
-      response = Holoserve::Tool::Merger.new(responses[:default] || { }, responses[response_variant]).result
+      response = if response_variant == :default
+        responses[:default] || { }
+      elsif response_variant
+        Holoserve::Tool::Merger.new(responses[:default] || { }, responses[response_variant]).result
+      else
+        raise NoResponseError, id, request_variant
+      end
       Holoserve::State::Updater.new(state, response[:transitions]).perform
       history << {:id => id, :request_variant => request_variant, :response_variant => response_variant}
 
       Holoserve::Interface::Event.send_pair_event id
-      logger.info "received handled request [#{id}] with request variant [#{request_variant}] and response variant [#{response_variant}]"
+      logger.info "handled request [#{id}] with request variant [#{request_variant}] and response variant [#{response_variant}]"
 
       Holoserve::Response::Composer.new(response).response_array
     else
@@ -36,6 +47,8 @@ class Holoserve::Interface::Fake < Goliath::API
 
       not_found
     end
+  rescue NoResponseError => error
+    logger.warn "could not select any response for request [#{error.id}] with request variant [#{error.request_variant}]"
   end
 
   private
