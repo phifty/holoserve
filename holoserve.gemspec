@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |specification|
   specification.name              = "holoserve"
-  specification.version           = "0.4.2"
+  specification.version           = "0.4.3"
   specification.date              = "2012-06-22"
 
   specification.authors           = [ "Philipp Brüll", "Maximilian Hoffmann" ]
@@ -14,7 +14,7 @@ Gem::Specification.new do |specification|
   specification.description       = "This tool can be used to fake webservice APIs for testing proposals."
 
   specification.has_rdoc          = true
-  specification.files             = [ "README.rdoc", "LICENSE", "Rakefile" ] + Dir["bin/**/*"] + Dir["lib/**/*"] + Dir["spec/**/*"]
+  specification.files             = [ "README.rdoc", "LICENSE", "Rakefile" ] + Dir["bin/**/*"] + Dir["lib/**/*"] + Dir["spec/**/*"] + Dir["schema/**/*"]
   specification.extra_rdoc_files  = [ "README.rdoc" ]
   specification.require_path      = "lib"
   specification.executables       = [ "holoserve" ]
