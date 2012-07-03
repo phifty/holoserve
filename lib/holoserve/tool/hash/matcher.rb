@@ -27,6 +27,10 @@ class Holoserve::Tool::Hash::Matcher
       return false unless match_hash?(value_one, value_two)
     elsif value_one.is_a?(Array) && value_two.is_a?(Array)
       return false unless match_array?(value_one, value_two)
+    elsif value_one.is_a?(TrueClass) || value_one.is_a?(FalseClass)
+      return false unless match_boolean?(value_one, value_two)
+    elsif value_two.is_a?(TrueClass) || value_two.is_a?(FalseClass)
+      return false unless match_boolean?(value_two, value_one)
     else
       return false unless value_one == value_two
     end
@@ -50,4 +54,11 @@ class Holoserve::Tool::Hash::Matcher
     end
     true
   end
+
+  def match_boolean?(boolean, value)
+    (return true if boolean.to_s.downcase == value.downcase) if value.is_a?(String)
+    return true if (boolean ? 1 : 0) == value
+    false
+  end
+
 end

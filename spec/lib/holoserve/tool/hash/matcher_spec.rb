@@ -5,12 +5,13 @@ describe Holoserve::Tool::Hash::Matcher do
   let(:hash) do
     {
       :test => "value",
+      :boolean => "true",
       :nested => {
         :unspecified => "value",
         :another => "test value"
       },
       :unspecified => "value",
-      :nested_array => [{:hash => "value", :unspecified => "value", :morehash => {:test => "value", :unspecified => "value", :array => [{:test => "value"}]}}]
+      :nested_array => [{:hash => "value", :unspecified => "value", :morehash => {:test => "value", :unspecified => "value", :array => [{:test => "value", :boolean => 0}]}}]
     }
   end
 
@@ -78,6 +79,32 @@ describe Holoserve::Tool::Hash::Matcher do
     }
   end
 
+  let(:matching_subset_with_nested_array_and_nested_hash_and_nested_array_and_boolean) do
+    {
+      :nested_array => [{:hash => "value", :morehash => {:test => "value", :array => [{:test => "value", :boolean => false}]}}]
+    }
+  end
+
+  let(:mismatching_subset_with_nested_array_and_nested_hash_and_nested_array_and_boolean) do
+    {
+      :nested_array => [{:hash => "value", :morehash => {:test => "value", :array => [{:test => "other value", :boolean => true}]}}]
+    }
+  end
+
+  let(:matching_subset_with_boolean_value) do
+    {
+      :test => "value",
+      :boolean => true
+    }
+  end
+
+  let(:mismatching_subset_with_boolean_value) do
+    {
+      :test => "value",
+      :boolean => false
+    }
+  end
+
   subject { described_class.new hash, matching_subset }
 
   describe "#match?" do
@@ -128,6 +155,26 @@ describe Holoserve::Tool::Hash::Matcher do
 
     it "should return false if a mismatching subset with nested array and nested hash and nested array is provided" do
       subject.subset = mismatching_subset_with_nested_array_and_nested_hash_and_nested_array
+      subject.match?.should be_false
+    end
+
+    it "should return true if a matching subset with a boolean value is provided" do
+      subject.subset = matching_subset_with_boolean_value
+      subject.match?.should be_true
+    end
+
+    it "should return false if a mismatching subset with a boolean value is provided" do
+      subject.subset = mismatching_subset_with_boolean_value
+      subject.match?.should be_false
+    end
+
+    it "should return true if a matching subset with nested array and nested hash and nested array and a boolean is provided" do
+      subject.subset = matching_subset_with_nested_array_and_nested_hash_and_nested_array_and_boolean
+      subject.match?.should be_true
+    end
+
+    it "should return false if a mismatching subset with nested array and nested hash and nested array and a boolean is provided" do
+      subject.subset = mismatching_subset_with_nested_array_and_nested_hash_and_nested_array_and_boolean
       subject.match?.should be_false
     end
 
