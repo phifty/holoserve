@@ -2,12 +2,12 @@
 
 Gem::Specification.new do |specification|
   specification.name              = "holoserve"
-  specification.version           = "0.4.3"
-  specification.date              = "2012-06-22"
+  specification.version           = "0.4.4"
+  specification.date              = "2013-02-27"
 
   specification.authors           = [ "Philipp Brüll", "Maximilian Hoffmann" ]
-  specification.email             = "philipp.bruell@skrill.com"
-  specification.homepage          = "http://github.com/skrill/holoserve"
+  specification.email             = "b.phifty@gmail.com"
+  specification.homepage          = "http://github.com/phifty/holoserve"
   specification.rubyforge_project = "holoserve"
 
   specification.summary           = "Tool to fake HTTP APIs."
@@ -21,7 +21,7 @@ Gem::Specification.new do |specification|
 
   specification.test_files        = Dir["spec/**/*_spec.rb"]
 
-  specification.add_dependency "goliath", "0.9.4"
+  specification.add_dependency "goliath"
   specification.add_dependency "slim"
   specification.add_dependency "sass"
   specification.add_dependency "coffee-script"
