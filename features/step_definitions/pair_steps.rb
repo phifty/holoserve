@@ -27,11 +27,10 @@ Then /^the returned pair should contain the test request$/ do
     },
     "responses" => {
       "default" => {
-        "condition" => "test == :value",
         "status" => 200
       },
       "test_body" => {
-        "condition" => "test == :value",
+        "condition" => "test_state == :value",
         "body" => "test_request",
         "transitions" => {
           "test" => "another value"
@@ -56,7 +55,7 @@ Then /^the returned pair should contain the test evaluation request$/ do
     },
     "responses" => {
       "default" => {
-        "condition" => "test == :value",
+        "condition" => "test_state == :value",
         "status" => 200,
         "body" => "test_evaluation"
       }

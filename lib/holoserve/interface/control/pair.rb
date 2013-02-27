@@ -15,7 +15,7 @@ module Holoserve::Interface::Control::Pair
     include Holoserve::Interface::Control::Helper
 
     def response(environment)
-      pair = pairs[params[:id]]
+      pair = pairs[ environment["parameters"][:id] ]
       respond_json pair
     end
 

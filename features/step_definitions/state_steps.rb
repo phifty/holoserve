@@ -1,6 +1,6 @@
 
 Given /^the test state$/ do
-  step "the state of resource 'test' is set to 'value'"
+  step "the state of resource 'test_state' is set to 'value'"
 end
 
 Given /^no defined state$/ do
@@ -16,7 +16,7 @@ When /^the state is cleared$/ do
 end
 
 When /^a matching request is paired$/ do
-  perform({"method" => "GET", "path" => "/test-headers"})
+  perform "method" => "GET", "path" => "/test-headers"
 end
 
 Then /^the state of resource '([^']+)' should be '([^']+)'$/ do |resource, state|

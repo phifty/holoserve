@@ -17,7 +17,7 @@ class Holoserve::Interface::Fake < Goliath::API
   use Goliath::Rack::Params
 
   def response(env)
-    request = Holoserve::Request::Decomposer.new(env, params).hash
+    request = Holoserve::Request::Decomposer.new(env, env["parameters"]).hash
     finder = Holoserve::Pair::Finder.new(pairs, request)
     pair = finder.pair
     if pair
@@ -49,6 +49,8 @@ class Holoserve::Interface::Fake < Goliath::API
     end
   rescue NoResponseError => error
     logger.warn "could not select any response for request [#{error.id}] with request variant [#{error.request_variant}]"
+  rescue Object => error
+    p error
   end
 
   private

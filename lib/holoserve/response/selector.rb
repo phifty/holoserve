@@ -26,14 +26,14 @@ class Holoserve::Response::Selector
 
   def selection
     @responses.each do |key, response|
-      next if key.to_sym == :default
+      next if key.to_sym == :default || !response.has_key?(:condition)
       begin
         match = @sandbox.instance_eval do
           eval response[:condition]
         end
         return key.to_sym if match
       rescue Object => error
-        @logger.error error.inspect
+        @logger.error "error evaluating condition: [#{response[:condition]}] #{error.inspect}"
       end
     end
     @responses.has_key?(:default) ? :default : nil

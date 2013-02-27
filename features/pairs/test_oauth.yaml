@@ -6,6 +6,6 @@ requests:
       test: "value"
 responses:
   default:
-    condition: "test == :value"
+    condition: "test_state == :value"
     status: 200
     body: "test_oauth"
